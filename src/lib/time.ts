@@ -217,3 +217,18 @@ export const formatOffset = (minutes: number) => {
 
 	return `UTC${sign}${hours}${remainder ? `:${String(remainder).padStart(2, '0')}` : ''}`;
 };
+
+export const zonedDateToUtc = (
+	year: number,
+	month: number,
+	day: number,
+	hour: number,
+	minute: number,
+	timeZone: string,
+) => {
+	const guess = Date.UTC(year, month - 1, day, hour, minute);
+	const firstOffset = getOffsetMinutes(guess, timeZone);
+	const first = guess - firstOffset * 60_000;
+	const secondOffset = getOffsetMinutes(first, timeZone);
+	return guess - secondOffset * 60_000;
+};

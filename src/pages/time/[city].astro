@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CityClock from '../../components/CityClock';
+import { cities, type City } from '../../lib/cities';
+import { formatOffset, getLocalParts, getOffsetMinutes } from '../../lib/time';
+
+export function getStaticPaths() {
+	return cities.map((city) => ({ params: { city: city.slug }, props: { city } }));
+}
+
+interface Props { city: City }
+const { city } = Astro.props;
+const initialNow = Date.now();
+const comparisons = cities.filter((item) =>
+	item.slug !== city.slug && ['london', 'new-york', 'tokyo', 'sydney', 'dubai', 'singapore'].includes(item.slug)
+);
+---
+
+<BaseLayout
+	title={`Current time in ${city.name}, ${city.country} · WorldTime`}
+	description={`See the exact local time, date and UTC offset in ${city.name}. Compare ${city.name} with cities around the world.`}
+	canonical={`/time/${city.slug}`}
+>
+	<header class="border-b border-stone-300 px-5 sm:px-8">
+		<div class="mx-auto flex h-20 max-w-[1500px] items-center justify-between">
+			<a href="/" class="flex items-center gap-3">
+				<span class="grid size-9 place-items-center rounded-full bg-orange-600 font-serif text-xl italic text-white">W</span>
+				<span class="font-serif text-xl">WorldTime</span>
+			</a>
+			<a href="/" class="text-sm text-stone-600 hover:text-stone-950">Convert a time →</a>
+		</div>
+	</header>
+
+	<main>
+		<section class="px-5 py-16 sm:px-8 lg:py-24">
+			<div class="mx-auto max-w-[1500px]">
+				<p class="font-mono text-[10px] uppercase tracking-[0.18em] text-orange-700">World / {city.country} / {city.name}</p>
+				<div class="mt-10 grid gap-14 lg:grid-cols-[1.35fr_.65fr]">
+					<div>
+						<p class="font-mono text-[11px] uppercase tracking-[0.2em] text-stone-500">Current time in</p>
+						<h1 class="mt-2 font-serif text-6xl leading-none tracking-[-0.06em] sm:text-8xl">{city.name}</h1>
+						<div class="mt-12"><CityClock client:load zone={city.zone} initialNow={initialNow} /></div>
+					</div>
+					<aside class="flex flex-col justify-end border-l border-stone-300 pl-6 lg:pl-10">
+						<div class="mb-8 size-24 rounded-full bg-[radial-gradient(circle_at_35%_35%,#fb923c,#ea580c_55%,#9a3412)] shadow-[0_0_60px_rgba(234,88,12,.28)]"></div>
+						<p class="font-serif text-2xl leading-snug">{city.description}</p>
+						<dl class="mt-8 grid grid-cols-2 gap-5 border-t border-stone-300 pt-6 text-sm">
+							<div><dt class="text-stone-500">Timezone</dt><dd class="mt-1 font-medium">{city.zone}</dd></div>
+							<div><dt class="text-stone-500">Offset now</dt><dd class="mt-1 font-medium">{formatOffset(getOffsetMinutes(initialNow, city.zone))}</dd></div>
+							<div><dt class="text-stone-500">Short name</dt><dd class="mt-1 font-medium">{getLocalParts(initialNow, city.zone).abbreviation}</dd></div>
+							<div><dt class="text-stone-500">Country</dt><dd class="mt-1 font-medium">{city.country}</dd></div>
+						</dl>
+					</aside>
+				</div>
+			</div>
+		</section>
+
+		<section class="border-y border-stone-300 bg-[#e8e4dc] px-5 py-16 sm:px-8">
+			<div class="mx-auto max-w-[1500px]">
+				<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-stone-500">Compare {city.name}</p>
+				<h2 class="mt-2 font-serif text-4xl tracking-[-0.04em]">Where do you need to be?</h2>
+				<div class="mt-8 grid border-l border-t border-stone-300 sm:grid-cols-2 lg:grid-cols-3">
+					{comparisons.map((target) => (
+						<a href={`/convert/${city.slug}/${target.slug}`} class="group border-b border-r border-stone-300 p-6 hover:bg-stone-950 hover:text-white">
+							<span class="font-mono text-[10px] uppercase tracking-wider text-stone-500">Convert to</span>
+							<p class="mt-8 font-serif text-3xl">{target.name}</p>
+							<p class="mt-1 text-sm text-stone-500 group-hover:text-stone-400">{target.country} →</p>
+						</a>
+					))}
+				</div>
+			</div>
+		</section>
+	</main>
+</BaseLayout>
+

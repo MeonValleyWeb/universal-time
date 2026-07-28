@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import NaturalTime from '../../../components/NaturalTime';
+import CityClock from '../../../components/CityClock';
+import { cities, type City } from '../../../lib/cities';
+
+export function getStaticPaths() {
+	const popular = cities.filter((city) =>
+		['london', 'new-york', 'los-angeles', 'tokyo', 'sydney', 'dubai', 'delhi', 'singapore'].includes(city.slug)
+	);
+	return popular.flatMap((from) =>
+		popular
+			.filter((to) => to.slug !== from.slug)
+			.map((to) => ({ params: { from: from.slug, to: to.slug }, props: { from, to } }))
+	);
+}
+
+interface Props { from: City; to: City }
+const { from, to } = Astro.props;
+const initialNow = Date.now();
+const initialQuery = `9am ${from.name} in ${to.name}`;
+---
+
+<BaseLayout
+	title={`${from.name} to ${to.name} time converter · WorldTime`}
+	description={`Convert ${from.name} time to ${to.name}. See the current time difference and choose a good time to call.`}
+	canonical={`/convert/${from.slug}/${to.slug}`}
+>
+	<header class="border-b border-stone-300 px-5 sm:px-8">
+		<div class="mx-auto flex h-20 max-w-[1500px] items-center justify-between">
+			<a href="/" class="flex items-center gap-3">
+				<span class="grid size-9 place-items-center rounded-full bg-orange-600 font-serif text-xl italic text-white">W</span>
+				<span class="font-serif text-xl">WorldTime</span>
+			</a>
+			<a href={`/time/${from.slug}`} class="text-sm text-stone-600 hover:text-stone-950">{from.name} clock →</a>
+		</div>
+	</header>
+
+	<main class="px-5 py-14 sm:px-8 lg:py-20">
+		<div class="mx-auto max-w-[1500px]">
+			<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-orange-700">Time converter</p>
+			<h1 class="mt-3 max-w-5xl font-serif text-5xl leading-[0.95] tracking-[-0.055em] sm:text-7xl">
+				{from.name} <span class="text-stone-400">to</span> {to.name}
+			</h1>
+			<div class="mt-12 grid gap-px overflow-hidden rounded-3xl border border-stone-300 bg-stone-300 lg:grid-cols-2">
+				<div class="bg-[#e8e4dc] p-8 sm:p-10">
+					<p class="font-mono text-[10px] uppercase tracking-wider text-stone-500">{from.country}</p>
+					<h2 class="mt-2 font-serif text-3xl">{from.name}</h2>
+					<div class="mt-8"><CityClock client:load zone={from.zone} initialNow={initialNow} /></div>
+				</div>
+				<div class="bg-stone-950 p-8 text-white sm:p-10">
+					<p class="font-mono text-[10px] uppercase tracking-wider text-stone-400">{to.country}</p>
+					<h2 class="mt-2 font-serif text-3xl">{to.name}</h2>
+					<div class="mt-8"><CityClock client:load zone={to.zone} initialNow={initialNow} /></div>
+				</div>
+			</div>
+			<div class="mt-12">
+				<NaturalTime client:load initialNow={initialNow} initialQuery={initialQuery} />
+			</div>
+		</div>
+	</main>
+</BaseLayout>

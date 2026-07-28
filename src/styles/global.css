@@ -3,4 +3,25 @@
 
 @theme {
 	--font-mono: "DM Mono", monospace;
+	--font-serif: "Newsreader", serif;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+}
+
+a,
+button {
+	transition-duration: 180ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		scroll-behavior: auto !important;
+		transition-duration: 0.01ms !important;
+	}
 }
