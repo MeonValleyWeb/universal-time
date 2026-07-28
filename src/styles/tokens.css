@@ -1,0 +1,45 @@
+:root,
+:root[data-theme="dark"] {
+	color-scheme: dark;
+	--color-canvas: #08111d;
+	--color-surface: #111b28;
+	--color-surface-elevated: #162334;
+	--color-input: rgba(0, 0, 0, 0.2);
+	--color-ink: #f8fafc;
+	--color-muted: #94a3b8;
+	--color-subtle: #64748b;
+	--color-line: rgba(255, 255, 255, 0.1);
+	--color-night-cell: #0a121e;
+	--color-day-cell: #182538;
+	--color-warm: #fef3c7;
+}
+
+:root[data-theme="light"] {
+	color-scheme: light;
+	--color-canvas: #f1eee6;
+	--color-surface: #fbfaf6;
+	--color-surface-elevated: #ffffff;
+	--color-input: rgba(42, 56, 65, 0.045);
+	--color-ink: #14212b;
+	--color-muted: #596b78;
+	--color-subtle: #7f8d96;
+	--color-line: rgba(25, 48, 62, 0.14);
+	--color-night-cell: #d9e1e5;
+	--color-day-cell: #f8f2df;
+	--color-warm: #8a5c12;
+}
+
+html,
+body {
+	background: var(--color-canvas);
+}
+
+body {
+	transition: background-color 180ms ease, color 180ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	body {
+		transition: none;
+	}
+}

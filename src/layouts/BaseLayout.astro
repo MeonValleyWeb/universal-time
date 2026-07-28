@@ -1,0 +1,41 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = 'WorldTime',
+	description = 'Compare every time zone on one responsive timeline.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark" data-theme-preference="system">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content={description} />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Newsreader:opsz,wght@6..72,300;6..72,500&display=swap" rel="stylesheet" />
+		<script is:inline>
+			try {
+				const preference = localStorage.getItem('worldtime:theme') || 'system';
+				const theme = preference === 'system'
+					? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+					: preference;
+				document.documentElement.dataset.theme = theme;
+				document.documentElement.dataset.themePreference = preference;
+			} catch {}
+		</script>
+		<title>{title}</title>
+	</head>
+	<body class="min-h-screen bg-[var(--color-canvas)] font-[Newsreader] text-[var(--color-ink)] antialiased selection:bg-cyan-300 selection:text-slate-950">
+		<slot />
+	</body>
+</html>

@@ -1,17 +1,63 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TimeCanvas from '../components/TimeCanvas';
 
+const initialNow = Date.now();
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="WorldTime — every hour, everywhere" description="Compare cities and time zones across one responsive 48-hour timeline.">
+	<div class="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
+		<div class="absolute -left-64 -top-64 size-[42rem] rounded-full bg-cyan-400/8 blur-[120px]"></div>
+		<div class="absolute -right-64 top-1/3 size-[36rem] rounded-full bg-amber-300/7 blur-[140px]"></div>
+		<div class="absolute inset-0 opacity-[0.035] [background-image:linear-gradient(rgba(255,255,255,.45)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.45)_1px,transparent_1px)] [background-size:72px_72px]"></div>
+	</div>
+
+	<header class="relative z-10 mx-auto flex max-w-[96rem] items-center justify-between px-5 py-6 sm:px-8 lg:px-12">
+		<a href="/" class="flex items-center gap-3 text-[var(--color-ink)]">
+			<span class="relative grid size-9 place-items-center rounded-full border border-cyan-200/40 before:absolute before:h-px before:w-5 before:rotate-45 before:bg-cyan-200 after:absolute after:h-5 after:w-px after:rotate-45 after:bg-cyan-200"></span>
+			<span class="text-lg font-medium tracking-tight">WorldTime</span>
+		</a>
+		<div class="hidden items-center gap-3 font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--color-subtle)] sm:flex">
+			<span class="size-1.5 animate-pulse rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(103,232,249,.9)]"></span>
+			Live global signal
+		</div>
+	</header>
+
+	<main class="relative z-10 mx-auto max-w-[96rem] px-3 pb-20 sm:px-6 lg:px-10">
+		<section class="grid items-end gap-8 px-2 pb-10 pt-10 sm:px-3 sm:pb-14 sm:pt-16 lg:grid-cols-[1.3fr_0.7fr] lg:gap-16 lg:pt-24">
+			<div>
+				<p class="mb-5 font-mono text-[10px] font-medium uppercase tracking-[0.35em] text-cyan-300">One planet · many working days</p>
+				<h1 class="max-w-5xl text-6xl font-light leading-[0.86] tracking-[-0.055em] text-[var(--color-ink)] sm:text-8xl lg:text-[9rem]">
+					Every hour,<br /><em class="font-light text-[var(--color-warm)]">everywhere.</em>
+				</h1>
+			</div>
+			<div class="max-w-md border-l border-[var(--color-line)] pl-5 lg:mb-3 lg:justify-self-end">
+				<p class="text-lg leading-7 text-[var(--color-ink)]">Find the moment when the world lines up.</p>
+				<p class="mt-3 font-mono text-[10px] leading-5 tracking-wide text-[var(--color-muted)]">Drag the timeline. Tap any hour. Add any IANA time zone. Daylight and working hours stay visible at a glance.</p>
+			</div>
+		</section>
+
+		<TimeCanvas client:load initialNow={initialNow} />
+
+		<section class="grid gap-10 px-3 py-20 md:grid-cols-3 lg:py-28">
+			<div class="md:col-span-1">
+				<p class="font-mono text-[9px] font-bold uppercase tracking-[0.3em] text-cyan-300">Reading the chart</p>
+				<h2 class="mt-5 text-4xl font-light leading-none tracking-tight text-[var(--color-ink)] sm:text-5xl">Time has<br />a texture.</h2>
+			</div>
+			<div class="grid gap-8 md:col-span-2 sm:grid-cols-3">
+				<div class="border-t border-[var(--color-line)] pt-5">
+					<span class="font-mono text-xs text-amber-200">01 / Light</span>
+					<p class="mt-4 text-sm leading-6 text-[var(--color-muted)]">Lighter cells are daytime. Deep navy marks evening and night without adding visual noise.</p>
+				</div>
+				<div class="border-t border-[var(--color-line)] pt-5">
+					<span class="font-mono text-xs text-amber-200">02 / Work</span>
+					<p class="mt-4 text-sm leading-6 text-[var(--color-muted)]">The amber underline marks the conventional 09:00–17:00 working window in each place.</p>
+				</div>
+				<div class="border-t border-[var(--color-line)] pt-5">
+					<span class="font-mono text-xs text-cyan-200">03 / Now</span>
+					<p class="mt-4 text-sm leading-6 text-[var(--color-muted)]">The cyan signal follows the present. The highlighted band holds the meeting window you select for comparison.</p>
+				</div>
+			</div>
+		</section>
+	</main>
+</BaseLayout>
