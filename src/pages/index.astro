@@ -15,7 +15,7 @@ const initialNow = Date.now();
 			</a>
 			<nav class="flex items-center gap-5 text-sm text-stone-600">
 				<a href="#world-clocks" class="hidden hover:text-stone-950 sm:block">World clocks</a>
-				<a href="#how-it-works" class="hidden hover:text-stone-950 sm:block">How it works</a>
+				<a href="/meeting-planner" class="hidden hover:text-stone-950 sm:block">Meeting planner</a>
 				<span class="rounded-full border border-stone-300 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider">Live · {cities.length} cities</span>
 			</nav>
 		</div>
@@ -64,6 +64,23 @@ const initialNow = Date.now();
 						</article>
 					))}
 				</div>
+			</div>
+		</section>
+
+		<section class="border-b border-stone-300 bg-[#e8e4dc] px-5 py-16 sm:px-8">
+			<div class="mx-auto grid max-w-[1500px] items-end gap-10 lg:grid-cols-[1fr_auto]">
+				<div>
+					<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-orange-700">Need the whole picture?</p>
+					<h2 class="mt-3 max-w-3xl font-serif text-4xl leading-none tracking-[-0.045em] sm:text-6xl">
+						Compare every working day on one timeline.
+					</h2>
+					<p class="mt-5 max-w-2xl text-base leading-7 text-stone-600">
+						Move from a quick answer to the visual meeting planner when several cities, daylight and fairness all matter.
+					</p>
+				</div>
+				<a href="/meeting-planner" class="inline-flex items-center justify-center rounded-full bg-stone-950 px-6 py-3 text-sm font-medium text-white hover:bg-orange-600">
+					Open meeting planner →
+				</a>
 			</div>
 		</section>
 

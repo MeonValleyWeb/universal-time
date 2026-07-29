@@ -2,11 +2,11 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import NaturalTime from '../../../components/NaturalTime';
 import CityClock from '../../../components/CityClock';
-import { cities, type City } from '../../../lib/cities';
+import { cities, popularConverterSlugs, type City } from '../../../lib/cities';
 
 export function getStaticPaths() {
 	const popular = cities.filter((city) =>
-		['london', 'new-york', 'los-angeles', 'tokyo', 'sydney', 'dubai', 'delhi', 'singapore'].includes(city.slug)
+		popularConverterSlugs.includes(city.slug)
 	);
 	return popular.flatMap((from) =>
 		popular
@@ -19,12 +19,19 @@ interface Props { from: City; to: City }
 const { from, to } = Astro.props;
 const initialNow = Date.now();
 const initialQuery = `9am ${from.name} in ${to.name}`;
+const schema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebPage',
+	name: `${from.name} to ${to.name} time converter`,
+	description: `Convert ${from.name} time to ${to.name} and find a good time to call.`,
+};
 ---
 
 <BaseLayout
 	title={`${from.name} to ${to.name} time converter · WorldTime`}
 	description={`Convert ${from.name} time to ${to.name}. See the current time difference and choose a good time to call.`}
 	canonical={`/convert/${from.slug}/${to.slug}`}
+	schema={schema}
 >
 	<header class="border-b border-stone-300 px-5 sm:px-8">
 		<div class="mx-auto flex h-20 max-w-[1500px] items-center justify-between">

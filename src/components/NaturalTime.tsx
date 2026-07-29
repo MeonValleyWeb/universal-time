@@ -1,94 +1,18 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { cities, featuredCitySlugs, type City } from '../lib/cities';
+import { parseNaturalTime } from '../lib/natural-time';
 import {
 	formatClock,
 	formatDate,
 	formatFullDate,
 	getLocalParts,
 	getOffsetMinutes,
-	zonedDateToUtc,
 } from '../lib/time';
 
 interface Props {
 	initialNow: number;
 	initialQuery?: string;
 }
-
-interface Result {
-	source: City;
-	target: City;
-	timestamp: number;
-}
-
-const weekdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-
-const matchingCities = (input: string) => {
-	const lower = input.toLocaleLowerCase();
-	return cities
-		.map((city) => ({
-			city,
-			index: Math.min(...city.aliases.map((alias) => {
-				const index = lower.indexOf(alias);
-				return index === -1 ? Number.POSITIVE_INFINITY : index;
-			})),
-		}))
-		.filter(({ index }) => Number.isFinite(index))
-		.sort((a, b) => a.index - b.index)
-		.filter((entry, index, all) => !all.slice(0, index).some((prior) => prior.city.zone === entry.city.zone && prior.index === entry.index))
-		.map(({ city }) => city);
-};
-
-const localDateParts = (timestamp: number, timeZone: string) => {
-	const parts = new Intl.DateTimeFormat('en-CA', {
-		timeZone,
-		year: 'numeric',
-		month: 'numeric',
-		day: 'numeric',
-	}).formatToParts(timestamp);
-	const values = Object.fromEntries(parts.map((part) => [part.type, Number(part.value)]));
-	return { year: values.year, month: values.month, day: values.day };
-};
-
-const resolveDate = (input: string, source: City, now: number) => {
-	const local = localDateParts(now, source.zone);
-	const date = new Date(Date.UTC(local.year, local.month - 1, local.day));
-	const lower = input.toLocaleLowerCase();
-
-	if (lower.includes('tomorrow')) date.setUTCDate(date.getUTCDate() + 1);
-	const weekday = weekdays.findIndex((day) => lower.includes(day));
-	if (weekday >= 0) {
-		let advance = (weekday - date.getUTCDay() + 7) % 7;
-		if (advance === 0 || lower.includes('next ')) advance += 7;
-		date.setUTCDate(date.getUTCDate() + advance);
-	}
-
-	const iso = input.match(/\b(20\d{2})-(\d{1,2})-(\d{1,2})\b/);
-	if (iso) return { year: Number(iso[1]), month: Number(iso[2]), day: Number(iso[3]) };
-	return { year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate() };
-};
-
-const parseQuery = (input: string, now: number): Result | null => {
-	const found = matchingCities(input);
-	if (!found.length) return null;
-	const source = found[0];
-	const target = found[1] ?? source;
-	const match = input.match(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b/i);
-	if (!match) return { source, target, timestamp: now };
-
-	let hour = Number(match[1]);
-	const minute = Number(match[2] ?? 0);
-	const period = match[3]?.toLocaleLowerCase();
-	if (period === 'pm' && hour < 12) hour += 12;
-	if (period === 'am' && hour === 12) hour = 0;
-	if (hour > 23 || minute > 59) return null;
-	const date = resolveDate(input, source, now);
-
-	return {
-		source,
-		target,
-		timestamp: zonedDateToUtc(date.year, date.month, date.day, hour, minute, source.zone),
-	};
-};
 
 export default function NaturalTime({
 	initialNow,
@@ -98,24 +22,46 @@ export default function NaturalTime({
 	const [query, setQuery] = useState(initialQuery);
 	const [submitted, setSubmitted] = useState(initialQuery);
 	const [copied, setCopied] = useState(false);
-	const result = useMemo(() => parseQuery(submitted, now), [submitted, now]);
+	const [localTarget, setLocalTarget] = useState<City>(cities.find((city) => city.slug === 'london')!);
+	const result = useMemo(() => parseNaturalTime(submitted, now, localTarget), [submitted, now, localTarget]);
 	const featured = featuredCitySlugs.map((slug) => cities.find((city) => city.slug === slug)!);
 
 	useEffect(() => {
 		const interval = window.setInterval(() => setNow(Date.now()), 30_000);
+		const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		const knownCity = cities.find((city) => city.zone === localZone);
+		if (knownCity) setLocalTarget(knownCity);
+		const sharedQuery = new URLSearchParams(window.location.search).get('q');
+		if (sharedQuery) {
+			setQuery(sharedQuery);
+			setSubmitted(sharedQuery);
+		}
 		return () => window.clearInterval(interval);
 	}, []);
 
 	const submit = (event: Event) => {
 		event.preventDefault();
-		setSubmitted(query.trim());
+		const nextQuery = query.trim();
+		setSubmitted(nextQuery);
 		setCopied(false);
+		const url = new URL(window.location.href);
+		url.searchParams.set('q', nextQuery);
+		window.history.replaceState({}, '', url);
 	};
 
 	const copy = async () => {
 		if (!result) return;
 		const text = `${formatDate(result.timestamp, result.source.zone)} ${formatClock(result.timestamp, result.source.zone, true)} ${result.source.name} · ${formatDate(result.timestamp, result.target.zone)} ${formatClock(result.timestamp, result.target.zone, true)} ${result.target.name}`;
 		await navigator.clipboard.writeText(text);
+		setCopied(true);
+	};
+
+	const share = async () => {
+		const url = new URL(window.location.href);
+		url.pathname = '/';
+		url.search = '';
+		url.searchParams.set('q', submitted);
+		await navigator.clipboard.writeText(url.toString());
 		setCopied(true);
 	};
 
@@ -153,6 +99,7 @@ export default function NaturalTime({
 							<div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-500">
 								<span class={`size-2 rounded-full ${goodTime ? 'bg-emerald-500' : 'bg-orange-500'}`} />
 								{goodTime ? 'A good time to call' : 'Outside usual working hours'}
+								{result.detectedTimeCount > 1 && <span>· first of {result.detectedTimeCount} times</span>}
 							</div>
 							<div class="mt-5 flex items-start">
 								<span class="font-mono text-[clamp(4.6rem,14vw,10.5rem)] font-medium leading-[0.78] tracking-[-0.095em] text-stone-950">
@@ -170,10 +117,16 @@ export default function NaturalTime({
 											? `Same time as ${result.source.name}`
 											: `${Math.abs(hourDifference)} hours ${hourDifference > 0 ? 'ahead of' : 'behind'} ${result.source.name}`}
 									</p>
+									{result.warnings.map((warning) => (
+										<p class="mt-2 max-w-xl text-xs leading-5 text-orange-700">{warning}</p>
+									))}
 								</div>
 								<div class="flex gap-2">
 									<button type="button" onClick={copy} class="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:border-stone-950">
 										{copied ? 'Copied' : 'Copy answer'}
+									</button>
+									<button type="button" onClick={share} class="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:border-stone-950">
+										Share query
 									</button>
 									<a href={`/convert/${result.source.slug}/${result.target.slug}`} class="rounded-full bg-stone-950 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600">
 										Open converter

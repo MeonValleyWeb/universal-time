@@ -3,6 +3,8 @@ dist/
 # generated types
 .astro/
 .codegraph/
+.playwright-cli/
+.netlify/
 
 # dependencies
 node_modules/

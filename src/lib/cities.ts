@@ -8,7 +8,8 @@ export interface City {
 }
 
 export const cities: City[] = [
-	{ slug: 'london', name: 'London', country: 'United Kingdom', zone: 'Europe/London', aliases: ['london', 'uk', 'gmt', 'bst'], description: 'The reference clock for the United Kingdom and a bridge between the Americas and Asia.' },
+	{ slug: 'utc', name: 'UTC', country: 'Universal Time', zone: 'UTC', aliases: ['utc', 'gmt', 'zulu'], description: 'Coordinated Universal Time, the global reference for civil timekeeping.' },
+	{ slug: 'london', name: 'London', country: 'United Kingdom', zone: 'Europe/London', aliases: ['london', 'uk', 'britain', 'bst'], description: 'The reference clock for the United Kingdom and a bridge between the Americas and Asia.' },
 	{ slug: 'new-york', name: 'New York', country: 'United States', zone: 'America/New_York', aliases: ['new york', 'nyc', 'eastern', 'est', 'edt'], description: 'Eastern Time for New York and much of the US East Coast.' },
 	{ slug: 'los-angeles', name: 'Los Angeles', country: 'United States', zone: 'America/Los_Angeles', aliases: ['los angeles', 'la', 'pacific', 'pst', 'pdt'], description: 'Pacific Time for Los Angeles and the US West Coast.' },
 	{ slug: 'chicago', name: 'Chicago', country: 'United States', zone: 'America/Chicago', aliases: ['chicago', 'central', 'cst', 'cdt'], description: 'Central Time for Chicago and the central United States.' },
@@ -40,4 +41,4 @@ export const cities: City[] = [
 
 export const cityBySlug = (slug: string) => cities.find((city) => city.slug === slug);
 export const featuredCitySlugs = ['london', 'new-york', 'tokyo', 'sydney', 'dubai', 'singapore'];
-
+export const popularConverterSlugs = ['london', 'new-york', 'los-angeles', 'tokyo', 'sydney', 'dubai', 'delhi', 'singapore'];

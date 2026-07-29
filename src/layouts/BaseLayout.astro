@@ -5,14 +5,36 @@ interface Props {
 	title?: string;
 	description?: string;
 	canonical?: string;
+	schema?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
 	title = 'WorldTime — world time, instantly understood',
 	description = 'Convert any time, compare cities and find the right moment to call.',
 	canonical,
+	schema,
 } = Astro.props;
-const socialImage = new URL('/og.png', Astro.url);
+const baseUrl = Astro.site ?? Astro.url;
+const socialImage = new URL('/og.png', baseUrl);
+const canonicalUrl = canonical && Astro.site ? new URL(canonical, Astro.site) : undefined;
+const websiteSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	name: 'WorldTime',
+	url: new URL('/', baseUrl).toString(),
+	description: 'Convert any time, compare cities and find the right moment to call.',
+	potentialAction: {
+		'@type': 'SearchAction',
+		target: `${new URL('/', baseUrl).toString()}?q={search_term_string}`,
+		'query-input': 'required name=search_term_string',
+	},
+};
+const structuredData = schema
+	? [websiteSchema, ...(Array.isArray(schema) ? schema : [schema])]
+	: [websiteSchema];
+const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
+const cloudflareAnalyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 ---
 
 <!doctype html>
@@ -30,7 +52,10 @@ const socialImage = new URL('/og.png', Astro.url);
 		<meta property="og:image" content={socialImage} />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:image" content={socialImage} />
-		{canonical && <link rel="canonical" href={new URL(canonical, Astro.url)} />}
+		{googleVerification && <meta name="google-site-verification" content={googleVerification} />}
+		{bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
+		{canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -39,5 +64,13 @@ const socialImage = new URL('/og.png', Astro.url);
 	</head>
 	<body class="min-h-screen bg-[#f2efe8] font-[Newsreader] text-stone-950 antialiased selection:bg-orange-600 selection:text-white">
 		<slot />
+		{cloudflareAnalyticsToken && (
+			<script
+				is:inline
+				defer
+				src="https://static.cloudflareinsights.com/beacon.min.js"
+				data-cf-beacon={JSON.stringify({ token: cloudflareAnalyticsToken })}
+			></script>
+		)}
 	</body>
 </html>

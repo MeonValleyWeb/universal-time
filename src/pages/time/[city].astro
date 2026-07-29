@@ -14,12 +14,24 @@ const initialNow = Date.now();
 const comparisons = cities.filter((item) =>
 	item.slug !== city.slug && ['london', 'new-york', 'tokyo', 'sydney', 'dubai', 'singapore'].includes(item.slug)
 );
+const schema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebPage',
+	name: `Current time in ${city.name}, ${city.country}`,
+	description: city.description,
+	about: {
+		'@type': 'Place',
+		name: city.name,
+		address: { '@type': 'PostalAddress', addressCountry: city.country },
+	},
+};
 ---
 
 <BaseLayout
 	title={`Current time in ${city.name}, ${city.country} · WorldTime`}
 	description={`See the exact local time, date and UTC offset in ${city.name}. Compare ${city.name} with cities around the world.`}
 	canonical={`/time/${city.slug}`}
+	schema={schema}
 >
 	<header class="border-b border-stone-300 px-5 sm:px-8">
 		<div class="mx-auto flex h-20 max-w-[1500px] items-center justify-between">
@@ -70,6 +82,24 @@ const comparisons = cities.filter((item) =>
 				</div>
 			</div>
 		</section>
+
+		<section class="px-5 py-16 sm:px-8">
+			<div class="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[.7fr_1.3fr]">
+				<div>
+					<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-orange-700">Useful context</p>
+					<h2 class="mt-3 font-serif text-4xl tracking-[-0.04em]">Understanding {city.name} time</h2>
+				</div>
+				<div class="grid gap-px bg-stone-300 sm:grid-cols-2">
+					<article class="bg-[#f2efe8] p-6">
+						<h3 class="font-serif text-2xl">What time zone is {city.name} in?</h3>
+						<p class="mt-3 text-sm leading-6 text-stone-600">{city.name} uses the IANA time zone <strong>{city.zone}</strong>. Its current offset is {formatOffset(getOffsetMinutes(initialNow, city.zone))}.</p>
+					</article>
+					<article class="bg-[#f2efe8] p-6">
+						<h3 class="font-serif text-2xl">When is a good time to call?</h3>
+						<p class="mt-3 text-sm leading-6 text-stone-600">Aim for 09:00–17:00 in {city.name}. Open a converter above to see how that working window lands in another city.</p>
+					</article>
+				</div>
+			</div>
+		</section>
 	</main>
 </BaseLayout>
-
