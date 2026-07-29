@@ -6,12 +6,12 @@
 	--color-input: rgba(42, 56, 65, 0.045);
 	--color-ink: #1c1917;
 	--color-muted: #78716c;
-	--color-subtle: #a8a29e;
+	--color-subtle: #6d6661;
 	--color-line: #d6d3d1;
 	--color-night-cell: #d9e1e5;
 	--color-day-cell: #f8f2df;
 	--color-warm: #9a5e10;
-	--color-signal: #ea580c;
+	--color-signal: #a63f08;
 	--color-signal-ink: #ffffff;
 }
 
@@ -23,7 +23,7 @@
 	--color-input: rgba(0, 0, 0, 0.2);
 	--color-ink: #f8fafc;
 	--color-muted: #94a3b8;
-	--color-subtle: #64748b;
+	--color-subtle: #aab7c8;
 	--color-line: rgba(255, 255, 255, 0.1);
 	--color-night-cell: #0a121e;
 	--color-day-cell: #182538;
@@ -34,15 +34,17 @@
 
 :root[data-theme="paper"] {
 	color-scheme: light;
-	--color-canvas: #f1eee6;
-	--color-surface: #fbfaf6;
-	--color-surface-elevated: #ffffff;
+	--color-canvas: #e8e3d8;
+	--color-surface: #f4f1e9;
+	--color-surface-elevated: #fbf9f3;
 	--color-input: rgba(42, 56, 65, 0.045);
 	--color-ink: #14212b;
 	--color-muted: #596b78;
-	--color-subtle: #7f8d96;
-	--color-line: rgba(25, 48, 62, 0.14);
+	--color-subtle: #586976;
+	--color-line: rgba(25, 48, 62, 0.17);
 	--color-night-cell: #d9e1e5;
 	--color-day-cell: #f8f2df;
 	--color-warm: #8a5c12;
+	--color-signal: #9f3b08;
+	--color-signal-ink: #ffffff;
 }
