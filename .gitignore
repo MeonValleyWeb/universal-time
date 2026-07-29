@@ -4,6 +4,7 @@ dist/
 .astro/
 .codegraph/
 .playwright-cli/
+output/
 .netlify/
 .wrangler/
 worker-startup.cpuprofile

@@ -1,0 +1,38 @@
+---
+interface Props {
+	slotId?: string;
+	placement: string;
+	minHeight?: number;
+}
+
+const { slotId = '', placement, minHeight = 120 } = Astro.props;
+const clientId = import.meta.env.PUBLIC_ADSENSE_CLIENT?.trim() ?? '';
+const adsEnabled = import.meta.env.PUBLIC_ADSENSE_ENABLED === 'true';
+const consentReady = import.meta.env.PUBLIC_ADSENSE_CONSENT_READY === 'true';
+const validClient = /^ca-pub-\d+$/.test(clientId);
+const validSlot = /^\d+$/.test(slotId);
+const shouldRender = adsEnabled && consentReady && validClient && validSlot;
+---
+
+{shouldRender && (
+	<aside
+		class="my-14 border-y border-[var(--color-line)] py-5"
+		aria-label="Advertisement"
+		data-ad-placement={placement}
+	>
+		<p class="mb-3 text-center font-mono text-[8px] uppercase tracking-[0.2em] text-[var(--color-subtle)]">
+			Advertisement
+		</p>
+		<ins
+			class="adsbygoogle block"
+			style={`display:block;min-height:${minHeight}px`}
+			data-ad-client={clientId}
+			data-ad-slot={slotId}
+			data-ad-format="auto"
+			data-full-width-responsive="true"
+		></ins>
+		<script is:inline>
+			(window.adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+	</aside>
+)}

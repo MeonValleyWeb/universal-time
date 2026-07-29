@@ -1,30 +1,39 @@
 {
-  "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "universal-time",
-  "main": "src/worker.ts",
-  "compatibility_date": "2026-07-29",
-  "compatibility_flags": ["nodejs_compat"],
-  "workers_dev": false,
-  "preview_urls": false,
-  "assets": {
-    "directory": "./dist",
-    "binding": "ASSETS",
-    "run_worker_first": true,
-    "html_handling": "drop-trailing-slash",
-    "not_found_handling": "404-page"
-  },
-  "routes": [
-    {
-      "pattern": "universaltime.app",
-      "custom_domain": true
-    },
-    {
-      "pattern": "www.universaltime.app",
-      "custom_domain": true
-    }
-  ],
-  "observability": {
-    "enabled": true,
-    "head_sampling_rate": 1
-  }
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "universal-time",
+	"main": "src/worker.ts",
+	"compatibility_date": "2026-07-29",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"workers_dev": false,
+	"preview_urls": false,
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS",
+		"run_worker_first": true,
+		"html_handling": "drop-trailing-slash",
+		"not_found_handling": "404-page"
+	},
+	"routes": [
+		{
+			"pattern": "universaltime.app",
+			"custom_domain": true
+		},
+		{
+			"pattern": "www.universaltime.app",
+			"custom_domain": true
+		}
+	],
+	"observability": {
+		"enabled": true,
+		"head_sampling_rate": 1
+	},
+	"d1_databases": [
+		{
+			"binding": "NEWSLETTER_DB",
+			"database_name": "universal-time-newsletter",
+			"database_id": "4c79881a-b2fc-4db2-99f0-a6a4b83237cd"
+		}
+	]
 }

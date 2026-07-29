@@ -1,10 +1,30 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const quickRoutes = [
+	{ href: '/', label: 'Ask a time question', detail: 'Natural language, no timezone algebra' },
+	{ href: '/meeting-planner', label: 'Plan a meeting', detail: 'Find a civilised hour for everyone' },
+	{ href: '/astronomy', label: 'Check the sky clock', detail: 'Sun, Moon, eclipses and celestial events' },
+	{ href: '/guides', label: 'Understand time itself', detail: 'Atomic clocks, DST, UTC and the odd history of hours' },
+];
+
+const popularRoutes = [
+	{ href: '/convert/london/auckland', label: 'London → Auckland', note: 'For people with family tomorrow' },
+	{ href: '/convert/new-york/london', label: 'New York → London', note: 'The Atlantic’s favourite scheduling argument' },
+	{ href: '/time/tokyo', label: 'Time in Tokyo', note: 'Usually later than you hoped' },
+	{ href: '/guides/pdt-mdt-cdt-edt', label: 'PDT, MDT, CDT & EDT', note: 'Four letters, several opportunities for regret' },
+];
+
+const timeFacts = [
+	['86,400', 'seconds in a conventional civil day'],
+	['9,192,631,770', 'caesium transitions used to define one SI second'],
+	['UTC', 'the standard that refuses to participate in daylight saving'],
+];
 ---
 
 <BaseLayout
-	title="That moment cannot be found · WorldTime"
-	description="This WorldTime page does not exist. Ask a time question, compare cities, or explore the knowledge of time."
+	title="404: this page missed its appointment · WorldTime"
+	description="The requested WorldTime page could not be found. Recover with live clocks, converters, meeting tools and genuinely useful time facts."
 >
 	<header class="border-b border-[var(--color-line)] px-5 sm:px-8">
 		<div class="mx-auto flex h-20 max-w-[1500px] items-center justify-between">
@@ -12,24 +32,135 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 				<span class="grid size-9 place-items-center rounded-full bg-[var(--color-signal)] font-serif text-xl italic text-[var(--color-signal-ink)]">W</span>
 				<span class="font-serif text-xl">WorldTime</span>
 			</a>
-			<span class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-subtle)]">404 · outside the known clock</span>
+			<span class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-subtle)]">HTTP 404 · punctual, if unhelpful</span>
 		</div>
 	</header>
 
-	<main class="px-5 py-20 sm:px-8 lg:py-28">
-		<div class="mx-auto max-w-[1500px]">
-			<p class="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--color-signal)]">A missing moment</p>
-			<h1 class="mt-5 max-w-5xl font-serif text-[clamp(4rem,10vw,10rem)] leading-[0.82] tracking-[-0.07em]">
-				Time moved on.<br /><em class="font-normal text-[var(--color-signal)]">This page did not.</em>
-			</h1>
-			<p class="mt-9 max-w-xl text-base leading-7 text-[var(--color-muted)]">
-				The address may have changed, but the answer you need is probably still here.
-			</p>
-			<div class="mt-10 flex flex-wrap gap-3">
-				<a href="/" class="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm text-[var(--color-canvas)]">Ask WorldTime</a>
-				<a href="/guides" class="rounded-full border border-[var(--color-line)] px-6 py-3 text-sm">Explore time guides</a>
-				<a href="/astronomy" class="rounded-full border border-[var(--color-line)] px-6 py-3 text-sm">Sun, Moon and sky time</a>
+	<main>
+		<section class="atlas-hero relative overflow-hidden border-b border-[var(--color-line)] px-5 py-16 sm:px-8 lg:py-24">
+			<img src="/world-atlas-bg.webp" alt="" class="pointer-events-none absolute inset-0 size-full object-cover opacity-35" aria-hidden="true" />
+			<div class="atlas-wash pointer-events-none absolute inset-0 bg-gradient-to-r from-[#f6f0e4]/95 via-[#f6f0e4]/70 to-transparent" aria-hidden="true"></div>
+			<div class="relative mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
+				<div>
+					<p class="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--color-signal)]">A tiny tear in the space-time continuum</p>
+					<p class="mt-4 font-['Share_Tech_Mono'] text-[clamp(7rem,20vw,19rem)] leading-[0.7] tracking-[-0.08em] text-[var(--color-ink)]" aria-hidden="true">404</p>
+					<h1 class="mt-12 max-w-5xl font-serif text-[clamp(3.4rem,7vw,7.5rem)] leading-[0.86] tracking-[-0.065em]">
+						This page missed<br /><em class="font-normal text-[var(--color-signal)]">its appointment.</em>
+					</h1>
+					<p class="mt-8 max-w-2xl text-lg leading-8 text-[var(--color-muted)]">
+						It may have moved, expired, or simply decided URLs were a social construct. Either way, repeatedly refreshing will only make both of us uncomfortable.
+					</p>
+				</div>
+				<aside class="border border-[var(--color-line)] bg-[var(--color-surface-elevated)]/90 p-6 backdrop-blur sm:p-8">
+					<p class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-signal)]">The clocks survived</p>
+					<div class="mt-8 border-b border-[var(--color-line)] pb-7">
+						<p class="font-mono text-[8px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Where you are</p>
+						<time data-local-clock class="mt-2 block font-['Share_Tech_Mono'] text-5xl tabular-nums">--:--:--</time>
+						<p data-local-zone class="mt-2 text-sm text-[var(--color-muted)]">Your browser’s local time</p>
+					</div>
+					<div class="pt-7">
+						<p class="font-mono text-[8px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Coordinated Universal Time</p>
+						<time data-utc-clock class="mt-2 block font-['Share_Tech_Mono'] text-4xl tabular-nums">--:--:--</time>
+						<p class="mt-2 text-sm text-[var(--color-muted)]">UTC remains blameless in this incident.</p>
+					</div>
+				</aside>
 			</div>
-		</div>
+		</section>
+
+		<section class="px-5 py-16 sm:px-8 lg:py-24">
+			<div class="mx-auto max-w-[1500px]">
+				<div class="grid gap-10 lg:grid-cols-[.6fr_1.4fr]">
+					<div>
+						<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Choose a less fictional destination</p>
+						<h2 class="mt-4 font-serif text-5xl leading-none tracking-[-0.05em]">Useful exits.</h2>
+						<p class="mt-5 max-w-sm text-sm leading-6 text-[var(--color-muted)]">
+							Unlike the page you requested, these have been personally checked for signs of existence.
+						</p>
+					</div>
+					<div class="grid gap-px bg-[var(--color-line)] sm:grid-cols-2">
+						{quickRoutes.map((route, index) => (
+							<a href={route.href} class="group min-h-52 bg-[var(--color-surface)] p-6 hover:bg-[var(--color-ink)] hover:text-[var(--color-canvas)]">
+								<span class="font-mono text-[9px] text-[var(--color-signal)]">0{index + 1}</span>
+								<h3 class="mt-12 font-serif text-3xl tracking-[-0.04em]">{route.label}</h3>
+								<p class="mt-3 text-sm text-[var(--color-muted)] group-hover:text-[var(--color-subtle)]">{route.detail}</p>
+							</a>
+						))}
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="border-y border-[var(--color-line)] bg-[var(--color-surface)] px-5 py-16 sm:px-8">
+			<div class="mx-auto max-w-[1500px]">
+				<div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+					<div>
+						<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Popular rescues</p>
+						<h2 class="mt-3 font-serif text-4xl tracking-[-0.045em]">Most people were looking for one of these.</h2>
+					</div>
+					<a href="/" class="text-sm text-[var(--color-signal)] hover:underline">Or start again, with dignity →</a>
+				</div>
+				<div class="mt-9 grid border-l border-t border-[var(--color-line)] md:grid-cols-2">
+					{popularRoutes.map((route) => (
+						<a href={route.href} class="border-b border-r border-[var(--color-line)] p-6 hover:bg-[var(--color-ink)] hover:text-[var(--color-canvas)]">
+							<h3 class="font-serif text-2xl">{route.label}</h3>
+							<p class="mt-2 text-sm text-[var(--color-muted)]">{route.note}</p>
+						</a>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<section class="px-5 py-16 sm:px-8 lg:py-24">
+			<div class="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[.75fr_1.25fr]">
+				<div>
+					<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Compensation for your inconvenience</p>
+					<h2 class="mt-4 max-w-lg font-serif text-5xl leading-none tracking-[-0.05em]">Three facts you did not ask for.</h2>
+					<p class="mt-5 max-w-md text-sm leading-6 text-[var(--color-muted)]">Still more useful than an error stack, and considerably better dressed.</p>
+				</div>
+				<dl class="grid gap-px bg-[var(--color-line)]">
+					{timeFacts.map(([value, detail]) => (
+						<div class="grid bg-[var(--color-surface)] p-6 sm:grid-cols-[16rem_1fr] sm:items-baseline sm:gap-8">
+							<dt class="font-['Share_Tech_Mono'] text-3xl text-[var(--color-signal)] sm:text-4xl">{value}</dt>
+							<dd class="mt-2 text-base text-[var(--color-muted)] sm:mt-0">{detail}</dd>
+						</div>
+					))}
+				</dl>
+			</div>
+		</section>
 	</main>
+
+	<script is:inline>
+		const localClock = document.querySelector('[data-local-clock]');
+		const utcClock = document.querySelector('[data-utc-clock]');
+		const localZone = document.querySelector('[data-local-zone]');
+		const localFormatter = new Intl.DateTimeFormat(undefined, {
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit',
+			hourCycle: 'h23',
+		});
+		const utcFormatter = new Intl.DateTimeFormat('en-GB', {
+			timeZone: 'UTC',
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit',
+			hourCycle: 'h23',
+		});
+		const renderClocks = () => {
+			const now = new Date();
+			if (localClock) {
+				localClock.textContent = localFormatter.format(now);
+				localClock.setAttribute('datetime', now.toISOString());
+			}
+			if (utcClock) {
+				utcClock.textContent = `${utcFormatter.format(now)} UTC`;
+				utcClock.setAttribute('datetime', now.toISOString());
+			}
+		};
+		if (localZone) {
+			localZone.textContent = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Your browser’s local time';
+		}
+		renderClocks();
+		window.setInterval(renderClocks, 1000);
+	</script>
 </BaseLayout>

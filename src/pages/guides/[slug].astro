@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
 import { timeGuides, type TimeGuide } from '../../lib/guides';
 
 export function getStaticPaths() {
@@ -8,6 +9,7 @@ export function getStaticPaths() {
 
 interface Props { guide: TimeGuide }
 const { guide } = Astro.props;
+const guideAdSlot = import.meta.env.PUBLIC_ADSENSE_GUIDE_SLOT?.trim() ?? '';
 const related = timeGuides.filter((item) => item.slug !== guide.slug && item.category === guide.category).slice(0, 3);
 const schema = {
 	'@context': 'https://schema.org',
@@ -23,6 +25,7 @@ const schema = {
 	description={guide.summary}
 	canonical={`/guides/${guide.slug}`}
 	schema={schema}
+	adSlot={guideAdSlot}
 >
 	<header class="border-b border-[var(--color-line)] px-5 sm:px-8">
 		<div class="mx-auto flex h-20 max-w-[1200px] items-center justify-between">
@@ -69,6 +72,8 @@ const schema = {
 				</aside>
 			</div>
 		</article>
+
+		<AdSlot slotId={guideAdSlot} placement="time-guide-after-article" minHeight={140} />
 
 		{related.length > 0 && (
 			<section class="mx-auto mt-20 max-w-[1200px] border-t border-[var(--color-line)] pt-12">

@@ -1,0 +1,192 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const adsActive =
+	import.meta.env.PUBLIC_ADSENSE_ENABLED === 'true'
+	&& import.meta.env.PUBLIC_ADSENSE_CONSENT_READY === 'true'
+	&& /^ca-pub-\d+$/.test(import.meta.env.PUBLIC_ADSENSE_CLIENT?.trim() ?? '');
+const analyticsActive = Boolean(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN?.trim());
+const privacyEmail = import.meta.env.PUBLIC_PRIVACY_EMAIL?.trim() || 'privacy@universaltime.app';
+const updated = '29 July 2026';
+---
+
+<BaseLayout
+	title="Privacy & cookies · WorldTime"
+	description="A plain-English explanation of what WorldTime stores, what stays in your browser, how Cloudflare operates the site and how advertising will work."
+	canonical="/privacy"
+>
+	<header class="border-b border-[var(--color-line)] px-5 sm:px-8">
+		<div class="mx-auto flex h-20 max-w-[1200px] items-center justify-between">
+			<a href="/" class="flex items-center gap-3">
+				<span class="grid size-9 place-items-center rounded-full bg-[var(--color-signal)] font-serif text-xl italic text-[var(--color-signal-ink)]">W</span>
+				<span class="font-serif text-xl">WorldTime</span>
+			</a>
+			<span class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-subtle)]">Last updated · {updated}</span>
+		</div>
+	</header>
+
+	<main>
+		<section class="border-b border-[var(--color-line)] px-5 py-16 sm:px-8 lg:py-24">
+			<div class="mx-auto max-w-[1200px]">
+				<p class="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--color-signal)]">Privacy, without the temporal distortion</p>
+				<h1 class="mt-5 max-w-5xl font-serif text-[clamp(4rem,9vw,8.5rem)] leading-[0.84] tracking-[-0.065em]">
+					Your time is yours.<br /><em class="font-normal text-[var(--color-signal)]">So is your data.</em>
+				</h1>
+				<p class="mt-8 max-w-3xl text-xl leading-8 text-[var(--color-muted)]">
+					WorldTime works without accounts or behavioural profiles. If you deliberately join “On this day…”, we store only the details needed to run it. This page explains that choice, browser storage, infrastructure data and what changes when advertising is enabled.
+				</p>
+			</div>
+		</section>
+
+		<section class="px-5 py-14 sm:px-8">
+			<div class="mx-auto grid max-w-[1200px] gap-px bg-[var(--color-line)] md:grid-cols-3">
+				<div class="bg-[var(--color-surface)] p-6">
+					<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Newsletter</p>
+					<p class="mt-5 font-serif text-3xl">Opt-in only</p>
+					<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">Email and date of birth are saved only after explicit consent.</p>
+				</div>
+				<div class="bg-[var(--color-surface)] p-6">
+					<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Web analytics</p>
+					<p class="mt-5 font-serif text-3xl">{analyticsActive ? 'Active' : 'Not configured'}</p>
+					<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">Cloudflare’s privacy-first performance and traffic measurement.</p>
+				</div>
+				<div class="bg-[var(--color-surface)] p-6">
+					<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Advertising</p>
+					<p class="mt-5 font-serif text-3xl">{adsActive ? 'Active' : 'Not active'}</p>
+					<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">Ad code remains gated until publisher details and consent handling are ready.</p>
+				</div>
+			</div>
+		</section>
+
+		<div class="px-5 pb-20 sm:px-8 lg:pb-28">
+			<div class="mx-auto grid max-w-[1200px] gap-14 lg:grid-cols-[17rem_1fr] lg:gap-20">
+				<aside>
+					<nav class="sticky top-8 border-l border-[var(--color-line)] pl-5 text-sm leading-8" aria-label="Privacy sections">
+						<a href="#short-version" class="block hover:text-[var(--color-signal)]">The short version</a>
+						<a href="#browser" class="block hover:text-[var(--color-signal)]">What stays in your browser</a>
+						<a href="#cloudflare" class="block hover:text-[var(--color-signal)]">Cloudflare and logs</a>
+						<a href="#newsletter" class="block hover:text-[var(--color-signal)]">Newsletter and D1</a>
+						<a href="#advertising" class="block hover:text-[var(--color-signal)]">Advertising and consent</a>
+						<a href="#cookies" class="block hover:text-[var(--color-signal)]">Cookie and storage register</a>
+						<a href="#choices" class="block hover:text-[var(--color-signal)]">Your choices</a>
+						<a href="#contact" class="block hover:text-[var(--color-signal)]">Contact</a>
+					</nav>
+				</aside>
+
+				<article class="min-w-0 space-y-16">
+					<section id="short-version" class="scroll-mt-8">
+						<p class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-signal)]">01 · The short version</p>
+						<h2 class="mt-4 font-serif text-4xl tracking-[-0.04em]">We calculate time, not personality profiles.</h2>
+						<p class="mt-5 text-lg leading-8 text-[var(--color-muted)]">
+							Time questions, conversions and the personal time calculation run in your browser. WorldTime does not ask for your name, create an account, sell a mailing list, store your time questions or save the calculator’s “days remaining” yardstick. Hosting and security still require Cloudflare to process ordinary network request data. Email and date of birth are stored only when you separately ask to join the newsletter.
+						</p>
+					</section>
+
+					<section id="browser" class="scroll-mt-8 border-t border-[var(--color-line)] pt-12">
+						<p class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-signal)]">02 · What stays in your browser</p>
+						<h2 class="mt-4 font-serif text-4xl tracking-[-0.04em]">Local means local.</h2>
+						<div class="mt-6 space-y-5 text-base leading-7 text-[var(--color-muted)]">
+							<p>Your browser’s timezone is read using standard browser APIs so answers can be expressed in your local time. It is not GPS and is not sent to a WorldTime database.</p>
+							<p>If you choose <strong class="text-[var(--color-ink)]">Use my location</strong> on the astronomy page, your browser asks for permission. The coordinates are used on that device to calculate Sun and Moon times and are not transmitted to WorldTime.</p>
+							<p>Your Paper, Dark or Auto theme preference is stored in local storage under <code class="text-[var(--color-ink)]">worldtime:theme</code>. It remains until you change it or clear browser storage.</p>
+						</div>
+					</section>
+
+					<section id="cloudflare" class="scroll-mt-8 border-t border-[var(--color-line)] pt-12">
+						<p class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-signal)]">03 · Cloudflare and operational logs</p>
+						<h2 class="mt-4 font-serif text-4xl tracking-[-0.04em]">Someone has to deliver the page.</h2>
+						<div class="mt-6 space-y-5 text-base leading-7 text-[var(--color-muted)]">
+							<p>WorldTime is hosted on Cloudflare Workers. Cloudflare processes connection and request information—such as IP address, browser details, requested URL, response status and approximate network location—to deliver, secure and troubleshoot the service.</p>
+							<p>Worker invocation logs and aggregate metrics are retained according to the Cloudflare plan and account settings. WorldTime does not add names, email addresses or user IDs to those logs.</p>
+							<p>If Cloudflare Web Analytics is active, its performance beacon measures page views and loading performance. Cloudflare describes this product as privacy-first and says it does not collect or use visitors’ personal data or track people across customer sites.</p>
+						</div>
+					</section>
+
+					<section id="newsletter" class="scroll-mt-8 border-t border-[var(--color-line)] pt-12">
+						<p class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-signal)]">04 · “On this day…” newsletter and D1</p>
+						<h2 class="mt-4 font-serif text-4xl tracking-[-0.04em]">A mailing list, not a time machine dossier.</h2>
+						<div class="mt-6 space-y-5 text-base leading-7 text-[var(--color-muted)]">
+							<p>If you enter an email address and date of birth, tick the consent box and submit the form, WorldTime stores the email address, date of birth, subscription status, consent version and timestamps in a Cloudflare D1 database. It also creates a random unsubscribe token. The form is restricted to people aged 18 or over.</p>
+							<p>The date of birth lets future editions connect your date with historical events, anniversaries and astronomical context. It is not used to predict death, health, creditworthiness, insurance risk or anything else that would make a whimsical clock website alarmingly powerful.</p>
+							<p>Newsletter records are kept while a subscription is active. If you unsubscribe, the record is marked unsubscribed so it is not accidentally re-mailed; you can ask for deletion by contacting us. WorldTime does not currently share or sell this list, and the email delivery system will be documented here before the first edition is sent.</p>
+						</div>
+					</section>
+
+					<section id="advertising" class="scroll-mt-8 border-t border-[var(--color-line)] pt-12">
+						<p class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-signal)]">05 · Advertising and consent</p>
+						<h2 class="mt-4 font-serif text-4xl tracking-[-0.04em]">Ads are conditional, not sneaky.</h2>
+						<div class="mt-6 space-y-5 text-base leading-7 text-[var(--color-muted)]">
+							<p>WorldTime is prepared to use Google AdSense on substantive guide and converter pages. It does not place ads on error, privacy or other low-value utility pages.</p>
+							<p>When advertising is activated, Google and its advertising partners may use cookies, local storage, device information and activity data to deliver and measure ads, prevent fraud, limit repetition and—where you consent—personalise advertising.</p>
+							<p>For visitors in the EEA, United Kingdom and Switzerland, advertising will only be activated after a Google-certified consent management platform is configured. The consent message will provide choices to consent, decline or manage purposes. Your choice may itself be saved so it does not ask on every page.</p>
+							<p>Learn more about <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noreferrer" class="text-[var(--color-signal)] hover:underline">how Google uses information from sites that use its services ↗</a>.</p>
+						</div>
+					</section>
+
+					<section id="cookies" class="scroll-mt-8 border-t border-[var(--color-line)] pt-12">
+						<p class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-signal)]">06 · Cookie and storage register</p>
+						<h2 class="mt-4 font-serif text-4xl tracking-[-0.04em]">The small-print inventory.</h2>
+						<div class="mt-7 overflow-x-auto border border-[var(--color-line)]">
+							<table class="w-full min-w-[680px] border-collapse text-left text-sm">
+								<thead class="bg-[var(--color-surface)] font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--color-subtle)]">
+									<tr>
+										<th class="border-b border-[var(--color-line)] p-4">Item</th>
+										<th class="border-b border-[var(--color-line)] p-4">Type</th>
+										<th class="border-b border-[var(--color-line)] p-4">Purpose</th>
+										<th class="border-b border-[var(--color-line)] p-4">Duration</th>
+									</tr>
+								</thead>
+								<tbody class="text-[var(--color-muted)]">
+									<tr>
+										<td class="border-b border-[var(--color-line)] p-4 text-[var(--color-ink)]">worldtime:theme</td>
+										<td class="border-b border-[var(--color-line)] p-4">First-party local storage</td>
+										<td class="border-b border-[var(--color-line)] p-4">Remembers Auto, Paper or Dark</td>
+										<td class="border-b border-[var(--color-line)] p-4">Until changed or cleared</td>
+									</tr>
+									<tr>
+										<td class="border-b border-[var(--color-line)] p-4 text-[var(--color-ink)]">Cloudflare security</td>
+										<td class="border-b border-[var(--color-line)] p-4">Strictly necessary, if issued</td>
+										<td class="border-b border-[var(--color-line)] p-4">Traffic delivery, bot detection and abuse prevention</td>
+										<td class="border-b border-[var(--color-line)] p-4">Varies by security feature</td>
+									</tr>
+									<tr>
+										<td class="border-b border-[var(--color-line)] p-4 text-[var(--color-ink)]">Consent choice</td>
+										<td class="border-b border-[var(--color-line)] p-4">CMP cookie or local storage</td>
+										<td class="border-b border-[var(--color-line)] p-4">Remembers advertising and privacy choices</td>
+										<td class="border-b border-[var(--color-line)] p-4">Defined in the consent message</td>
+									</tr>
+									<tr>
+										<td class="p-4 text-[var(--color-ink)]">Google advertising</td>
+										<td class="p-4">Third-party cookies and storage</td>
+										<td class="p-4">Ad delivery, measurement, fraud prevention and personalisation where allowed</td>
+										<td class="p-4">Controlled by Google, partners and your consent</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</section>
+
+					<section id="choices" class="scroll-mt-8 border-t border-[var(--color-line)] pt-12">
+						<p class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-signal)]">07 · Your choices</p>
+						<h2 class="mt-4 font-serif text-4xl tracking-[-0.04em]">You retain the controls.</h2>
+						<ul class="mt-6 space-y-4 text-base leading-7 text-[var(--color-muted)]">
+							<li class="border-l border-[var(--color-signal)] pl-4">Decline optional advertising purposes in the consent message without losing access to WorldTime.</li>
+							<li class="border-l border-[var(--color-signal)] pl-4">Use your browser settings to block or delete cookies and local storage.</li>
+							<li class="border-l border-[var(--color-signal)] pl-4">Deny geolocation permission; only the local sky calculations require it.</li>
+							<li class="border-l border-[var(--color-signal)] pl-4">Use Google’s ad controls to manage personalisation associated with Google services.</li>
+							<li class="border-l border-[var(--color-signal)] pl-4">Unsubscribe from “On this day…” using the link in an edition, or email us to request access, correction or deletion.</li>
+						</ul>
+					</section>
+
+					<section id="contact" class="scroll-mt-8 border-t border-[var(--color-line)] pt-12">
+						<p class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-signal)]">08 · Contact and changes</p>
+						<h2 class="mt-4 font-serif text-4xl tracking-[-0.04em]">Questions are allowed. Even awkward ones.</h2>
+						<p class="mt-6 text-base leading-7 text-[var(--color-muted)]">
+							For privacy questions or requests, email <a href={`mailto:${privacyEmail}`} class="text-[var(--color-signal)] hover:underline">{privacyEmail}</a>. This notice will be updated when the service, advertising partners or data practices materially change. WorldTime is a general-audience service; the newsletter form rejects subscriptions from people under 18.
+						</p>
+					</section>
+				</article>
+			</div>
+		</div>
+	</main>
+</BaseLayout>

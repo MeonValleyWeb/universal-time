@@ -14,6 +14,7 @@ export const GET: APIRoute = ({ site, url }) => {
 		{ path: '/meeting-planner', priority: '0.8', frequency: 'weekly' },
 		{ path: '/astronomy', priority: '0.8', frequency: 'daily' },
 		{ path: '/guides', priority: '0.8', frequency: 'weekly' },
+		{ path: '/privacy', priority: '0.3', frequency: 'yearly' },
 		...timeGuides.map((guide) => ({
 			path: `/guides/${guide.slug}`,
 			priority: '0.7',

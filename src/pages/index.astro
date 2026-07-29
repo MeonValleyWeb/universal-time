@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NaturalTime from '../components/NaturalTime';
+import PersonalTimeScale from '../components/PersonalTimeScale';
 import WorldStrip from '../components/WorldStrip';
 import { cities } from '../lib/cities';
 
@@ -131,6 +132,8 @@ const initialNow = Date.now();
 			</div>
 		</section>
 
+		<PersonalTimeScale client:load />
+
 		<section id="world-clocks" class="px-5 py-16 sm:px-8">
 			<div class="mx-auto max-w-[1500px]">
 				<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-stone-500">Popular city clocks</p>
@@ -146,8 +149,5 @@ const initialNow = Date.now();
 			</div>
 		</section>
 
-		<aside aria-label="Advertisement" class="border-t border-stone-300 px-5 py-8 text-center sm:px-8">
-			<div class="mx-auto grid min-h-24 max-w-[970px] place-items-center border border-dashed border-stone-300 font-mono text-[10px] uppercase tracking-[0.2em] text-stone-400">Advertisement</div>
-		</aside>
 	</main>
 </BaseLayout>

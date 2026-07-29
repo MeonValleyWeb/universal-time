@@ -7,6 +7,7 @@ interface Props {
 	description?: string;
 	canonical?: string;
 	schema?: Record<string, unknown> | Record<string, unknown>[];
+	adSlot?: string;
 }
 
 const {
@@ -14,6 +15,7 @@ const {
 	description = 'Convert any time, compare cities and find the right moment to call.',
 	canonical,
 	schema,
+	adSlot = '',
 } = Astro.props;
 const baseUrl = Astro.site ?? Astro.url;
 const socialImage = new URL('/og.png', baseUrl);
@@ -36,6 +38,14 @@ const structuredData = schema
 const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 const bingVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
 const cloudflareAnalyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
+const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT?.trim() ?? '';
+const adsenseEnabled = import.meta.env.PUBLIC_ADSENSE_ENABLED === 'true';
+const adsenseConsentReady = import.meta.env.PUBLIC_ADSENSE_CONSENT_READY === 'true';
+const adsensePageReady =
+	adsenseEnabled
+	&& adsenseConsentReady
+	&& /^ca-pub-\d+$/.test(adsenseClient)
+	&& /^\d+$/.test(adSlot);
 ---
 
 <!doctype html>
@@ -65,16 +75,34 @@ const cloudflareAnalyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 		<meta name="twitter:image" content={socialImage} />
 		{googleVerification && <meta name="google-site-verification" content={googleVerification} />}
 		{bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
+		{/^ca-pub-\d+$/.test(adsenseClient) && <meta name="google-adsense-account" content={adsenseClient} />}
 		{canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Newsreader:opsz,wght@6..72,300;6..72,500&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+		{adsensePageReady && (
+			<script
+				is:inline
+				async
+				crossorigin="anonymous"
+				src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+			></script>
+		)}
 		<title>{title}</title>
 	</head>
 	<body class="min-h-screen bg-[var(--color-canvas)] font-[Newsreader] text-[var(--color-ink)] antialiased selection:bg-[var(--color-signal)] selection:text-[var(--color-signal-ink)]">
 		<slot />
+		<footer class="border-t border-[var(--color-line)] px-5 py-8 sm:px-8">
+			<div class="mx-auto flex max-w-[1500px] flex-col gap-5 text-sm text-[var(--color-muted)] sm:flex-row sm:items-center sm:justify-between">
+				<p><span class="text-[var(--color-ink)]">WorldTime</span> · Built around UTC, not around you.</p>
+				<nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Legal and information">
+					<a href="/guides" class="hover:text-[var(--color-signal)]">How time works</a>
+					<a href="/privacy" class="hover:text-[var(--color-signal)]">Privacy & cookies</a>
+				</nav>
+			</div>
+		</footer>
 		<ThemeSwitcher client:load />
 		{cloudflareAnalyticsToken && (
 			<script
