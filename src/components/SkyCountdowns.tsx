@@ -10,9 +10,9 @@ const events = [
 	},
 	{
 		name: 'Perseid meteor peak',
-		kind: 'Comet time',
+		kind: 'Meteor shower',
 		at: '2026-08-13T01:56:00Z',
-		detail: 'Earth reaches the heart of the debris stream left by comet 109P/Swift–Tuttle.',
+		detail: 'Earth reaches the heart of the debris stream left by comet 109P/Swift-Tuttle.',
 		source: 'https://eclipse.gsfc.nasa.gov/SKYCAL/SKYCAL.html?cal=2026',
 	},
 	{
