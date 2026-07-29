@@ -9,7 +9,7 @@ const { PUBLIC_SITE_URL } = loadEnv('production', new URL('.', import.meta.url).
 
 // https://astro.build/config
 export default defineConfig({
-  ...(PUBLIC_SITE_URL ? { site: PUBLIC_SITE_URL } : {}),
+  site: PUBLIC_SITE_URL || 'https://universaltime.app',
   integrations: [preact()],
 
   vite: {

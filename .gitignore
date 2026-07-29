@@ -5,6 +5,8 @@ dist/
 .codegraph/
 .playwright-cli/
 .netlify/
+.wrangler/
+worker-startup.cpuprofile
 
 # dependencies
 node_modules/

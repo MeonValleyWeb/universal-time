@@ -11,6 +11,9 @@
     "check": "astro check",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "preview": "astro preview",
+    "cf:types": "wrangler types",
+    "cf:check": "wrangler deploy --dry-run",
+    "deploy:cloudflare": "npm run build && wrangler deploy",
     "astro": "astro"
   },
   "dependencies": {
@@ -23,6 +26,8 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
-    "typescript": "^6.0.3"
+    "@types/node": "^22.20.1",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.115.0"
   }
 }
