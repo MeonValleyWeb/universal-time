@@ -91,7 +91,7 @@ export default function NaturalTime({
 							id="time-query"
 							value={query}
 							onInput={(event) => setQuery(event.currentTarget.value)}
-							class="w-full bg-transparent font-serif text-2xl leading-tight tracking-[-0.025em] text-[var(--color-ink)] outline-none placeholder:text-[var(--color-subtle)] sm:text-3xl"
+							class="w-full bg-transparent font-serif text-xl leading-tight tracking-[-0.025em] text-[var(--color-ink)] outline-none placeholder:text-[var(--color-subtle)] sm:text-2xl lg:text-3xl"
 							placeholder="4pm New York in London tomorrow"
 							autocomplete="off"
 						/>
