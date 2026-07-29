@@ -81,53 +81,54 @@ export default function NaturalTime({
 		: 0;
 
 	return (
-			<section class="atlas-panel min-w-0 border border-stone-950/20 bg-[#fbf7ed]/90 p-4 shadow-[0_24px_70px_rgba(68,54,36,0.10)] backdrop-blur-[2px] sm:p-8 lg:p-10">
-				<form onSubmit={submit}>
-					<div class="mb-3 flex flex-wrap items-center justify-between gap-2">
-						<label for="time-query" class="block font-mono text-[11px] uppercase tracking-[0.22em] text-stone-500">
-							Ask anything about time
-						</label>
-						<span class="font-mono text-[9px] uppercase tracking-[0.14em] text-orange-700">
-							Your time · {localTarget.name}
-						</span>
-					</div>
-					<div class="relative border-b-2 border-stone-950 pb-3 focus-within:border-orange-600">
+			<section class="time-instrument min-w-0 border border-[var(--color-line)] bg-[var(--color-surface)]/92 backdrop-blur-[3px]">
+				<form onSubmit={submit} class="grid border-b border-[var(--color-line)] md:grid-cols-[12rem_1fr_auto]">
+					<label for="time-query" class="flex items-center border-b border-[var(--color-line)] px-5 py-4 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-subtle)] md:border-b-0 md:border-r">
+						Ask about time
+					</label>
+					<div class="relative px-5 py-4 focus-within:bg-[var(--color-input)]">
 						<input
 							id="time-query"
 							value={query}
 							onInput={(event) => setQuery(event.currentTarget.value)}
-							class="w-full bg-transparent pr-14 font-serif text-xl leading-tight tracking-[-0.025em] text-stone-950 outline-none placeholder:text-stone-400 sm:text-4xl"
+							class="w-full bg-transparent font-serif text-2xl leading-tight tracking-[-0.025em] text-[var(--color-ink)] outline-none placeholder:text-[var(--color-subtle)] sm:text-3xl"
 							placeholder="4pm New York in London tomorrow"
 							autocomplete="off"
 						/>
-						<button aria-label="Convert time" class="absolute bottom-3 right-0 grid size-10 place-items-center rounded-full bg-orange-600 text-xl text-white hover:scale-105 active:scale-95">
-							→
-						</button>
 					</div>
+					<button class="m-3 min-h-12 bg-[var(--color-ink)] px-7 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-[var(--color-canvas)] hover:bg-[var(--color-signal)] hover:text-[var(--color-signal-ink)] active:translate-y-px">
+						Find the time
+					</button>
 				</form>
 
-				<div aria-live="polite" class="mt-7 min-h-[245px] sm:mt-9 sm:min-h-[255px]">
+				<div aria-live="polite" class="min-h-[300px]">
 					{result ? (
-						<div>
-							<div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-500">
-								<span class={`size-2 rounded-full ${goodTime ? 'bg-emerald-500' : 'bg-orange-500'}`} />
-								{result.intent === 'before-bed'
-									? (goodTime ? `A good time to call ${result.target.name}` : `${result.target.name} may be asleep`)
-									: (goodTime ? 'A good time to call' : 'Outside usual working hours')}
-								{result.detectedTimeCount > 1 && <span>· first of {result.detectedTimeCount} times</span>}
+						<div class="grid lg:grid-cols-[minmax(0,1.5fr)_minmax(18rem,0.5fr)]">
+							<div class="min-w-0 border-b border-[var(--color-line)] p-5 sm:p-7 lg:border-b-0 lg:border-r lg:p-9">
+								<div class="flex flex-wrap items-center justify-between gap-3">
+									<p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">
+										{result.intent === 'before-bed'
+											? (goodTime ? `A good time to call ${result.target.name}` : `${result.target.name} may be asleep`)
+											: (goodTime ? 'A good time to call' : 'Outside usual working hours')}
+									</p>
+									<p class="font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--color-signal)]">
+										Local reference: {localTarget.name}
+									</p>
+								</div>
+								<div class="mt-7 flex min-w-0 items-start">
+									<span class="min-w-0 font-['Share_Tech_Mono'] text-[clamp(5.4rem,15vw,13rem)] leading-[0.72] tracking-[-0.075em] text-[var(--color-ink)]">
+										{formatClock(result.timestamp, result.answer.zone, false)}
+									</span>
+									<span class="ml-3 border border-[var(--color-signal)] px-2 py-1 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-signal)] sm:mt-2">
+										{getLocalParts(result.timestamp, result.answer.zone).abbreviation}
+									</span>
+								</div>
 							</div>
-							<div class="mt-5 flex min-w-0 items-start">
-								<span class="min-w-0 font-['Share_Tech_Mono'] text-[clamp(4.5rem,9.5vw,9.5rem)] leading-[0.78] tracking-[-0.075em] text-stone-950">
-									{formatClock(result.timestamp, result.answer.zone, false)}
-								</span>
-								<span class="ml-3 mt-1 rounded-full bg-orange-600 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-white sm:mt-3">
-									{getLocalParts(result.timestamp, result.answer.zone).abbreviation}
-								</span>
-							</div>
-							<div class="mt-7 flex flex-wrap items-end justify-between gap-5">
+							<div class="flex flex-col justify-between p-5 sm:p-7 lg:p-9">
 								<div>
-									<p class="font-serif text-2xl text-stone-950">{formatFullDate(result.timestamp, result.answer.zone)} in {result.answer.name}</p>
-									<p class="mt-1 text-sm text-stone-500">
+									<p class="font-serif text-4xl leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]">{result.answer.name}</p>
+									<p class="mt-4 text-base leading-6 text-[var(--color-muted)]">{formatFullDate(result.timestamp, result.answer.zone)}</p>
+									<p class="mt-2 text-sm leading-6 text-[var(--color-subtle)]">
 										{result.intent === 'before-bed'
 											? `${formatClock(result.timestamp, result.target.zone, false)} ${formatFullDate(result.timestamp, result.target.zone)} in ${result.target.name}`
 											: hourDifference === 0
@@ -135,32 +136,32 @@ export default function NaturalTime({
 											: `${Math.abs(hourDifference)} hours ${hourDifference > 0 ? 'ahead of' : 'behind'} ${result.source.name}`}
 									</p>
 									{result.warnings.map((warning) => (
-										<p class="mt-2 max-w-xl text-xs leading-5 text-orange-700">{warning}</p>
+										<p class="mt-3 text-xs leading-5 text-[var(--color-signal)]">{warning}</p>
 									))}
 								</div>
-								<div class="flex flex-wrap gap-2">
-									<button type="button" onClick={copy} class="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:border-stone-950">
+								<div class="mt-8 flex flex-wrap gap-x-5 gap-y-3 border-t border-[var(--color-line)] pt-5">
+									<button type="button" onClick={copy} class="text-sm text-[var(--color-muted)] underline-offset-4 hover:text-[var(--color-ink)] hover:underline">
 										{copied ? 'Copied' : 'Copy answer'}
 									</button>
-									<button type="button" onClick={share} class="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:border-stone-950">
+									<button type="button" onClick={share} class="text-sm text-[var(--color-muted)] underline-offset-4 hover:text-[var(--color-ink)] hover:underline">
 										Share query
 									</button>
 									{result.source.slug !== 'local' ? (
-										<a href={`/convert/${result.source.slug}/${result.target.slug}`} class="rounded-full bg-stone-950 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600">
-											Open converter
+										<a href={`/convert/${result.source.slug}/${result.target.slug}`} class="text-sm font-medium text-[var(--color-signal)] underline-offset-4 hover:underline">
+											Open converter →
 										</a>
 									) : (
-										<a href="/meeting-planner" class="rounded-full bg-stone-950 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600">
-											Open planner
+										<a href="/meeting-planner" class="text-sm font-medium text-[var(--color-signal)] underline-offset-4 hover:underline">
+											Open planner →
 										</a>
 									)}
 								</div>
 							</div>
 						</div>
 					) : (
-						<div class="border-l-2 border-orange-600 pl-5">
-							<p class="font-serif text-2xl text-stone-950">We couldn’t place that time yet.</p>
-							<p class="mt-2 text-sm text-stone-500">Try “9:30am New York in London tomorrow”.</p>
+						<div class="p-7 sm:p-10">
+							<p class="font-serif text-4xl text-[var(--color-ink)]">We couldn’t place that time yet.</p>
+							<p class="mt-3 text-sm text-[var(--color-muted)]">Try “9:30am New York in London tomorrow”.</p>
 						</div>
 					)}
 				</div>

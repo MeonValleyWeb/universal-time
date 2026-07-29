@@ -101,15 +101,6 @@ button {
 	border-color: var(--color-signal) !important;
 }
 
-.personal-time-scale {
-	--personal-muted: #aebbc4;
-	--personal-signal: #ff9b5a;
-}
-
-:root[data-theme="dark"] .personal-time-scale {
-	--personal-signal: #67e8f9;
-}
-
 @media (prefers-reduced-motion: reduce) {
 	* {
 		scroll-behavior: auto !important;
