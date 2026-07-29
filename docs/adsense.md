@@ -31,7 +31,10 @@ PUBLIC_ADSENSE_CONSENT_READY=true
 PUBLIC_ADSENSE_ENABLED=true
 ```
 
-6. Build and deploy. Confirm:
+6. Set `ADSENSE_PUBLISHER_ID` in `wrangler.jsonc` to the matching `pub-...`
+   value. The Worker publishes `/ads.txt` directly because Cloudflare static
+   assets can treat extension-shaped Astro routes as HTML fallbacks.
+7. Build and deploy. Confirm:
    - `/ads.txt` contains your `pub-...` entry.
    - the privacy page reports Advertising as active;
    - ad code appears on guide and converter pages;

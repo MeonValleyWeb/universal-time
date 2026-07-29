@@ -29,13 +29,14 @@ test('places gated ad units only on substantive content templates', async () => 
 });
 
 test('publishes privacy and ads.txt discovery routes', async () => {
-	const [sitemap, adsTxt, privacy] = await Promise.all([
+	const [sitemap, worker, privacy] = await Promise.all([
 		read('src/pages/sitemap.xml.ts'),
-		read('src/pages/ads.txt.ts'),
+		read('src/worker.ts'),
 		read('src/pages/privacy.astro'),
 	]);
 
 	assert.match(sitemap, /path: '\/privacy'/);
-	assert.match(adsTxt, /f08c47fec0942fa0/);
+	assert.match(worker, /url\.pathname === '\/ads\.txt'/);
+	assert.match(worker, /f08c47fec0942fa0/);
 	assert.match(privacy, /Cloudflare D1 database/);
 });

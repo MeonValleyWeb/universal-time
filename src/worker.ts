@@ -151,6 +151,20 @@ export default {
 			return Response.redirect(url.toString(), 308);
 		}
 
+		if (request.method === 'GET' && url.pathname === '/ads.txt') {
+			const publisherId = env.ADSENSE_PUBLISHER_ID.trim();
+			const body = /^pub-\d+$/.test(publisherId)
+				? `google.com, ${publisherId}, DIRECT, f08c47fec0942fa0\n`
+				: '# AdSense publisher ID is not configured yet.\n';
+			return new Response(body, {
+				headers: {
+					'content-type': 'text/plain; charset=utf-8',
+					'cache-control': 'public, max-age=300',
+					'x-content-type-options': 'nosniff',
+				},
+			});
+		}
+
 		if (request.method === 'POST' && url.pathname === '/api/newsletter') {
 			return subscribe(request, env);
 		}
