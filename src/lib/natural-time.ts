@@ -4,9 +4,11 @@ import { zonedDateToUtc } from './time.ts';
 export interface NaturalTimeResult {
 	source: City;
 	target: City;
+	answer: City;
 	timestamp: number;
 	isCurrentTime: boolean;
 	detectedTimeCount: number;
+	intent: 'conversion' | 'current' | 'relative' | 'before-bed';
 	warnings: string[];
 }
 
@@ -127,6 +129,64 @@ const getWarnings = (input: string) => {
 	return warnings;
 };
 
+const isBeforeBedIntent = (input: string) =>
+	/\bbefore\s+(?:(?:i|we)\s+(?:go\s*to|get\s+to)\s+bed|(?:my|our)\s+bedtime|bed(?:time)?)\b/i.test(input);
+
+const findBeforeBedCallTime = (source: City, target: City, now: number) => {
+	const local = localDateParts(now, source.zone);
+	const startDate = new Date(Date.UTC(local.year, local.month - 1, local.day));
+	const latestMinutes = 21 * 60 + 30;
+	const earliestMinutes = 16 * 60;
+
+	for (let dayOffset = 0; dayOffset <= 1; dayOffset += 1) {
+		const date = new Date(startDate);
+		date.setUTCDate(date.getUTCDate() + dayOffset);
+
+		for (let minutes = latestMinutes; minutes >= earliestMinutes; minutes -= 30) {
+			const timestamp = zonedDateToUtc(
+				date.getUTCFullYear(),
+				date.getUTCMonth() + 1,
+				date.getUTCDate(),
+				Math.floor(minutes / 60),
+				minutes % 60,
+				source.zone,
+			);
+			if (timestamp <= now + 5 * 60_000) continue;
+
+			const targetHour = Number(
+				new Intl.DateTimeFormat('en-GB', {
+					timeZone: target.zone,
+					hour: '2-digit',
+					hourCycle: 'h23',
+				}).format(timestamp),
+			);
+			if (targetHour >= 8 && targetHour < 21) return { timestamp, targetIsAwake: true };
+		}
+	}
+
+	const fallbackDate = new Date(startDate);
+	let timestamp = zonedDateToUtc(
+		fallbackDate.getUTCFullYear(),
+		fallbackDate.getUTCMonth() + 1,
+		fallbackDate.getUTCDate(),
+		21,
+		30,
+		source.zone,
+	);
+	if (timestamp <= now + 5 * 60_000) {
+		fallbackDate.setUTCDate(fallbackDate.getUTCDate() + 1);
+		timestamp = zonedDateToUtc(
+			fallbackDate.getUTCFullYear(),
+			fallbackDate.getUTCMonth() + 1,
+			fallbackDate.getUTCDate(),
+			21,
+			30,
+			source.zone,
+		);
+	}
+	return { timestamp, targetIsAwake: false };
+};
+
 export const parseNaturalTime = (
 	input: string,
 	now: number,
@@ -135,8 +195,31 @@ export const parseNaturalTime = (
 	const found = findCities(input);
 	if (!found.length) return null;
 
-	const source = found[0];
 	const clock = parseClock(input);
+	if (!clock && isBeforeBedIntent(input)) {
+		const source = defaultTarget;
+		const target = found[0];
+		const suggestion = findBeforeBedCallTime(source, target, now);
+		const warnings = [
+			'Assuming bedtime is around 22:30; this suggests the latest comfortable half-hour beforehand.',
+			...getWarnings(input),
+		];
+		if (!suggestion.targetIsAwake) {
+			warnings.push(`${target.name} may be outside typical waking hours; try the meeting planner for a wider overlap.`);
+		}
+		return {
+			source,
+			target,
+			answer: source,
+			timestamp: suggestion.timestamp,
+			isCurrentTime: false,
+			detectedTimeCount: 0,
+			intent: 'before-bed',
+			warnings,
+		};
+	}
+
+	const source = found[0];
 	const target = found[1] ?? (clock && defaultTarget.zone !== source.zone ? defaultTarget : source);
 	const relative = input.match(/\bin\s+(\d+)\s*(minutes?|mins?|hours?|hrs?)\b/i);
 
@@ -147,9 +230,11 @@ export const parseNaturalTime = (
 		return {
 			source,
 			target,
+			answer: target,
 			timestamp: now + milliseconds,
 			isCurrentTime: false,
 			detectedTimeCount: 1,
+			intent: 'relative',
 			warnings: getWarnings(input),
 		};
 	}
@@ -158,9 +243,11 @@ export const parseNaturalTime = (
 		return {
 			source,
 			target: source,
+			answer: source,
 			timestamp: now,
 			isCurrentTime: true,
 			detectedTimeCount: 0,
+			intent: 'current',
 			warnings: getWarnings(input),
 		};
 	}
@@ -169,9 +256,11 @@ export const parseNaturalTime = (
 	return {
 		source,
 		target,
+		answer: target,
 		timestamp: zonedDateToUtc(date.year, date.month, date.day, clock.hour, clock.minute, source.zone),
 		isCurrentTime: false,
 		detectedTimeCount: clock.count,
+		intent: 'conversion',
 		warnings: getWarnings(input),
 	};
 };

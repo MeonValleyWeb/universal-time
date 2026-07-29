@@ -43,3 +43,29 @@ test('warns about ambiguous abbreviations', () => {
 	assert.ok(result);
 	assert.match(result.warnings[0], /interpreted as India/);
 });
+
+test('answers a before-bed call question in the visitor local time', () => {
+	const result = parseNaturalTime(
+		'what time do I need to ring my daughter in New Zealand before I go to bed',
+		now,
+		london,
+	);
+	assert.ok(result);
+	assert.equal(result.intent, 'before-bed');
+	assert.equal(result.source.slug, 'london');
+	assert.equal(result.target.slug, 'auckland');
+	assert.equal(result.answer.slug, 'london');
+	assert.equal(formatClock(result.timestamp, result.answer.zone, false), '21:30');
+	assert.equal(formatClock(result.timestamp, result.target.zone, false), '8:30');
+	assert.match(result.warnings[0], /Assuming bedtime/);
+});
+
+test('understands the common goto-bed spelling', () => {
+	const result = parseNaturalTime(
+		'when should I call New Zealand before I goto bed',
+		now,
+		london,
+	);
+	assert.ok(result);
+	assert.equal(result.intent, 'before-bed');
+});

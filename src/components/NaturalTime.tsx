@@ -7,12 +7,23 @@ import {
 	formatFullDate,
 	getLocalParts,
 	getOffsetMinutes,
+	zoneOption,
 } from '../lib/time';
 
 interface Props {
 	initialNow: number;
 	initialQuery?: string;
 }
+
+const cityForBrowserZone = (zone: string): City =>
+	cities.find((city) => city.zone === zone) ?? {
+		slug: 'local',
+		name: zoneOption(zone).city,
+		country: 'Your browser timezone',
+		zone,
+		aliases: [],
+		description: 'The local timezone reported by your browser.',
+	};
 
 export default function NaturalTime({
 	initialNow,
@@ -28,8 +39,7 @@ export default function NaturalTime({
 	useEffect(() => {
 		const interval = window.setInterval(() => setNow(Date.now()), 30_000);
 		const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-		const knownCity = cities.find((city) => city.zone === localZone);
-		if (knownCity) setLocalTarget(knownCity);
+		setLocalTarget(cityForBrowserZone(localZone));
 		const sharedQuery = new URLSearchParams(window.location.search).get('q');
 		if (sharedQuery) {
 			setQuery(sharedQuery);
@@ -73,9 +83,14 @@ export default function NaturalTime({
 	return (
 			<section class="min-w-0 border border-stone-950/20 bg-[#fbf7ed]/90 p-5 shadow-[0_24px_70px_rgba(68,54,36,0.10)] backdrop-blur-[2px] sm:p-8 lg:p-10">
 				<form onSubmit={submit}>
-					<label for="time-query" class="mb-3 block font-mono text-[11px] uppercase tracking-[0.22em] text-stone-500">
-						Ask anything about time
-					</label>
+					<div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+						<label for="time-query" class="block font-mono text-[11px] uppercase tracking-[0.22em] text-stone-500">
+							Ask anything about time
+						</label>
+						<span class="font-mono text-[9px] uppercase tracking-[0.14em] text-orange-700">
+							Your time · {localTarget.name}
+						</span>
+					</div>
 					<div class="relative border-b-2 border-stone-950 pb-3 focus-within:border-orange-600">
 						<input
 							id="time-query"
@@ -96,22 +111,26 @@ export default function NaturalTime({
 						<div>
 							<div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-500">
 								<span class={`size-2 rounded-full ${goodTime ? 'bg-emerald-500' : 'bg-orange-500'}`} />
-								{goodTime ? 'A good time to call' : 'Outside usual working hours'}
+								{result.intent === 'before-bed'
+									? (goodTime ? `A good time to call ${result.target.name}` : `${result.target.name} may be asleep`)
+									: (goodTime ? 'A good time to call' : 'Outside usual working hours')}
 								{result.detectedTimeCount > 1 && <span>· first of {result.detectedTimeCount} times</span>}
 							</div>
 							<div class="mt-5 flex min-w-0 items-start">
 								<span class="min-w-0 font-['Share_Tech_Mono'] text-[clamp(4.5rem,9.5vw,9.5rem)] leading-[0.78] tracking-[-0.075em] text-stone-950">
-									{formatClock(result.timestamp, result.target.zone, false)}
+									{formatClock(result.timestamp, result.answer.zone, false)}
 								</span>
 								<span class="ml-3 mt-1 rounded-full bg-orange-600 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-white sm:mt-3">
-									{getLocalParts(result.timestamp, result.target.zone).abbreviation}
+									{getLocalParts(result.timestamp, result.answer.zone).abbreviation}
 								</span>
 							</div>
 							<div class="mt-7 flex flex-wrap items-end justify-between gap-5">
 								<div>
-									<p class="font-serif text-2xl text-stone-950">{formatFullDate(result.timestamp, result.target.zone)} in {result.target.name}</p>
+									<p class="font-serif text-2xl text-stone-950">{formatFullDate(result.timestamp, result.answer.zone)} in {result.answer.name}</p>
 									<p class="mt-1 text-sm text-stone-500">
-										{hourDifference === 0
+										{result.intent === 'before-bed'
+											? `${formatClock(result.timestamp, result.target.zone, false)} ${formatFullDate(result.timestamp, result.target.zone)} in ${result.target.name}`
+											: hourDifference === 0
 											? `Same time as ${result.source.name}`
 											: `${Math.abs(hourDifference)} hours ${hourDifference > 0 ? 'ahead of' : 'behind'} ${result.source.name}`}
 									</p>
@@ -126,9 +145,15 @@ export default function NaturalTime({
 									<button type="button" onClick={share} class="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:border-stone-950">
 										Share query
 									</button>
-									<a href={`/convert/${result.source.slug}/${result.target.slug}`} class="rounded-full bg-stone-950 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600">
-										Open converter
-									</a>
+									{result.source.slug !== 'local' ? (
+										<a href={`/convert/${result.source.slug}/${result.target.slug}`} class="rounded-full bg-stone-950 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600">
+											Open converter
+										</a>
+									) : (
+										<a href="/meeting-planner" class="rounded-full bg-stone-950 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600">
+											Open planner
+										</a>
+									)}
 								</div>
 							</div>
 						</div>
