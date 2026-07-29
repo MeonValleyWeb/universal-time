@@ -2,23 +2,25 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import NaturalTime from '../../../components/NaturalTime';
 import CityClock from '../../../components/CityClock';
-import { cities, popularConverterSlugs, type City } from '../../../lib/cities';
+import { cities, converterPairs, type City } from '../../../lib/cities';
+import { getPairContext } from '../../../lib/search-context';
 
 export function getStaticPaths() {
-	const popular = cities.filter((city) =>
-		popularConverterSlugs.includes(city.slug)
-	);
-	return popular.flatMap((from) =>
-		popular
-			.filter((to) => to.slug !== from.slug)
-			.map((to) => ({ params: { from: from.slug, to: to.slug }, props: { from, to } }))
-	);
+	return converterPairs.map((pair) => ({
+		params: { from: pair.from, to: pair.to },
+		props: {
+			from: cities.find((city) => city.slug === pair.from)!,
+			to: cities.find((city) => city.slug === pair.to)!,
+			reason: pair.reason,
+		},
+	}));
 }
 
-interface Props { from: City; to: City }
-const { from, to } = Astro.props;
+interface Props { from: City; to: City; reason: string }
+const { from, to, reason } = Astro.props;
 const initialNow = Date.now();
 const initialQuery = `9am ${from.name} in ${to.name}`;
+const context = getPairContext(from, to, initialNow);
 const schema = {
 	'@context': 'https://schema.org',
 	'@type': 'WebPage',
@@ -64,6 +66,33 @@ const schema = {
 			<div class="mt-12">
 				<NaturalTime client:load initialNow={initialNow} initialQuery={initialQuery} />
 			</div>
+
+			<section class="mt-16 border-t border-[var(--color-line)] pt-12">
+				<div class="grid gap-10 lg:grid-cols-[.72fr_1.28fr]">
+					<div>
+						<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Working together</p>
+						<h2 class="mt-3 font-serif text-4xl tracking-[-0.04em]">The useful part of the difference</h2>
+						<p class="mt-5 max-w-md text-sm leading-6 text-[var(--color-muted)]">{reason}</p>
+					</div>
+					<div class="grid gap-px bg-[var(--color-line)] sm:grid-cols-2">
+						<article class="bg-[var(--color-surface)] p-6">
+							<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Working-hour overlap</p>
+							<h3 class="mt-5 font-serif text-2xl">When both cities are at work</h3>
+							<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">{context.overlapSummary}</p>
+						</article>
+						<article class="bg-[var(--color-surface)] p-6">
+							<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Calendar boundary</p>
+							<h3 class="mt-5 font-serif text-2xl">Check the date, not just the hour</h3>
+							<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">{context.dateSummary}</p>
+						</article>
+						<article class="bg-[var(--color-surface)] p-6 sm:col-span-2">
+							<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Daylight saving time</p>
+							<h3 class="mt-5 font-serif text-2xl">The gap can move during the year</h3>
+							<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">{context.dstSummary}</p>
+						</article>
+					</div>
+				</div>
+			</section>
 		</div>
 	</main>
 </BaseLayout>

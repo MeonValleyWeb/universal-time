@@ -23,7 +23,7 @@ export default function WorldStrip({ initialNow }: Props) {
 				return (
 					<a
 						href={`/time/${city.slug}`}
-						class="group min-w-0 border-b border-r border-stone-950/20 bg-[#f6f0e4]/75 p-4 transition hover:bg-stone-950 hover:text-white sm:min-h-36 sm:p-5"
+						class="atlas-clock group min-w-0 border-b border-r border-stone-950/20 bg-[#f6f0e4]/75 p-4 transition hover:bg-stone-950 hover:text-white sm:min-h-36 sm:p-5"
 					>
 						<div class="flex items-start justify-between gap-2">
 							<span class="min-w-0 font-mono text-[8px] uppercase tracking-[0.14em] text-stone-500 group-hover:text-stone-400">

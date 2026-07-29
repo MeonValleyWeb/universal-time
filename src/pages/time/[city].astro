@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CityClock from '../../components/CityClock';
-import { cities, type City } from '../../lib/cities';
+import { cities, converterPairs, type City } from '../../lib/cities';
+import { getCitySeasonalContext } from '../../lib/search-context';
 import { formatOffset, getLocalParts, getOffsetMinutes } from '../../lib/time';
 
 export function getStaticPaths() {
@@ -11,9 +12,12 @@ export function getStaticPaths() {
 interface Props { city: City }
 const { city } = Astro.props;
 const initialNow = Date.now();
-const comparisons = cities.filter((item) =>
-	item.slug !== city.slug && ['london', 'new-york', 'tokyo', 'sydney', 'dubai', 'singapore'].includes(item.slug)
-);
+const comparisons = converterPairs
+	.filter((pair) => pair.from === city.slug)
+	.slice(0, 6)
+	.map((pair) => cities.find((item) => item.slug === pair.to)!)
+	.filter(Boolean);
+const seasonalContext = getCitySeasonalContext(city, getLocalParts(initialNow, city.zone).year);
 const schema = {
 	'@context': 'https://schema.org',
 	'@type': 'WebPage',
@@ -71,15 +75,21 @@ const schema = {
 			<div class="mx-auto max-w-[1500px]">
 				<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-stone-500">Compare {city.name}</p>
 				<h2 class="mt-2 font-serif text-4xl tracking-[-0.04em]">Where do you need to be?</h2>
-				<div class="mt-8 grid border-l border-t border-stone-300 sm:grid-cols-2 lg:grid-cols-3">
-					{comparisons.map((target) => (
+				{comparisons.length ? (
+					<div class="mt-8 grid border-l border-t border-stone-300 sm:grid-cols-2 lg:grid-cols-3">
+						{comparisons.map((target) => (
 						<a href={`/convert/${city.slug}/${target.slug}`} class="group border-b border-r border-stone-300 p-6 hover:bg-stone-950 hover:text-white">
 							<span class="font-mono text-[10px] uppercase tracking-wider text-stone-500">Convert to</span>
 							<p class="mt-8 font-serif text-3xl">{target.name}</p>
 							<p class="mt-1 text-sm text-stone-500 group-hover:text-stone-400">{target.country} →</p>
 						</a>
-					))}
-				</div>
+						))}
+					</div>
+				) : (
+					<a href="/meeting-planner" class="mt-8 inline-flex rounded-full bg-stone-950 px-5 py-3 text-sm text-white hover:bg-orange-600">
+						Compare {city.name} in the meeting planner →
+					</a>
+				)}
 			</div>
 		</section>
 
@@ -97,6 +107,10 @@ const schema = {
 					<article class="bg-[#f2efe8] p-6">
 						<h3 class="font-serif text-2xl">When is a good time to call?</h3>
 						<p class="mt-3 text-sm leading-6 text-stone-600">Aim for 09:00–17:00 in {city.name}. Open a converter above to see how that working window lands in another city.</p>
+					</article>
+					<article class="bg-[#f2efe8] p-6 sm:col-span-2">
+						<h3 class="font-serif text-2xl">Does {city.name} change its clocks?</h3>
+						<p class="mt-3 text-sm leading-6 text-stone-600">{seasonalContext}</p>
 					</article>
 				</div>
 			</div>

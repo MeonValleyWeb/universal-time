@@ -81,7 +81,7 @@ export default function NaturalTime({
 		: 0;
 
 	return (
-			<section class="min-w-0 border border-stone-950/20 bg-[#fbf7ed]/90 p-5 shadow-[0_24px_70px_rgba(68,54,36,0.10)] backdrop-blur-[2px] sm:p-8 lg:p-10">
+			<section class="atlas-panel min-w-0 border border-stone-950/20 bg-[#fbf7ed]/90 p-5 shadow-[0_24px_70px_rgba(68,54,36,0.10)] backdrop-blur-[2px] sm:p-8 lg:p-10">
 				<form onSubmit={submit}>
 					<div class="mb-3 flex flex-wrap items-center justify-between gap-2">
 						<label for="time-query" class="block font-mono text-[11px] uppercase tracking-[0.22em] text-stone-500">

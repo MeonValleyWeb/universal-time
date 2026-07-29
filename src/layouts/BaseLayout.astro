@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import ThemeSwitcher from '../components/ThemeSwitcher';
 
 interface Props {
 	title?: string;
@@ -38,10 +39,20 @@ const cloudflareAnalyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="paper" data-theme-preference="auto">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
+		<script is:inline>
+			try {
+				const saved = localStorage.getItem('worldtime:theme');
+				const preference = ['auto', 'paper', 'dark'].includes(saved) ? saved : 'auto';
+				const hour = new Date().getHours();
+				const theme = preference === 'auto' ? (hour >= 7 && hour < 19 ? 'paper' : 'dark') : preference;
+				document.documentElement.dataset.theme = theme;
+				document.documentElement.dataset.themePreference = preference;
+			} catch {}
+		</script>
 		<meta name="description" content={description} />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="theme-color" content="#f2efe8" />
@@ -62,8 +73,9 @@ const cloudflareAnalyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
 		<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Newsreader:opsz,wght@6..72,300;6..72,500&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 		<title>{title}</title>
 	</head>
-	<body class="min-h-screen bg-[#f2efe8] font-[Newsreader] text-stone-950 antialiased selection:bg-orange-600 selection:text-white">
+	<body class="min-h-screen bg-[var(--color-canvas)] font-[Newsreader] text-[var(--color-ink)] antialiased selection:bg-[var(--color-signal)] selection:text-[var(--color-signal-ink)]">
 		<slot />
+		<ThemeSwitcher client:load />
 		{cloudflareAnalyticsToken && (
 			<script
 				is:inline

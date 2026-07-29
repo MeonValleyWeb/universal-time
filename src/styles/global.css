@@ -12,11 +12,79 @@ html {
 
 body {
 	margin: 0;
+	transition: background-color 220ms ease, color 220ms ease;
 }
 
 a,
 button {
 	transition-duration: 180ms;
+}
+
+:root[data-theme="dark"] .atlas-hero {
+	background: #08111d;
+}
+
+:root[data-theme="dark"] .atlas-hero > img,
+:root[data-theme="dark"] body > div > img {
+	filter: grayscale(1) contrast(1.15);
+	opacity: 0.14;
+}
+
+:root[data-theme="dark"] .atlas-wash {
+	background: linear-gradient(90deg, rgba(8, 17, 29, 0.98), rgba(8, 17, 29, 0.72), rgba(8, 17, 29, 0.28)) !important;
+}
+
+:root[data-theme="dark"] .atlas-panel,
+:root[data-theme="dark"] .atlas-clock {
+	background: rgba(17, 27, 40, 0.94) !important;
+}
+
+:root[data-theme="dark"] [class~="bg-[#e8e4dc]"],
+:root[data-theme="dark"] [class~="bg-[#f2efe8]"],
+:root[data-theme="dark"] [class~="bg-[#faf8f2]"] {
+	background-color: var(--color-surface) !important;
+}
+
+:root[data-theme="dark"] [class~="bg-stone-300"] {
+	background-color: var(--color-line) !important;
+}
+
+:root[data-theme="dark"] [class~="text-stone-950"],
+:root[data-theme="dark"] [class~="hover:text-stone-950"]:hover {
+	color: var(--color-ink) !important;
+}
+
+:root[data-theme="dark"] [class~="text-stone-700"],
+:root[data-theme="dark"] [class~="text-stone-600"] {
+	color: var(--color-muted) !important;
+}
+
+:root[data-theme="dark"] [class~="text-stone-500"],
+:root[data-theme="dark"] [class~="text-stone-400"] {
+	color: var(--color-subtle) !important;
+}
+
+:root[data-theme="dark"] [class~="border-stone-300"],
+:root[data-theme="dark"] [class~="border-stone-950/20"] {
+	border-color: var(--color-line) !important;
+}
+
+:root[data-theme="dark"] [class~="text-orange-700"],
+:root[data-theme="dark"] [class~="text-orange-600"],
+:root[data-theme="dark"] [class~="text-orange-500"] {
+	color: var(--color-signal) !important;
+}
+
+:root[data-theme="dark"] [class~="bg-orange-600"] {
+	background-color: var(--color-signal) !important;
+}
+
+:root[data-theme="dark"] [class~="bg-orange-600"][class~="text-white"] {
+	color: var(--color-signal-ink) !important;
+}
+
+:root[data-theme="dark"] [class~="border-orange-600"] {
+	border-color: var(--color-signal) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

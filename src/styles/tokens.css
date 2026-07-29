@@ -12,6 +12,7 @@
 	--color-day-cell: #f8f2df;
 	--color-warm: #9a5e10;
 	--color-signal: #ea580c;
+	--color-signal-ink: #ffffff;
 }
 
 :root[data-theme="dark"] {
@@ -27,9 +28,11 @@
 	--color-night-cell: #0a121e;
 	--color-day-cell: #182538;
 	--color-warm: #fef3c7;
+	--color-signal: #67e8f9;
+	--color-signal-ink: #08111d;
 }
 
-:root[data-theme="light"] {
+:root[data-theme="paper"] {
 	color-scheme: light;
 	--color-canvas: #f1eee6;
 	--color-surface: #fbfaf6;

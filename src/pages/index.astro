@@ -23,9 +23,9 @@ const initialNow = Date.now();
 	</header>
 
 	<main>
-		<section class="relative overflow-hidden border-b border-stone-950/20 px-5 py-12 sm:px-8 sm:py-16 lg:py-20">
+		<section class="atlas-hero relative overflow-hidden border-b border-stone-950/20 px-5 py-12 sm:px-8 sm:py-16 lg:py-20">
 			<img src="/world-atlas-bg.webp" alt="" class="pointer-events-none absolute inset-0 size-full object-cover opacity-80" aria-hidden="true" />
-			<div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#f6f0e4]/95 via-[#f6f0e4]/55 to-transparent" aria-hidden="true"></div>
+			<div class="atlas-wash pointer-events-none absolute inset-0 bg-gradient-to-r from-[#f6f0e4]/95 via-[#f6f0e4]/55 to-transparent" aria-hidden="true"></div>
 			<div class="relative mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[0.68fr_1.32fr] lg:gap-16 xl:gap-24">
 				<div class="flex flex-col justify-between">
 					<div>
@@ -47,7 +47,7 @@ const initialNow = Date.now();
 			<div class="relative mx-auto mt-12 max-w-[1500px] lg:mt-16">
 				<div class="mb-3 flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.2em] text-stone-600">
 					<span>Live around the world</span>
-					<span class="hidden sm:inline">Daylight shown in orange</span>
+					<span class="hidden sm:inline">Daylight shown in the signal colour</span>
 				</div>
 				<WorldStrip client:load initialNow={initialNow} />
 			</div>
