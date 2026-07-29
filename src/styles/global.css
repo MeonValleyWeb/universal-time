@@ -15,6 +15,30 @@ body {
 	transition: background-color 220ms ease, color 220ms ease;
 }
 
+:root[data-theme="paper"] body {
+	background-color: var(--color-canvas);
+	background-image:
+		linear-gradient(rgba(232, 227, 216, 0.2), rgba(232, 227, 216, 0.2)),
+		url("/time-field.svg");
+	background-position:
+		center,
+		center top;
+	background-repeat:
+		repeat,
+		repeat-y;
+	background-size:
+		auto,
+		1600px 1400px;
+}
+
+@media (max-width: 640px) {
+	:root[data-theme="paper"] body {
+		background-size:
+			auto,
+			1000px 875px;
+	}
+}
+
 a,
 button {
 	transition-duration: 180ms;
