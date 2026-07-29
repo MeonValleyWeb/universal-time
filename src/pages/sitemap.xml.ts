@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { cities, converterPairs } from '../lib/cities';
+import { timeGuides } from '../lib/guides';
 
 export const prerender = true;
 
@@ -11,6 +12,13 @@ export const GET: APIRoute = ({ site, url }) => {
 	const paths = [
 		{ path: '/', priority: '1.0', frequency: 'daily' },
 		{ path: '/meeting-planner', priority: '0.8', frequency: 'weekly' },
+		{ path: '/astronomy', priority: '0.8', frequency: 'daily' },
+		{ path: '/guides', priority: '0.8', frequency: 'weekly' },
+		...timeGuides.map((guide) => ({
+			path: `/guides/${guide.slug}`,
+			priority: '0.7',
+			frequency: 'monthly',
+		})),
 		...cities.map((city) => ({ path: `/time/${city.slug}`, priority: '0.8', frequency: 'daily' })),
 		...converterPairs.map((pair) => ({
 			path: `/convert/${pair.from}/${pair.to}`,

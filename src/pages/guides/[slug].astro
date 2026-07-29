@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { timeGuides, type TimeGuide } from '../../lib/guides';
+
+export function getStaticPaths() {
+	return timeGuides.map((guide) => ({ params: { slug: guide.slug }, props: { guide } }));
+}
+
+interface Props { guide: TimeGuide }
+const { guide } = Astro.props;
+const related = timeGuides.filter((item) => item.slug !== guide.slug && item.category === guide.category).slice(0, 3);
+const schema = {
+	'@context': 'https://schema.org',
+	'@type': 'Article',
+	headline: guide.title,
+	description: guide.summary,
+	author: { '@type': 'Organization', name: 'WorldTime' },
+};
+---
+
+<BaseLayout
+	title={`${guide.title} · WorldTime`}
+	description={guide.summary}
+	canonical={`/guides/${guide.slug}`}
+	schema={schema}
+>
+	<header class="border-b border-[var(--color-line)] px-5 sm:px-8">
+		<div class="mx-auto flex h-20 max-w-[1200px] items-center justify-between">
+			<a href="/" class="flex items-center gap-3">
+				<span class="grid size-9 place-items-center rounded-full bg-[var(--color-signal)] font-serif text-xl italic text-[var(--color-signal-ink)]">W</span>
+				<span class="font-serif text-xl">WorldTime</span>
+			</a>
+			<a href="/guides" class="text-sm text-[var(--color-muted)] hover:text-[var(--color-ink)]">All time guides →</a>
+		</div>
+	</header>
+
+	<main class="px-5 py-14 sm:px-8 lg:py-20">
+		<article class="mx-auto max-w-[1200px]">
+			<p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-signal)]">{guide.category}</p>
+			<h1 class="mt-5 max-w-5xl font-serif text-[clamp(3.5rem,8vw,7.5rem)] leading-[0.88] tracking-[-0.06em]">{guide.title}</h1>
+			<p class="mt-8 max-w-3xl border-l border-[var(--color-signal)] pl-5 text-xl leading-8 text-[var(--color-muted)]">{guide.summary}</p>
+
+			<div class="mt-16 grid gap-12 lg:grid-cols-[1fr_18rem] lg:gap-20">
+				<div class="space-y-12">
+					{guide.sections.map((section) => (
+						<section>
+							<h2 class="font-serif text-4xl tracking-[-0.04em]">{section.heading}</h2>
+							<p class="mt-5 text-lg leading-8 text-[var(--color-muted)]">{section.body}</p>
+						</section>
+					))}
+				</div>
+				<aside>
+					<div class="border border-[var(--color-line)] bg-[var(--color-surface)] p-5">
+						<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Key facts</p>
+						<ul class="mt-5 space-y-4">
+							{guide.keyFacts.map((fact) => (
+								<li class="border-l border-[var(--color-signal)] pl-3 text-sm leading-6">{fact}</li>
+							))}
+						</ul>
+					</div>
+					<div class="mt-6 p-5">
+						<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Primary sources</p>
+						<ul class="mt-4 space-y-3">
+							{guide.sources.map((source) => (
+								<li><a href={source.url} target="_blank" rel="noreferrer" class="text-sm text-[var(--color-signal)] hover:underline">{source.label} ↗</a></li>
+							))}
+						</ul>
+					</div>
+				</aside>
+			</div>
+		</article>
+
+		{related.length > 0 && (
+			<section class="mx-auto mt-20 max-w-[1200px] border-t border-[var(--color-line)] pt-12">
+				<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-subtle)]">Keep exploring</p>
+				<div class="mt-6 grid gap-px bg-[var(--color-line)] sm:grid-cols-3">
+					{related.map((item) => (
+						<a href={`/guides/${item.slug}`} class="bg-[var(--color-surface)] p-5 hover:text-[var(--color-signal)]">
+							<span class="font-serif text-2xl">{item.title}</span>
+						</a>
+					))}
+				</div>
+			</section>
+		)}
+	</main>
+</BaseLayout>

@@ -17,6 +17,8 @@ const initialNow = Date.now();
 			<nav class="flex items-center gap-5 text-sm text-stone-600">
 				<a href="#world-clocks" class="hidden hover:text-stone-950 sm:block">World clocks</a>
 				<a href="/meeting-planner" class="hidden hover:text-stone-950 sm:block">Meeting planner</a>
+				<a href="/astronomy" class="hidden hover:text-stone-950 lg:block">Sun & Moon</a>
+				<a href="/guides" class="hidden hover:text-stone-950 lg:block">Time guides</a>
 				<span class="rounded-full border border-stone-300 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider">Live · {cities.length} cities</span>
 			</nav>
 		</div>
@@ -92,6 +94,40 @@ const initialNow = Date.now();
 				<a href="/meeting-planner" class="inline-flex items-center justify-center rounded-full bg-stone-950 px-6 py-3 text-sm font-medium text-white hover:bg-orange-600">
 					Open meeting planner →
 				</a>
+			</div>
+		</section>
+
+		<section class="border-b border-[var(--color-line)] px-5 py-16 sm:px-8 lg:py-24">
+			<div class="mx-auto max-w-[1500px]">
+				<div class="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
+					<div>
+						<p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-signal)]">Beyond time zones</p>
+						<h2 class="mt-4 max-w-xl font-serif text-5xl leading-[0.94] tracking-[-0.05em] sm:text-6xl">
+							Everything that keeps, shapes and marks time.
+						</h2>
+						<p class="mt-5 max-w-lg text-base leading-7 text-[var(--color-muted)]">
+							Follow the Sun and Moon, count down to celestial events, or understand the standards and stories behind the clock.
+						</p>
+					</div>
+					<div class="grid gap-px bg-[var(--color-line)] sm:grid-cols-2">
+						<a href="/astronomy" class="group min-h-80 bg-[var(--color-surface)] p-7 hover:bg-[var(--color-ink)] hover:text-[var(--color-canvas)] sm:p-9">
+							<span class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Sun · Moon · Sky</span>
+							<h3 class="mt-20 font-serif text-4xl tracking-[-0.045em]">Your local sky clock</h3>
+							<p class="mt-4 text-sm leading-6 text-[var(--color-muted)] group-hover:text-[var(--color-subtle)]">
+								Sunrise, sunset, solar noon, moon phase and live countdowns to eclipses and comet-linked meteor showers.
+							</p>
+							<span class="mt-8 inline-flex text-sm text-[var(--color-signal)]">Explore astronomical time →</span>
+						</a>
+						<a href="/guides" class="group min-h-80 bg-[var(--color-surface)] p-7 hover:bg-[var(--color-ink)] hover:text-[var(--color-canvas)] sm:p-9">
+							<span class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Atomic · Civil · Historic</span>
+							<h3 class="mt-20 font-serif text-4xl tracking-[-0.045em]">Why time works this way</h3>
+							<p class="mt-4 text-sm leading-6 text-[var(--color-muted)] group-hover:text-[var(--color-subtle)]">
+								Atomic clocks, UTC and GMT, US zone abbreviations, leap seconds, calendars and the reason a day has 24 hours.
+							</p>
+							<span class="mt-8 inline-flex text-sm text-[var(--color-signal)]">Read the time guides →</span>
+						</a>
+					</div>
+				</div>
 			</div>
 		</section>
 

@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { timeGuides } from '../../lib/guides';
+
+const categories = [...new Set(timeGuides.map((guide) => guide.category))];
+---
+
+<BaseLayout
+	title="How time works · WorldTime guides"
+	description="Clear, sourced explanations of time zones, daylight saving, atomic clocks, UTC, calendars and the history of timekeeping."
+	canonical="/guides"
+>
+	<header class="border-b border-[var(--color-line)] px-5 sm:px-8">
+		<div class="mx-auto flex h-20 max-w-[1500px] items-center justify-between">
+			<a href="/" class="flex items-center gap-3">
+				<span class="grid size-9 place-items-center rounded-full bg-[var(--color-signal)] font-serif text-xl italic text-[var(--color-signal-ink)]">W</span>
+				<span class="font-serif text-xl">WorldTime</span>
+			</a>
+			<a href="/astronomy" class="text-sm text-[var(--color-muted)] hover:text-[var(--color-ink)]">Sun, Moon and sky time →</a>
+		</div>
+	</header>
+
+	<main>
+		<section class="px-5 py-16 sm:px-8 lg:py-24">
+			<div class="mx-auto max-w-[1500px]">
+				<p class="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--color-signal)]">The knowledge of time</p>
+				<h1 class="mt-5 max-w-5xl font-serif text-[clamp(4rem,9vw,9rem)] leading-[0.84] tracking-[-0.065em]">
+					Everything time<br /><em class="font-normal text-[var(--color-signal)]">means.</em>
+				</h1>
+				<p class="mt-8 max-w-2xl text-base leading-7 text-[var(--color-muted)]">
+					From the 9,192,631,770 atomic oscillations in one second to the political decision behind a time-zone boundary.
+				</p>
+			</div>
+		</section>
+
+		{categories.map((category) => (
+			<section class="border-t border-[var(--color-line)] px-5 py-14 sm:px-8">
+				<div class="mx-auto max-w-[1500px]">
+					<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-subtle)]">{category}</p>
+					<div class="mt-7 grid gap-px bg-[var(--color-line)] md:grid-cols-2 lg:grid-cols-3">
+						{timeGuides.filter((guide) => guide.category === category).map((guide) => (
+							<a href={`/guides/${guide.slug}`} class="group bg-[var(--color-surface)] p-6 hover:bg-[var(--color-ink)] hover:text-[var(--color-canvas)]">
+								<h2 class="font-serif text-3xl tracking-[-0.035em]">{guide.title}</h2>
+								<p class="mt-4 text-sm leading-6 text-[var(--color-muted)] group-hover:text-[var(--color-subtle)]">{guide.summary}</p>
+								<span class="mt-8 inline-flex font-mono text-[9px] uppercase tracking-wider text-[var(--color-signal)]">Read the answer →</span>
+							</a>
+						))}
+					</div>
+				</div>
+			</section>
+		))}
+	</main>
+</BaseLayout>
