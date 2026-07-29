@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NaturalTime from '../components/NaturalTime';
+import WorldStrip from '../components/WorldStrip';
 import { cities } from '../lib/cities';
 
 const initialNow = Date.now();
@@ -22,15 +23,18 @@ const initialNow = Date.now();
 	</header>
 
 	<main>
-		<section class="px-5 py-14 sm:px-8 sm:py-20 lg:py-24">
-			<div class="mx-auto grid max-w-[1500px] gap-14 lg:grid-cols-[0.72fr_1.28fr] lg:gap-24">
+		<section class="relative overflow-hidden border-b border-stone-950/20 px-5 py-12 sm:px-8 sm:py-16 lg:py-20">
+			<img src="/world-atlas-bg.webp" alt="" class="pointer-events-none absolute inset-0 size-full object-cover opacity-80" aria-hidden="true" />
+			<div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#f6f0e4]/95 via-[#f6f0e4]/55 to-transparent" aria-hidden="true"></div>
+			<div class="relative mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[0.68fr_1.32fr] lg:gap-16 xl:gap-24">
 				<div class="flex flex-col justify-between">
 					<div>
 						<div class="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.22em] text-orange-700">
 							<span class="h-px w-8 bg-orange-600"></span>
 							The world’s clearest clock
 						</div>
-						<h1 class="max-w-xl font-serif text-[clamp(3.5rem,6vw,7rem)] leading-[0.9] tracking-[-0.06em]">
+						<p class="font-serif text-[clamp(3rem,5vw,5.75rem)] leading-none tracking-[-0.065em]">WorldTime</p>
+						<h1 class="mt-7 max-w-xl font-serif text-[clamp(3.25rem,5.5vw,6.5rem)] leading-[0.88] tracking-[-0.06em]">
 							The right time, <em class="font-normal text-orange-600">anywhere.</em>
 						</h1>
 						<p class="mt-8 max-w-md text-base leading-7 text-stone-600">
@@ -39,6 +43,13 @@ const initialNow = Date.now();
 					</div>
 				</div>
 				<NaturalTime client:load initialNow={initialNow} />
+			</div>
+			<div class="relative mx-auto mt-12 max-w-[1500px] lg:mt-16">
+				<div class="mb-3 flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.2em] text-stone-600">
+					<span>Live around the world</span>
+					<span class="hidden sm:inline">Daylight shown in orange</span>
+				</div>
+				<WorldStrip client:load initialNow={initialNow} />
 			</div>
 		</section>
 

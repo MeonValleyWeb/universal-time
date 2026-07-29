@@ -13,29 +13,19 @@ const {
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark" data-theme-preference="system">
+<html lang="en">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="description" content={description} />
-		<meta name="theme-color" content="#08111d" />
+		<meta name="theme-color" content="#f2efe8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Newsreader:opsz,wght@6..72,300;6..72,500&display=swap" rel="stylesheet" />
-		<script is:inline>
-			try {
-				const preference = localStorage.getItem('worldtime:theme') || 'system';
-				const theme = preference === 'system'
-					? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-					: preference;
-				document.documentElement.dataset.theme = theme;
-				document.documentElement.dataset.themePreference = preference;
-			} catch {}
-		</script>
+		<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Newsreader:opsz,wght@6..72,300;6..72,500&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 		<title>{title}</title>
 	</head>
-	<body class="min-h-screen bg-[var(--color-canvas)] font-[Newsreader] text-[var(--color-ink)] antialiased selection:bg-cyan-300 selection:text-slate-950">
+	<body class="min-h-screen bg-[var(--color-canvas)] font-[Newsreader] text-[var(--color-ink)] antialiased selection:bg-orange-600 selection:text-white">
 		<slot />
 	</body>
 </html>

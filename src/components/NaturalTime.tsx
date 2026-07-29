@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import { cities, featuredCitySlugs, type City } from '../lib/cities';
+import { cities, type City } from '../lib/cities';
 import { parseNaturalTime } from '../lib/natural-time';
 import {
 	formatClock,
@@ -24,7 +24,6 @@ export default function NaturalTime({
 	const [copied, setCopied] = useState(false);
 	const [localTarget, setLocalTarget] = useState<City>(cities.find((city) => city.slug === 'london')!);
 	const result = useMemo(() => parseNaturalTime(submitted, now, localTarget), [submitted, now, localTarget]);
-	const featured = featuredCitySlugs.map((slug) => cities.find((city) => city.slug === slug)!);
 
 	useEffect(() => {
 		const interval = window.setInterval(() => setNow(Date.now()), 30_000);
@@ -72,8 +71,7 @@ export default function NaturalTime({
 		: 0;
 
 	return (
-		<>
-			<section class="rounded-[2rem] border border-stone-300 bg-[#faf8f2] p-6 shadow-[0_30px_80px_rgba(41,37,36,0.09)] sm:p-10 lg:p-12">
+			<section class="min-w-0 border border-stone-950/20 bg-[#fbf7ed]/90 p-5 shadow-[0_24px_70px_rgba(68,54,36,0.10)] backdrop-blur-[2px] sm:p-8 lg:p-10">
 				<form onSubmit={submit}>
 					<label for="time-query" class="mb-3 block font-mono text-[11px] uppercase tracking-[0.22em] text-stone-500">
 						Ask anything about time
@@ -83,7 +81,7 @@ export default function NaturalTime({
 							id="time-query"
 							value={query}
 							onInput={(event) => setQuery(event.currentTarget.value)}
-							class="w-full bg-transparent pr-14 font-serif text-2xl leading-tight tracking-[-0.025em] text-stone-950 outline-none placeholder:text-stone-400 sm:text-4xl"
+							class="w-full bg-transparent pr-14 font-serif text-xl leading-tight tracking-[-0.025em] text-stone-950 outline-none placeholder:text-stone-400 sm:text-4xl"
 							placeholder="4pm New York in London tomorrow"
 							autocomplete="off"
 						/>
@@ -93,7 +91,7 @@ export default function NaturalTime({
 					</div>
 				</form>
 
-				<div aria-live="polite" class="mt-10 min-h-[255px]">
+				<div aria-live="polite" class="mt-9 min-h-[255px]">
 					{result ? (
 						<div>
 							<div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-500">
@@ -101,8 +99,8 @@ export default function NaturalTime({
 								{goodTime ? 'A good time to call' : 'Outside usual working hours'}
 								{result.detectedTimeCount > 1 && <span>· first of {result.detectedTimeCount} times</span>}
 							</div>
-							<div class="mt-5 flex items-start">
-								<span class="font-mono text-[clamp(4.6rem,14vw,10.5rem)] font-medium leading-[0.78] tracking-[-0.095em] text-stone-950">
+							<div class="mt-5 flex min-w-0 items-start">
+								<span class="min-w-0 font-['Share_Tech_Mono'] text-[clamp(4.5rem,9.5vw,9.5rem)] leading-[0.78] tracking-[-0.075em] text-stone-950">
 									{formatClock(result.timestamp, result.target.zone, false)}
 								</span>
 								<span class="ml-3 mt-1 rounded-full bg-orange-600 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-white sm:mt-3">
@@ -121,7 +119,7 @@ export default function NaturalTime({
 										<p class="mt-2 max-w-xl text-xs leading-5 text-orange-700">{warning}</p>
 									))}
 								</div>
-								<div class="flex gap-2">
+								<div class="flex flex-wrap gap-2">
 									<button type="button" onClick={copy} class="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:border-stone-950">
 										{copied ? 'Copied' : 'Copy answer'}
 									</button>
@@ -142,22 +140,5 @@ export default function NaturalTime({
 					)}
 				</div>
 			</section>
-
-			<div class="mt-14 grid grid-cols-2 border-l border-t border-stone-300 sm:grid-cols-3 lg:grid-cols-6">
-				{featured.map((city) => {
-					const hour = getLocalParts(now, city.zone).hour;
-					return (
-						<a href={`/time/${city.slug}`} class="group min-h-32 border-b border-r border-stone-300 p-4 hover:bg-stone-950 hover:text-white">
-							<div class="flex items-center justify-between">
-								<span class="font-mono text-[9px] uppercase tracking-[0.12em] text-stone-500 group-hover:text-stone-400">{city.country}</span>
-								<span class={`size-1.5 rounded-full ${hour >= 7 && hour < 20 ? 'bg-emerald-500' : 'bg-indigo-400'}`} />
-							</div>
-							<p class="mt-6 font-serif text-lg">{city.name}</p>
-							<p class="mt-1 font-mono text-2xl tracking-[-0.06em]">{formatClock(now, city.zone, false)}</p>
-						</a>
-					);
-				})}
-			</div>
-		</>
 	);
 }

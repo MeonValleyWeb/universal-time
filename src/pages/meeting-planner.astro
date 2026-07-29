@@ -9,37 +9,41 @@ const initialNow = Date.now();
 	title="World Time Meeting Planner · WorldTime"
 	description="Compare working hours across cities and find the fairest meeting time on one visual 48-hour timeline."
 >
-	<div class="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
-		<div class="absolute -left-64 -top-64 size-[42rem] rounded-full bg-cyan-400/8 blur-[120px]"></div>
-		<div class="absolute -right-64 top-1/3 size-[36rem] rounded-full bg-amber-300/7 blur-[140px]"></div>
-		<div class="absolute inset-0 opacity-[0.035] [background-image:linear-gradient(rgba(255,255,255,.45)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.45)_1px,transparent_1px)] [background-size:72px_72px]"></div>
+	<div class="pointer-events-none fixed inset-x-0 top-0 h-[54rem] overflow-hidden" aria-hidden="true">
+		<img src="/world-atlas-bg.webp" alt="" class="absolute inset-0 size-full object-cover object-top opacity-55" />
+		<div class="absolute inset-0 bg-gradient-to-b from-[#f2efe8]/20 via-[#f2efe8]/70 to-[#f2efe8]"></div>
 	</div>
 
-	<header class="relative z-10 mx-auto flex max-w-[96rem] items-center justify-between px-5 py-6 sm:px-8 lg:px-12">
+	<header class="relative z-10 border-b border-stone-950/20 px-5 sm:px-8">
+		<div class="mx-auto flex h-20 max-w-[96rem] items-center justify-between">
 		<a href="/" class="flex items-center gap-3 text-[var(--color-ink)]">
-			<span class="relative grid size-9 place-items-center rounded-full border border-cyan-200/40 before:absolute before:h-px before:w-5 before:rotate-45 before:bg-cyan-200 after:absolute after:h-5 after:w-px after:rotate-45 after:bg-cyan-200"></span>
-			<span class="text-lg font-medium tracking-tight">WorldTime</span>
+			<span class="grid size-9 place-items-center rounded-full bg-orange-600 font-serif text-xl italic text-white">W</span>
+			<span class="font-serif text-xl tracking-[-0.03em]">WorldTime</span>
 		</a>
 		<div class="flex items-center gap-4">
 			<span class="hidden items-center gap-3 font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--color-subtle)] sm:flex">
-				<span class="size-1.5 animate-pulse rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(103,232,249,.9)]"></span>
-				Live global signal
+				<span class="size-1.5 animate-pulse rounded-full bg-orange-600"></span>
+				Live global clock
 			</span>
-			<a href="/" class="rounded-full border border-white/15 px-4 py-2 font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--color-muted)] hover:border-cyan-200/50 hover:text-[var(--color-ink)]">
+			<a href="/" class="rounded-full border border-stone-950/20 px-4 py-2 font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--color-muted)] hover:border-orange-600 hover:text-orange-700">
 				Quick converter
 			</a>
+		</div>
 		</div>
 	</header>
 
 	<main class="relative z-10 mx-auto max-w-[96rem] px-3 pb-20 sm:px-6 lg:px-10">
-		<section class="grid items-end gap-8 px-2 pb-10 pt-10 sm:px-3 sm:pb-14 sm:pt-16 lg:grid-cols-[1.3fr_0.7fr] lg:gap-16 lg:pt-24">
+		<section class="grid items-end gap-8 px-2 pb-10 pt-12 sm:px-3 sm:pb-14 sm:pt-16 lg:grid-cols-[1.3fr_0.7fr] lg:gap-16 lg:pt-20">
 			<div>
-				<p class="mb-5 font-mono text-[10px] font-medium uppercase tracking-[0.35em] text-cyan-300">Advanced meeting planner</p>
-				<h1 class="max-w-5xl text-6xl font-light leading-[0.86] tracking-[-0.055em] text-[var(--color-ink)] sm:text-8xl lg:text-[9rem]">
-					Every hour,<br /><em class="font-light text-[var(--color-warm)]">everywhere.</em>
+				<p class="mb-5 flex items-center gap-3 font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-orange-700">
+					<span class="h-px w-8 bg-orange-600"></span>
+					Advanced meeting planner
+				</p>
+				<h1 class="max-w-5xl text-6xl font-light leading-[0.86] tracking-[-0.055em] text-[var(--color-ink)] sm:text-8xl lg:text-[8.5rem]">
+					Every hour,<br /><em class="font-light text-orange-600">everywhere.</em>
 				</h1>
 			</div>
-			<div class="max-w-md border-l border-[var(--color-line)] pl-5 lg:mb-3 lg:justify-self-end">
+			<div class="max-w-md border-l border-orange-600 pl-5 lg:mb-3 lg:justify-self-end">
 				<p class="text-lg leading-7 text-[var(--color-ink)]">Find the moment when the world lines up.</p>
 				<p class="mt-3 font-mono text-[10px] leading-5 tracking-wide text-[var(--color-muted)]">Drag the timeline. Tap any hour. Add any IANA time zone. Daylight and working hours stay visible at a glance.</p>
 			</div>
