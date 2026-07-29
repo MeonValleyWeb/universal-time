@@ -81,7 +81,7 @@ export default function NaturalTime({
 		: 0;
 
 	return (
-			<section class="atlas-panel min-w-0 border border-stone-950/20 bg-[#fbf7ed]/90 p-5 shadow-[0_24px_70px_rgba(68,54,36,0.10)] backdrop-blur-[2px] sm:p-8 lg:p-10">
+			<section class="atlas-panel min-w-0 border border-stone-950/20 bg-[#fbf7ed]/90 p-4 shadow-[0_24px_70px_rgba(68,54,36,0.10)] backdrop-blur-[2px] sm:p-8 lg:p-10">
 				<form onSubmit={submit}>
 					<div class="mb-3 flex flex-wrap items-center justify-between gap-2">
 						<label for="time-query" class="block font-mono text-[11px] uppercase tracking-[0.22em] text-stone-500">
@@ -106,7 +106,7 @@ export default function NaturalTime({
 					</div>
 				</form>
 
-				<div aria-live="polite" class="mt-9 min-h-[255px]">
+				<div aria-live="polite" class="mt-7 min-h-[245px] sm:mt-9 sm:min-h-[255px]">
 					{result ? (
 						<div>
 							<div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-500">

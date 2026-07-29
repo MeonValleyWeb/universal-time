@@ -6,12 +6,12 @@
 	--color-input: rgba(42, 56, 65, 0.045);
 	--color-ink: #1c1917;
 	--color-muted: #78716c;
-	--color-subtle: #a8a29e;
+	--color-subtle: #6d6661;
 	--color-line: #d6d3d1;
 	--color-night-cell: #d9e1e5;
 	--color-day-cell: #f8f2df;
 	--color-warm: #9a5e10;
-	--color-signal: #ea580c;
+	--color-signal: #a63f08;
 	--color-signal-ink: #ffffff;
 }
 
@@ -40,9 +40,11 @@
 	--color-input: rgba(42, 56, 65, 0.045);
 	--color-ink: #14212b;
 	--color-muted: #596b78;
-	--color-subtle: #7f8d96;
+	--color-subtle: #586976;
 	--color-line: rgba(25, 48, 62, 0.14);
 	--color-night-cell: #d9e1e5;
 	--color-day-cell: #f8f2df;
 	--color-warm: #8a5c12;
+	--color-signal: #9f3b08;
+	--color-signal-ink: #ffffff;
 }

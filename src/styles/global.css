@@ -20,6 +20,20 @@ button {
 	transition-duration: 180ms;
 }
 
+:root:not([data-theme="dark"]) [class~="text-orange-700"],
+:root:not([data-theme="dark"]) [class~="text-orange-600"],
+:root:not([data-theme="dark"]) [class~="text-orange-500"] {
+	color: var(--color-signal) !important;
+}
+
+:root:not([data-theme="dark"]) [class~="text-stone-500"] {
+	color: var(--color-subtle) !important;
+}
+
+:root:not([data-theme="dark"]) [class~="bg-orange-600"] {
+	background-color: var(--color-signal) !important;
+}
+
 :root[data-theme="dark"] .atlas-hero {
 	background: #08111d;
 }
@@ -85,6 +99,15 @@ button {
 
 :root[data-theme="dark"] [class~="border-orange-600"] {
 	border-color: var(--color-signal) !important;
+}
+
+.personal-time-scale {
+	--personal-muted: #aebbc4;
+	--personal-signal: #ff9b5a;
+}
+
+:root[data-theme="dark"] .personal-time-scale {
+	--personal-signal: #67e8f9;
 }
 
 @media (prefers-reduced-motion: reduce) {

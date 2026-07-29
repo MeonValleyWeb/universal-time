@@ -6,6 +6,13 @@ import WorldStrip from '../components/WorldStrip';
 import { cities } from '../lib/cities';
 
 const initialNow = Date.now();
+const homepageCitySlugs = [
+	'utc', 'london', 'new-york', 'los-angeles',
+	'toronto', 'mexico-city', 'sao-paulo', 'paris',
+	'cairo', 'dubai', 'delhi', 'singapore',
+	'tokyo', 'sydney', 'auckland', 'honolulu',
+];
+const homepageCities = homepageCitySlugs.map((slug) => cities.find((city) => city.slug === slug)!);
 ---
 
 <BaseLayout>
@@ -26,22 +33,22 @@ const initialNow = Date.now();
 	</header>
 
 	<main>
-		<section class="atlas-hero relative overflow-hidden border-b border-stone-950/20 px-5 py-12 sm:px-8 sm:py-16 lg:py-20">
+		<section class="atlas-hero relative overflow-hidden border-b border-stone-950/20 px-5 py-8 sm:px-8 sm:py-16 lg:py-20">
 			<img src="/world-atlas-bg.webp" alt="" class="pointer-events-none absolute inset-0 size-full object-cover opacity-80" aria-hidden="true" />
 			<div class="atlas-wash pointer-events-none absolute inset-0 bg-gradient-to-r from-[#f6f0e4]/95 via-[#f6f0e4]/55 to-transparent" aria-hidden="true"></div>
-			<div class="relative mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[0.68fr_1.32fr] lg:gap-16 xl:gap-24">
+			<div class="relative mx-auto grid max-w-[1500px] gap-7 sm:gap-12 lg:grid-cols-[0.68fr_1.32fr] lg:gap-16 xl:gap-24">
 				<div class="flex flex-col justify-between">
 					<div>
-						<div class="mb-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.22em] text-orange-700">
+						<div class="mb-4 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.22em] text-orange-700 sm:mb-8">
 							<span class="h-px w-8 bg-orange-600"></span>
 							The world’s clearest clock
 						</div>
-						<p class="font-serif text-[clamp(3rem,5vw,5.75rem)] leading-none tracking-[-0.065em]">WorldTime</p>
-						<h1 class="mt-7 max-w-xl font-serif text-[clamp(3.25rem,5.5vw,6.5rem)] leading-[0.88] tracking-[-0.06em]">
+						<p class="hidden font-serif text-[clamp(3rem,5vw,5.75rem)] leading-none tracking-[-0.065em] sm:block">WorldTime</p>
+						<h1 class="max-w-xl font-serif text-[2.85rem] leading-[0.9] tracking-[-0.06em] sm:mt-7 sm:text-[clamp(3.25rem,5.5vw,6.5rem)]">
 							The right time, <em class="font-normal text-orange-600">anywhere.</em>
 						</h1>
-						<p class="mt-8 max-w-md text-base leading-7 text-stone-600">
-							No timezone maths. Ask naturally, paste a time, or compare cities. We’ll give you one clear answer.
+						<p class="mt-4 max-w-md text-sm leading-6 text-stone-600 sm:mt-8 sm:text-base sm:leading-7">
+							Ask naturally, paste a time or compare cities. One clear answer, without timezone maths.
 						</p>
 					</div>
 				</div>
@@ -59,21 +66,19 @@ const initialNow = Date.now();
 		<section id="how-it-works" class="bg-stone-950 px-5 py-20 text-stone-100 sm:px-8 lg:py-28">
 			<div class="mx-auto grid max-w-[1500px] gap-14 lg:grid-cols-2">
 				<div>
-					<p class="font-mono text-[10px] uppercase tracking-[0.22em] text-orange-500">One question. One answer.</p>
-					<h2 class="mt-6 max-w-xl font-serif text-5xl leading-[0.95] tracking-[-0.05em] sm:text-6xl">
+					<h2 class="max-w-xl font-serif text-5xl leading-[0.95] tracking-[-0.05em] sm:text-6xl">
 						Built for the moment before you hit send.
 					</h2>
 				</div>
-				<div class="grid gap-px bg-stone-800 sm:grid-cols-2">
+				<div class="grid gap-x-10 gap-y-9 sm:grid-cols-2">
 					{[
-						['01', 'Understands natural language', 'Write “Friday at 4pm New York in London” just as you would in a message.'],
-						['02', 'Respects clock changes', 'Future conversions use the correct local offset for that date.'],
-						['03', 'Checks the hour', 'See immediately whether your proposed time lands inside a normal working day.'],
-						['04', 'Ready to share', 'Copy a clear dual-time answer or open a dedicated converter.'],
-					].map(([number, heading, copy]) => (
-						<article class="bg-stone-950 p-6 sm:p-8">
-							<span class="font-mono text-xs text-orange-500">{number}</span>
-							<h3 class="mt-12 font-serif text-2xl">{heading}</h3>
+						['Understands natural language', 'Write “Friday at 4pm New York in London” just as you would in a message.'],
+						['Respects clock changes', 'Future conversions use the correct local offset for that date.'],
+						['Checks the hour', 'See immediately whether your proposed time lands inside a normal working day.'],
+						['Ready to share', 'Copy a clear dual-time answer or open a dedicated converter.'],
+					].map(([heading, copy]) => (
+						<article class="border-t border-stone-700 pt-5">
+							<h3 class="font-serif text-2xl">{heading}</h3>
 							<p class="mt-3 text-sm leading-6 text-stone-400">{copy}</p>
 						</article>
 					))}
@@ -84,8 +89,7 @@ const initialNow = Date.now();
 		<section class="border-b border-stone-300 bg-[#e8e4dc] px-5 py-16 sm:px-8">
 			<div class="mx-auto grid max-w-[1500px] items-end gap-10 lg:grid-cols-[1fr_auto]">
 				<div>
-					<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-orange-700">Need the whole picture?</p>
-					<h2 class="mt-3 max-w-3xl font-serif text-4xl leading-none tracking-[-0.045em] sm:text-6xl">
+					<h2 class="max-w-3xl font-serif text-4xl leading-none tracking-[-0.045em] sm:text-6xl">
 						Compare every working day on one timeline.
 					</h2>
 					<p class="mt-5 max-w-2xl text-base leading-7 text-stone-600">
@@ -136,16 +140,21 @@ const initialNow = Date.now();
 
 		<section id="world-clocks" class="px-5 py-16 sm:px-8">
 			<div class="mx-auto max-w-[1500px]">
-				<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-stone-500">Popular city clocks</p>
-				<h2 class="mt-2 font-serif text-3xl tracking-[-0.04em]">Find your place</h2>
+				<div class="flex flex-wrap items-end justify-between gap-4">
+					<h2 class="font-serif text-4xl tracking-[-0.04em]">Find your place</h2>
+					<p class="max-w-lg text-sm leading-6 text-stone-600">The world clocks people reach for most, with every other city waiting in the complete index.</p>
+				</div>
 				<div class="mt-8 grid gap-x-8 border-t border-stone-300 sm:grid-cols-2 lg:grid-cols-4">
-					{cities.map((city) => (
+					{homepageCities.map((city) => (
 						<a href={`/time/${city.slug}`} class="flex items-center justify-between border-b border-stone-300 py-4 text-sm hover:text-orange-700">
 							<span>{city.name}</span>
 							<span class="font-mono text-[9px] text-stone-500">{city.country}</span>
 						</a>
 					))}
 				</div>
+				<a href="/cities" class="mt-8 inline-flex border-b border-stone-950 pb-1 text-sm font-medium hover:border-orange-600 hover:text-orange-700">
+					Explore the complete city index →
+				</a>
 			</div>
 		</section>
 
