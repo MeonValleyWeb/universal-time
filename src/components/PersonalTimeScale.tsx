@@ -59,19 +59,20 @@ export default function PersonalTimeScale() {
 	};
 
 	return (
-		<section class="border-b border-[var(--color-line)] bg-[var(--color-surface)] px-5 py-20 text-[var(--color-ink)] sm:px-8 lg:py-28">
+		<section class="border-b border-[var(--color-line)] bg-[#11100f] px-5 py-16 text-[#f8f5ee] sm:px-8 lg:py-24">
 			<div class="mx-auto max-w-[1500px]">
 				<div class="grid gap-12 xl:grid-cols-[0.8fr_1.2fr] xl:gap-20">
 					<div>
-						<h2 class="max-w-2xl font-serif text-5xl leading-[0.9] tracking-[-0.055em] sm:text-7xl">
+						<p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[#fb923c]">Your place on the absurdly long timeline</p>
+						<h2 class="mt-5 max-w-2xl font-serif text-5xl leading-[0.9] tracking-[-0.055em] sm:text-7xl">
 							So, how much time have you got?
 						</h2>
-						<p class="mt-6 max-w-xl text-base leading-7 text-[var(--color-muted)]">
+						<p class="mt-6 max-w-xl text-base leading-7 text-[#c4beb5]">
 							We cannot predict your lifespan. Frankly, neither can the internet. But we can show the time you have lived and use an 80th birthday as a clearly labelled measuring stick.
 						</p>
 
 						<div class="mt-10">
-							<label for="life-birth-date" class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Your date of birth</label>
+							<label for="life-birth-date" class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#c4beb5]">Your date of birth</label>
 							<input
 								id="life-birth-date"
 								type="date"
@@ -80,7 +81,7 @@ export default function PersonalTimeScale() {
 									setBirthDate(event.currentTarget.value);
 									setState('idle');
 								}}
-								class="mt-3 block w-full max-w-sm border-b border-[var(--color-line)] bg-transparent py-3 font-serif text-3xl text-[var(--color-ink)] outline-none focus:border-[var(--color-signal)]"
+								class="mt-3 block w-full max-w-sm border-b border-white/20 bg-transparent py-3 font-serif text-3xl text-[#f8f5ee] outline-none focus:border-[#fb923c]"
 							/>
 						</div>
 
@@ -88,69 +89,63 @@ export default function PersonalTimeScale() {
 							<div class="mt-10" aria-live="polite">
 								<div class="flex items-end justify-between gap-4">
 									<p class="font-serif text-3xl">{decimal.format(life.progress)}%</p>
-									<p class="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--color-subtle)]">of the 80-year yardstick</p>
+									<p class="font-mono text-[9px] uppercase tracking-[0.16em] text-[#c4beb5]">of the 80-year yardstick</p>
 								</div>
-								<div
-									class="relative mt-4 h-10 border-y border-[var(--color-line)]"
-									role="img"
-									aria-label={`${decimal.format(life.progress)} percent of the 80-year yardstick`}
-								>
-									<span class="absolute left-0 top-3 font-mono text-[8px] uppercase tracking-wider text-[var(--color-subtle)]">Birth</span>
-									<span class="absolute right-0 top-3 font-mono text-[8px] uppercase tracking-wider text-[var(--color-subtle)]">80 years</span>
-									<span
-										class="absolute inset-y-0 w-px bg-[var(--color-signal)] transition-[left] duration-700"
-										style={{ left: `${life.progress}%` }}
-									>
-										<span class="absolute -left-1 -top-1 size-2 rounded-full bg-[var(--color-signal)]" />
-									</span>
+								<div class="mt-3 h-3 overflow-hidden rounded-full bg-white/10">
+									<div class="h-full rounded-full bg-[#fb923c] transition-[width] duration-700" style={{ width: `${life.progress}%` }} />
 								</div>
 								<div class="mt-6 grid gap-px bg-[var(--color-line)] sm:grid-cols-3">
-									<div class="bg-[var(--color-surface)] p-5">
+									<div class="bg-[#11100f] p-5">
 										<p class="font-serif text-3xl">{number.format(life.daysLived)}</p>
-										<p class="mt-2 font-mono text-[9px] uppercase tracking-wider text-[var(--color-subtle)]">days lived</p>
+										<p class="mt-2 font-mono text-[9px] uppercase tracking-wider text-[#c4beb5]">days lived</p>
 									</div>
-									<div class="bg-[var(--color-surface)] p-5">
+									<div class="bg-[#11100f] p-5">
 										<p class="font-serif text-3xl">{life.orbits}</p>
-										<p class="mt-2 font-mono text-[9px] uppercase tracking-wider text-[var(--color-subtle)]">orbits of the Sun</p>
+										<p class="mt-2 font-mono text-[9px] uppercase tracking-wider text-[#c4beb5]">orbits of the Sun</p>
 									</div>
-									<div class="bg-[var(--color-surface)] p-5">
+									<div class="bg-[#11100f] p-5">
 										<p class="font-serif text-3xl">{number.format(life.daysToYardstick)}</p>
-										<p class="mt-2 font-mono text-[9px] uppercase tracking-wider text-[var(--color-subtle)]">days to 80*</p>
+										<p class="mt-2 font-mono text-[9px] uppercase tracking-wider text-[#c4beb5]">days to 80*</p>
 									</div>
 								</div>
-								<p class="mt-3 text-xs leading-5 text-[var(--color-subtle)]">
+								<p class="mt-3 text-xs leading-5 text-[#c4beb5]">
 									* A playful yardstick, not a forecast, diagnosis or appointment with the Grim Reaper.
 								</p>
 							</div>
 						) : birthDate ? (
-							<p class="mt-5 text-sm text-[var(--color-signal)]">That date appears to have fallen out of the calendar.</p>
+							<p class="mt-5 text-sm text-[#fb923c]">That date appears to have fallen out of the calendar.</p>
 						) : null}
 					</div>
 
-					<div class="content-start border-t border-[var(--color-line)]">
-						<article class="grid gap-4 border-b border-[var(--color-line)] py-7 sm:grid-cols-[0.55fr_1.45fr] sm:items-baseline">
+					<div class="grid content-start gap-px bg-[var(--color-line)] sm:grid-cols-2">
+						<article class="bg-[var(--color-surface)] p-6 text-[var(--color-ink)] sm:p-8">
 							<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-signal)]">One second</p>
-							<div><p class="font-serif text-4xl">9,192,631,770</p><p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">Oscillations of caesium-133. A second is surprisingly busy.</p></div>
+							<p class="mt-14 font-serif text-4xl">9,192,631,770</p>
+							<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">Oscillations of caesium-133. A second is surprisingly busy.</p>
 						</article>
-						<article class="grid gap-4 border-b border-[var(--color-line)] py-7 sm:grid-cols-[0.55fr_1.45fr] sm:items-baseline">
+						<article class="bg-[var(--color-surface)] p-6 text-[var(--color-ink)] sm:p-8">
 							<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-signal)]">Your scale</p>
-							<div><p class="font-serif text-4xl">{life ? number.format(life.weeksLived) : 'Not calculated'}</p><p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">Weeks so far. Enough Mondays to deserve some credit.</p></div>
+							<p class="mt-14 font-serif text-4xl">{life ? number.format(life.weeksLived) : '—'}</p>
+							<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">Weeks so far. Enough Mondays to deserve some credit.</p>
 						</article>
-						<article class="grid gap-4 border-b border-[var(--color-line)] py-7 sm:grid-cols-[0.55fr_1.45fr] sm:items-baseline">
+						<article class="bg-[var(--color-surface)] p-6 text-[var(--color-ink)] sm:p-8">
 							<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-signal)]">About 5 billion years</p>
-							<div><p class="font-serif text-4xl">Red giant</p><p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">
+							<p class="mt-14 font-serif text-4xl">Red giant</p>
+							<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">
 								The Sun will expand into a red giant. It will not explode as a supernova; it lacks the mass for that particular drama.
-							</p></div>
+							</p>
 						</article>
-						<article class="grid gap-4 border-b border-[var(--color-line)] py-7 sm:grid-cols-[0.55fr_1.45fr] sm:items-baseline">
+						<article class="bg-[var(--color-surface)] p-6 text-[var(--color-ink)] sm:p-8">
 							<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-signal)]">After that</p>
-							<div><p class="font-serif text-4xl">White dwarf</p><p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">
+							<p class="mt-14 font-serif text-4xl">White dwarf</p>
+							<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">
 								The remnant will cool for an almost unreasonable length of time. Your calendar should be clear.
-							</p></div>
+							</p>
 						</article>
 
-						<form onSubmit={subscribe} class="pt-10 text-[var(--color-ink)]">
-							<h3 class="font-serif text-4xl tracking-[-0.04em]">Make your date mean something.</h3>
+						<form onSubmit={subscribe} class="bg-[var(--color-canvas)] p-6 text-[var(--color-ink)] sm:col-span-2 sm:p-8">
+							<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-signal)]">On this day…</p>
+							<h3 class="mt-4 font-serif text-4xl tracking-[-0.04em]">Make your date mean something.</h3>
 							<p class="mt-3 max-w-2xl text-sm leading-6 text-[var(--color-muted)]">
 								Join the future newsletter for remarkable events, celestial anniversaries and odd fragments of time connected to your date. No daily avalanche.
 							</p>
@@ -186,10 +181,10 @@ export default function PersonalTimeScale() {
 							</div>
 							<label class="mt-6 flex items-start gap-3 text-sm leading-6 text-[var(--color-muted)]">
 								<input type="checkbox" required checked={consent} onChange={(event) => setConsent(event.currentTarget.checked)} class="mt-1 accent-[var(--color-signal)]" />
-								<span>I am 18 or over and agree to receive the “On this day…” newsletter. I can unsubscribe at any time. Read the <a href="/privacy#newsletter" class="text-[var(--color-signal)] underline decoration-current underline-offset-2">privacy details</a>.</span>
+								<span>I am 18 or over and agree to receive the “On this day…” newsletter. I can unsubscribe at any time. Read the <a href="/privacy#newsletter" class="text-[var(--color-signal)] underline underline-offset-2">privacy details</a>.</span>
 							</label>
 							<div class="mt-6 flex flex-wrap items-center gap-4">
-								<button disabled={state === 'sending'} class="bg-[var(--color-ink)] px-6 py-3 text-sm font-medium text-[var(--color-canvas)] hover:bg-[var(--color-signal)] disabled:opacity-50">
+								<button disabled={state === 'sending'} class="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-medium text-[var(--color-canvas)] hover:bg-[var(--color-signal)] disabled:opacity-50">
 									{state === 'sending' ? 'Saving your place…' : 'Join the timeline →'}
 								</button>
 								<p aria-live="polite" class={`text-sm ${state === 'error' ? 'text-red-700' : 'text-[var(--color-muted)]'}`}>{message}</p>

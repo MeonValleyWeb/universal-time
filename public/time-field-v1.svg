@@ -15,7 +15,6 @@
     </radialGradient>
   </defs>
 
-  <!-- A 24-hour civil-time dial: one dash for every hour. -->
   <g transform="translate(1320 315)">
     <circle r="310" fill="url(#sun-glow)"/>
     <circle r="246" stroke="#14212B" stroke-opacity=".12"/>
@@ -32,7 +31,6 @@
     <text x="-63" y="44" fill="#14212B" fill-opacity=".22" font-family="DM Mono, monospace" font-size="12" letter-spacing="4">24 HOURS</text>
   </g>
 
-  <!-- Solar year: an orbit with quarter markers. -->
   <g transform="translate(190 955)">
     <ellipse cx="330" cy="0" rx="430" ry="178" stroke="#14212B" stroke-opacity=".15" stroke-dasharray="5 8"/>
     <ellipse cx="330" cy="0" rx="300" ry="122" stroke="#14212B" stroke-opacity=".08"/>
@@ -51,7 +49,6 @@
     </g>
   </g>
 
-  <!-- UTC ruler: sixty fine divisions, anchored at the prime meridian. -->
   <g transform="translate(0 1310)">
     <rect width="1600" height="26" fill="url(#minute-rule)"/>
     <path d="M80 25.5H1520" stroke="url(#fade-x)"/>
@@ -63,7 +60,6 @@
     </g>
   </g>
 
-  <!-- The equation-of-time analemma, traced faintly like a working diagram. -->
   <g transform="translate(1050 1000) rotate(-10)">
     <path d="M0-174C-74-140-76-66-8-12C54 38 60 108 0 174C-60 108-54 38 8-12C76-66 74-140 0-174Z" stroke="#14212B" stroke-opacity=".12" stroke-width="2"/>
     <path d="M-88 0H88M0-202V202" stroke="#14212B" stroke-opacity=".07"/>

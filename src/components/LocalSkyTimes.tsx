@@ -171,7 +171,7 @@ export default function LocalSkyTimes() {
 					</p>
 				</div>
 
-				<div class="grid lg:grid-cols-[1fr_1fr]">
+				<div class="grid lg:grid-cols-2">
 					<form onSubmit={useCity} class="border-b border-[var(--color-line)] p-7 lg:border-b-0 lg:border-r sm:p-10">
 						<label for="sky-city" class="block font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Choose a city</label>
 						<select

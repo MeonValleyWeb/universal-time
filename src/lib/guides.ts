@@ -1,3 +1,5 @@
+import { phaseOneTimeZoneGuides } from './time-zone-guides.ts';
+
 export interface TimeGuide {
 	slug: string;
 	title: string;
@@ -140,6 +142,10 @@ export const timeGuides: TimeGuide[] = [
 		category: 'Time zones',
 		sections: [
 			{
+				heading: 'Railways made local solar time impractical',
+				body: 'Before standard time, towns commonly set clocks from the local Sun. That works while journeys are slow, but it becomes chaotic when railways need one dependable timetable across hundreds of miles. North American railroads adopted Standard Railway Time on 18 November 1883, and towns soon followed their shared clocks.',
+			},
+			{
 				heading: 'Offsets connect local time to UTC',
 				body: 'A time-zone offset says how far local civil time is ahead of or behind UTC at a particular instant. UTC+9 means the local clock reads nine hours later than UTC; UTC−5 means it reads five hours earlier.',
 			},
@@ -151,10 +157,15 @@ export const timeGuides: TimeGuide[] = [
 				heading: 'A zone name is better than a fixed offset',
 				body: 'An IANA name such as America/New_York stores a history and rule set, allowing software to find the correct offset for a specific date. A bare UTC−5 cannot tell you whether a future New York date falls in standard or daylight time.',
 			},
+			{
+				heading: 'The rules are law, then data',
+				body: 'There is no world government of civil time. Countries and regions choose their own clock rules, sometimes with little notice. The IANA Time Zone Database turns those legal and political decisions into data used by phones, browsers and servers, but a future conversion can still change if a government changes its rule.',
+			},
 		],
-		keyFacts: ['Time zones map instants to local civil time', 'Offsets can include 30 or 45 minutes', 'IANA rules change when governments change clocks'],
+		keyFacts: ['Railways accelerated standard time', 'Time zones map instants to local civil time', 'Offsets can include 30 or 45 minutes', 'IANA rules change when governments change clocks'],
 		sources: [
 			{ label: 'IANA Time Zone Database', url: 'https://www.iana.org/time-zones' },
+			{ label: 'NIST — World time scales', url: 'https://www.nist.gov/pml/time-and-frequency-division/popular-links/walk-through-time/walk-through-time-world-time-scales' },
 		],
 	},
 	{
@@ -304,6 +315,7 @@ export const timeGuides: TimeGuide[] = [
 			{ label: 'US Naval Observatory — Calendars', url: 'https://aa.usno.navy.mil/faq/calendars' },
 		],
 	},
+	...phaseOneTimeZoneGuides,
 ];
 
 export const guideBySlug = (slug: string) => timeGuides.find((guide) => guide.slug === slug);
