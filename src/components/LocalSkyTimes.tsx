@@ -53,7 +53,7 @@ const phaseName = (phase: number) => {
 const statusMessage: Partial<Record<LocationStatus, string>> = {
 	denied: 'Location permission is blocked. Allow it in your browser site settings, then try again, or choose a city below.',
 	timeout: 'Your device did not return a location in time. Try again or choose a city below.',
-	unavailable: 'Your device could not provide a location. Try again or choose a city below.',
+	unavailable: 'Your browser was allowed to ask, but your device did not return a position. Check that Location Services are on for this browser, then try again or choose a city below.',
 	insecure: 'Browser location only works over a secure connection. Choose a city or enter coordinates below.',
 };
 
@@ -89,25 +89,33 @@ export default function LocalSkyTimes() {
 		}
 
 		setStatus('loading');
-		navigator.geolocation.getCurrentPosition(
-			(position) => {
-				setLocation({
-					latitude: position.coords.latitude,
-					longitude: position.coords.longitude,
-					label: 'Your current location',
-					timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-					accuracy: position.coords.accuracy,
-					source: 'device',
-				});
-				setStatus('idle');
-			},
-			(error) => {
-				if (error.code === error.PERMISSION_DENIED) setStatus('denied');
-				else if (error.code === error.TIMEOUT) setStatus('timeout');
-				else setStatus('unavailable');
-			},
-			{ enableHighAccuracy: false, timeout: 15_000, maximumAge: 300_000 },
-		);
+		const acceptPosition = (position: GeolocationPosition) => {
+			setLocation({
+				latitude: position.coords.latitude,
+				longitude: position.coords.longitude,
+				label: 'Your current location',
+				timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+				accuracy: position.coords.accuracy,
+				source: 'device',
+			});
+			setStatus('idle');
+		};
+		const requestPosition = (highAccuracy: boolean, isRetry = false) => {
+			navigator.geolocation.getCurrentPosition(
+				acceptPosition,
+				(error) => {
+					if (!isRetry && error.code !== error.PERMISSION_DENIED) {
+						requestPosition(true, true);
+						return;
+					}
+					if (error.code === error.PERMISSION_DENIED) setStatus('denied');
+					else if (error.code === error.TIMEOUT) setStatus('timeout');
+					else setStatus('unavailable');
+				},
+				{ enableHighAccuracy: highAccuracy, timeout: highAccuracy ? 30_000 : 15_000, maximumAge: highAccuracy ? 0 : 300_000 },
+			);
+		};
+		requestPosition(false);
 	};
 
 	const useCity = (event: Event) => {
