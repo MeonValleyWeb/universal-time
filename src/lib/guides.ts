@@ -1,4 +1,5 @@
 import { phaseOneTimeZoneGuides } from './time-zone-guides.ts';
+import { timeZoneCaseStudies } from './time-zone-case-studies.ts';
 
 export interface TimeGuide {
 	slug: string;
@@ -316,6 +317,7 @@ export const timeGuides: TimeGuide[] = [
 		],
 	},
 	...phaseOneTimeZoneGuides,
+	...timeZoneCaseStudies,
 ];
 
 export const guideBySlug = (slug: string) => timeGuides.find((guide) => guide.slug === slug);
