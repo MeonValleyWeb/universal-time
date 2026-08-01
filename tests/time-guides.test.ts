@@ -3,7 +3,7 @@ import test from 'node:test';
 import { timeGuides } from '../src/lib/guides.ts';
 
 test('time guides form a curated, useful first knowledge inventory', () => {
-	assert.ok(timeGuides.length >= 22);
+	assert.ok(timeGuides.length >= 27);
 	assert.equal(new Set(timeGuides.map((guide) => guide.slug)).size, timeGuides.length);
 	for (const slug of [
 		'who-invented-time-zones',
@@ -16,6 +16,11 @@ test('time guides form a curated, useful first knowledge inventory', () => {
 		'why-time-zone-abbreviations-are-ambiguous',
 		'international-date-line-history',
 		'british-and-american-daylight-saving-time-history',
+		'arizona-navajo-nation-daylight-saving-time',
+		'india-nepal-time-zone-offsets',
+		'samoa-date-line-jump-2011',
+		'russia-turkey-permanent-time-changes',
+		'australia-state-daylight-saving-time',
 	]) {
 		assert.ok(timeGuides.some((guide) => guide.slug === slug), `missing Phase 1 guide: ${slug}`);
 	}
