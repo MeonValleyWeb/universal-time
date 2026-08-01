@@ -12,6 +12,7 @@ export const GET: APIRoute = ({ site, url }) => {
 	const paths = [
 		{ path: '/', priority: '1.0', frequency: 'daily' },
 		{ path: '/meeting-planner', priority: '0.8', frequency: 'weekly' },
+		{ path: '/time-zones', priority: '0.8', frequency: 'daily' },
 		{ path: '/astronomy', priority: '0.8', frequency: 'daily' },
 		{ path: '/guides', priority: '0.8', frequency: 'weekly' },
 		{ path: '/privacy', priority: '0.3', frequency: 'yearly' },
