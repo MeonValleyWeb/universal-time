@@ -50,6 +50,9 @@ const phaseName = (phase: number) => {
 	return 'Waning crescent';
 };
 
+const formatCoordinate = (value: number, positive: string, negative: string) =>
+	`${Math.abs(value).toFixed(1)}°${value >= 0 ? positive : negative}`;
+
 const statusMessage: Partial<Record<LocationStatus, string>> = {
 	denied: 'Location permission is blocked. Allow it in your browser site settings, then try again, or choose a city below.',
 	timeout: 'Your device did not return a location in time. Try again or choose a city below.',
@@ -248,6 +251,9 @@ export default function LocalSkyTimes() {
 		: location.source === 'city'
 			? 'Using city-centre coordinates'
 			: 'Using coordinates you entered';
+	const coordinateLabel = location.source === 'device'
+		? `${formatCoordinate(location.latitude, 'N', 'S')}, ${formatCoordinate(location.longitude, 'E', 'W')}`
+		: `${location.latitude.toFixed(2)}°, ${location.longitude.toFixed(2)}°`;
 
 	return (
 		<div class="border border-[var(--color-line)] bg-[var(--color-surface)]">
@@ -257,9 +263,9 @@ export default function LocalSkyTimes() {
 					<p class="mt-2 text-xs leading-5 text-[var(--color-muted)]">{locationNote}</p>
 				</div>
 				<div class="text-left sm:text-right">
-					<p class="font-mono text-[9px] uppercase tracking-[0.12em] text-[var(--color-subtle)]">
-						{location.latitude.toFixed(2)}°, {location.longitude.toFixed(2)}°
-					</p>
+					<p class="font-mono text-[9px] uppercase tracking-[0.12em] text-[var(--color-subtle)]">{location.source === 'device' ? 'Approximate area' : 'Coordinates'}</p>
+					<p class="mt-1 font-mono text-xs text-[var(--color-ink)]">{coordinateLabel}</p>
+					<p class="mt-1 font-mono text-[9px] uppercase tracking-[0.12em] text-[var(--color-subtle)]">{location.timeZone}</p>
 					<button type="button" onClick={() => setLocation(null)} class="mt-3 border-b border-[var(--color-ink)] pb-1 text-sm text-[var(--color-ink)] hover:border-[var(--color-signal)] hover:text-[var(--color-signal)]">
 						Change location
 					</button>
