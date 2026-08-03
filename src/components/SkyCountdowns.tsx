@@ -1,28 +1,5 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
-
-const events = [
-	{
-		name: 'Total solar eclipse',
-		kind: 'Eclipse',
-		at: '2026-08-12T17:45:51Z',
-		detail: 'Greatest eclipse. Totality crosses Greenland, Iceland, northern Russia and Spain; a partial eclipse is visible across a much wider region.',
-		source: 'https://science.nasa.gov/eclipses/future-eclipses/',
-	},
-	{
-		name: 'Perseid meteor peak',
-		kind: 'Comet time',
-		at: '2026-08-13T01:56:00Z',
-		detail: 'Earth reaches the heart of the debris stream left by comet 109P/Swift–Tuttle.',
-		source: 'https://eclipse.gsfc.nasa.gov/SKYCAL/SKYCAL.html?cal=2026',
-	},
-	{
-		name: 'Partial lunar eclipse',
-		kind: 'Eclipse',
-		at: '2026-08-28T04:14:04Z',
-		detail: 'Greatest eclipse. Visible from the eastern Pacific, the Americas, Europe and Africa.',
-		source: 'https://eclipse.gsfc.nasa.gov/LEdecade/LEdecade2021.html',
-	},
-];
+import { celestialEvents } from '../lib/celestial-events';
 
 const splitRemaining = (milliseconds: number) => {
 	const seconds = Math.max(0, Math.floor(milliseconds / 1000));
@@ -47,7 +24,7 @@ export default function SkyCountdowns({ initialNow }: { initialNow: number }) {
 
 	return (
 		<div class="grid gap-px bg-[var(--color-line)] lg:grid-cols-3">
-			{events.map((event) => {
+			{celestialEvents.slice(0, 3).map((event) => {
 				const timestamp = new Date(event.at).getTime();
 				const remaining = splitRemaining(timestamp - now);
 				const passed = timestamp <= now;
@@ -55,7 +32,7 @@ export default function SkyCountdowns({ initialNow }: { initialNow: number }) {
 					<article class="bg-[var(--color-surface)] p-6 sm:p-8">
 						<div class="flex items-center justify-between gap-4">
 							<span class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-signal)]">{event.kind}</span>
-							<span class="font-mono text-[8px] uppercase tracking-wider text-[var(--color-subtle)]">NASA sourced</span>
+							<span class="font-mono text-[8px] uppercase tracking-wider text-[var(--color-subtle)]">Source checked</span>
 						</div>
 						<h3 class="mt-5 font-serif text-3xl tracking-[-0.035em]">{event.name}</h3>
 						<p class="mt-2 text-xs leading-5 text-[var(--color-muted)]">{formatter.format(timestamp)}</p>
@@ -72,9 +49,10 @@ export default function SkyCountdowns({ initialNow }: { initialNow: number }) {
 							</div>
 						)}
 						<p class="mt-8 text-sm leading-6 text-[var(--color-muted)]">{event.detail}</p>
-						<a href={event.source} target="_blank" rel="noreferrer" class="mt-5 inline-flex font-mono text-[9px] uppercase tracking-wider text-[var(--color-signal)] hover:underline">
-							Official source ↗
-						</a>
+						<div class="mt-5 flex flex-wrap gap-x-5 gap-y-3 font-mono text-[9px] uppercase tracking-wider">
+							<a href={`/astronomy/${event.slug}`} class="text-[var(--color-ink)] hover:text-[var(--color-signal)]">Event guide →</a>
+							<a href={event.source.url} target="_blank" rel="noreferrer" class="text-[var(--color-signal)] hover:underline">Official source ↗</a>
+						</div>
 					</article>
 				);
 			})}

@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EventLocalTime from '../../components/EventLocalTime';
+import { celestialEvents, celestialEventBySlug } from '../../lib/celestial-events';
+
+export function getStaticPaths() {
+	return celestialEvents.map((event) => ({ params: { slug: event.slug } }));
+}
+
+const event = celestialEventBySlug(Astro.params.slug ?? '');
+if (!event) return Astro.redirect('/astronomy');
+
+const canonical = `/astronomy/${event.slug}`;
+const startDate = new Date(event.at).toISOString();
+const schema = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'Event',
+		name: event.name,
+		startDate,
+		eventStatus: 'https://schema.org/EventScheduled',
+		eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+		description: event.detail,
+		url: new URL(canonical, Astro.site).toString(),
+		organizer: { '@type': 'Organization', name: 'WorldTime', url: new URL('/', Astro.site).toString() },
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: 'WorldTime', item: new URL('/', Astro.site).toString() },
+			{ '@type': 'ListItem', position: 2, name: 'Astronomy', item: new URL('/astronomy', Astro.site).toString() },
+			{ '@type': 'ListItem', position: 3, name: event.name, item: new URL(canonical, Astro.site).toString() },
+		],
+	},
+];
+---
+
+<BaseLayout title={`${event.name} 2026: time, visibility and local clock · WorldTime`} description={`${event.detail} Find the global event time in your browser’s time zone and learn where it can be seen.`} canonical={canonical} schema={schema}>
+	<header class="border-b border-[var(--color-line)] px-5 sm:px-8">
+		<div class="mx-auto flex h-20 max-w-[1500px] items-center justify-between">
+			<a href="/" class="flex items-center gap-3"><span class="grid size-9 place-items-center rounded-full bg-[var(--color-signal)] font-serif text-xl italic text-[var(--color-signal-ink)]">W</span><span class="font-serif text-xl">WorldTime</span></a>
+			<a href="/astronomy" class="text-sm text-[var(--color-muted)] hover:text-[var(--color-ink)]">← Sun, Moon & sky time</a>
+		</div>
+	</header>
+	<main>
+		<section class="atlas-hero relative overflow-hidden border-b border-[var(--color-line)] px-5 py-16 sm:px-8 lg:py-24">
+			<img src="/world-atlas-bg.webp" alt="" class="pointer-events-none absolute inset-0 size-full object-cover opacity-50" aria-hidden="true" />
+			<div class="atlas-wash pointer-events-none absolute inset-0 bg-gradient-to-r from-[#f6f0e4]/95 via-[#f6f0e4]/65 to-transparent" aria-hidden="true"></div>
+			<div class="relative mx-auto max-w-[1500px]">
+				<p class="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--color-signal)]">{event.kind} · 2026</p>
+				<h1 class="mt-5 max-w-5xl font-serif text-[clamp(3.5rem,8vw,7.5rem)] leading-[0.88] tracking-[-0.06em]">{event.name}</h1>
+				<p class="mt-8 max-w-2xl text-lg leading-8 text-[var(--color-muted)]">{event.detail}</p>
+			</div>
+		</section>
+		<section class="px-5 py-14 sm:px-8 lg:py-20">
+			<div class="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.7fr)] lg:items-start">
+				<div>
+					<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Where it matters</p>
+					<h2 class="mt-4 font-serif text-5xl leading-none tracking-[-0.045em]">The view is local.<br />The moment is shared.</h2>
+					<p class="mt-8 max-w-2xl text-base leading-7 text-[var(--color-muted)]">{event.visibility}</p>
+					<a href={event.source.url} target="_blank" rel="noreferrer" class="mt-8 inline-flex border-b border-[var(--color-signal)] pb-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-signal)] hover:text-[var(--color-ink)]">{event.source.name} ↗</a>
+				</div>
+				<EventLocalTime client:load event={event} />
+			</div>
+		</section>
+		<section class="border-t border-[var(--color-line)] bg-[var(--color-surface)] px-5 py-12 sm:px-8">
+			<div class="mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-6">
+				<div><p class="font-serif text-3xl tracking-[-0.04em]">Need local Sun and Moon times?</p><p class="mt-2 text-sm text-[var(--color-muted)]">Use your approximate location only in your browser.</p></div>
+				<a href="/astronomy" class="bg-[var(--color-ink)] px-5 py-3 text-sm text-[var(--color-canvas)] hover:bg-[var(--color-signal)] hover:text-[var(--color-signal-ink)]">Open the sky clock →</a>
+			</div>
+		</section>
+	</main>
+</BaseLayout>
