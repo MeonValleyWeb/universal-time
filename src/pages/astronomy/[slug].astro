@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EventLocalTime from '../../components/EventLocalTime';
+import EquinoxDaylightChart from '../../components/EquinoxDaylightChart';
 import { celestialEvents, celestialEventBySlug } from '../../lib/celestial-events';
 
 export function getStaticPaths() {
@@ -11,6 +12,10 @@ const event = celestialEventBySlug(Astro.params.slug ?? '');
 if (!event) return Astro.redirect('/astronomy');
 
 const canonical = `/astronomy/${event.slug}`;
+const isSeptemberEquinox = event.slug === 'september-equinox-2026';
+const heroSummary = isSeptemberEquinox
+	? 'One instant in space changes the season, the date and the amount of daylight we receive.'
+	: event.detail;
 const startDate = new Date(event.at).toISOString();
 const schema = [
 	{
@@ -50,9 +55,43 @@ const schema = [
 			<div class="relative mx-auto max-w-[1500px]">
 				<p class="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--color-signal)]">{event.kind} · 2026</p>
 				<h1 class="mt-5 max-w-5xl font-serif text-[clamp(3.5rem,8vw,7.5rem)] leading-[0.88] tracking-[-0.06em]">{event.name}</h1>
-				<p class="mt-8 max-w-2xl text-lg leading-8 text-[var(--color-muted)]">{event.detail}</p>
+				<p class="mt-8 max-w-2xl text-lg leading-8 text-[var(--color-muted)]">{heroSummary}</p>
 			</div>
 		</section>
+		{isSeptemberEquinox && (
+			<>
+				<section class="px-5 py-14 sm:px-8 lg:py-20">
+					<div class="mx-auto max-w-[920px]">
+						<h2 class="font-serif text-5xl leading-[0.95] tracking-[-0.045em]">The equinox is an instant, not a day.</h2>
+						<div class="mt-8 space-y-6 text-lg leading-8 text-[var(--color-muted)]">
+							<p>At 00:05 UTC on 23 September 2026, the centre of the Sun passes directly across Earth’s celestial equator on its annual journey south. Astronomers call that crossing the September equinox. It is one sharply defined moment in the same way a train passes a platform marker. It happens once for everyone, even though the local date and local clock can differ from place to place.</p>
+							<p>For people north of the equator, it is the traditional beginning of astronomical autumn. South of the equator, it is the beginning of astronomical spring. The change is not caused by Earth being closer to or farther from the Sun. It comes from our planet’s tilted axis. As Earth travels around the Sun, each hemisphere takes turns leaning toward the light. At the equinox, neither hemisphere is tilted strongly toward or away from the Sun.</p>
+							<p>The word comes from Latin for “equal night”, but it is a useful approximation rather than a promise of exactly twelve hours of daylight and twelve hours of darkness. Sunrise is defined when the upper edge of the Sun first appears, while sunset is when its upper edge disappears. Earth’s atmosphere bends sunlight before the Sun is geometrically above the horizon. Together those details add a few minutes of daylight. Latitude, hills and a clear horizon alter the experience again.</p>
+						</div>
+					</div>
+				</section>
+
+				<section class="border-y border-[var(--color-line)] bg-[var(--color-surface)] px-5 py-14 sm:px-8 lg:py-20">
+					<div class="mx-auto max-w-[1500px]">
+						<EquinoxDaylightChart />
+					</div>
+				</section>
+
+				<section class="px-5 py-14 sm:px-8 lg:py-20">
+					<div class="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(360px,1.2fr)] lg:items-start">
+						<img src="/astronomy/equinox-declination-study.png" alt="An archival-style celestial study showing the Sun centred on the equator with seasonal arcs and the Moon at different positions." width="2172" height="724" loading="lazy" class="w-full border border-[var(--color-line)] object-cover" />
+						<div>
+							<h2 class="font-serif text-5xl leading-[0.95] tracking-[-0.045em]">A shared moment, different local stories.</h2>
+							<div class="mt-8 space-y-6 text-base leading-7 text-[var(--color-muted)]">
+								<p>On the equator, the Sun’s path remains steep and daylight changes very little across the year. In London, the September equinox sits on the downhill side of the annual daylight curve: evenings shorten quickly through autumn. In Sydney, the direction is reversed. Daylight begins to extend as spring gathers pace. The chart is deliberately comparative, not a substitute for a local almanac. It shows the consequence of latitude before weather, mountains and urban horizons enter the picture.</p>
+								<p>That is why the equinox is both global and personal. The astronomical crossing has one UTC timestamp. Its civil date might be 22 September in part of the Americas, 23 September in Europe and Asia, and later still elsewhere. Meanwhile, local sunrise and sunset do not obey time-zone borders. They follow longitude, latitude and the geometry of Earth’s orbit. Clock time is a practical human agreement placed over those natural rhythms.</p>
+								<p>The equinox also helps explain why timekeeping needs several reference frames. UTC keeps the world coordinated. A time zone expresses UTC as a local civil clock. Solar noon tracks the Sun’s highest point for a particular place. The three are related, but they are not interchangeable. When a country changes its time-zone rules or begins daylight saving time, the equinox itself does not move. Only the local label we attach to it changes.</p>
+							</div>
+						</div>
+					</div>
+				</section>
+			</>
+		)}
 		<section class="px-5 py-14 sm:px-8 lg:py-20">
 			<div class="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.7fr)] lg:items-start">
 				<div>
@@ -64,6 +103,18 @@ const schema = [
 				<EventLocalTime client:load event={event} />
 			</div>
 		</section>
+		{isSeptemberEquinox && (
+			<section class="border-t border-[var(--color-line)] px-5 py-14 sm:px-8 lg:py-20">
+				<div class="mx-auto max-w-[920px]">
+					<h2 class="font-serif text-5xl leading-[0.95] tracking-[-0.045em]">How to use this page.</h2>
+					<div class="mt-8 space-y-6 text-base leading-7 text-[var(--color-muted)]">
+						<p>Use the local time card to translate the global moment into your current browser time zone. Then open the sky clock to calculate today’s actual sunrise, solar noon and sunset for your approximate area. The two answers do different jobs: one tells you when the equinox occurs on the world clock, the other tells you how much light your place receives today.</p>
+						<p>For a deeper explanation, read <a href="/guides/solar-time-vs-clock-time" class="text-[var(--color-signal)] underline underline-offset-4">solar time versus clock time</a>, then follow it with <a href="/guides/how-calendars-measure-time" class="text-[var(--color-signal)] underline underline-offset-4">how calendars measure time</a>. Together they show how an astronomical event becomes a date on a calendar and an appointment on a clock.</p>
+						<p>The seasonal time is taken from the U.S. Naval Observatory’s 2026 table. The explanation of equinox geometry and the changing daylight pattern follows standard solar-position geometry. This page will be reviewed when the next year’s event list is prepared, so a past event becomes history rather than a misleading countdown.</p>
+					</div>
+				</div>
+			</section>
+		)}
 		<section class="border-t border-[var(--color-line)] bg-[var(--color-surface)] px-5 py-12 sm:px-8">
 			<div class="mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-6">
 				<div><p class="font-serif text-3xl tracking-[-0.04em]">Need local Sun and Moon times?</p><p class="mt-2 text-sm text-[var(--color-muted)]">Use your approximate location only in your browser.</p></div>
