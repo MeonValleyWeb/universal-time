@@ -7,7 +7,6 @@ const adsActive =
 	&& /^ca-pub-\d+$/.test(import.meta.env.PUBLIC_ADSENSE_CLIENT?.trim() ?? '');
 const analyticsActive = Boolean(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN?.trim());
 const privacyEmail = import.meta.env.PUBLIC_PRIVACY_EMAIL?.trim() || 'privacy@universaltime.app';
-const updated = '29 July 2026';
 ---
 
 <BaseLayout
@@ -15,16 +14,6 @@ const updated = '29 July 2026';
 	description="A plain-English explanation of what WorldTime stores, what stays in your browser, how Cloudflare operates the site and how advertising will work."
 	canonical="/privacy"
 >
-	<header class="border-b border-[var(--color-line)] px-5 sm:px-8">
-		<div class="mx-auto flex h-20 max-w-[1200px] items-center justify-between">
-			<a href="/" class="flex items-center gap-3">
-				<span class="grid size-9 place-items-center rounded-full bg-[var(--color-signal)] font-serif text-xl italic text-[var(--color-signal-ink)]">W</span>
-				<span class="font-serif text-xl">WorldTime</span>
-			</a>
-			<span class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-subtle)]">Last updated · {updated}</span>
-		</div>
-	</header>
-
 	<main>
 		<section class="border-b border-[var(--color-line)] px-5 py-16 sm:px-8 lg:py-24">
 			<div class="mx-auto max-w-[1200px]">

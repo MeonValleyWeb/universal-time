@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
 import ThemeSwitcher from '../components/ThemeSwitcher';
 
 interface Props {
@@ -39,6 +40,7 @@ const canonicalUrl = new URL('/meeting-planner', Astro.site ?? Astro.url);
 		<title>{title}</title>
 	</head>
 	<body class="min-h-screen bg-[var(--color-canvas)] font-[Newsreader] text-[var(--color-ink)] antialiased selection:bg-[var(--color-signal)] selection:text-[var(--color-signal-ink)]">
+		<SiteHeader />
 		<slot />
 		<ThemeSwitcher client:load />
 	</body>

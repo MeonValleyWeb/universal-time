@@ -13,9 +13,77 @@ const applyTheme = (preference: ThemePreference) => {
 	document.documentElement.dataset.themePreference = preference;
 };
 
+function AnalogClock({
+	now,
+	className = 'size-6',
+	showSeconds = true,
+}: {
+	now: Date;
+	className?: string;
+	showSeconds?: boolean;
+}) {
+	const seconds = showSeconds ? now.getSeconds() : 0;
+	const minutes = now.getMinutes() + seconds / 60;
+	const hours = (now.getHours() % 12) + minutes / 60;
+
+	return (
+		<svg viewBox="0 0 24 24" class={className} aria-hidden="true">
+			<circle cx="12" cy="12" r="9.25" fill="none" stroke="currentColor" stroke-width="1.25" />
+			{[0, 3, 6, 9].map((hour) => (
+				<line
+					key={hour}
+					x1="12"
+					y1="3.8"
+					x2="12"
+					y2="5"
+					stroke="currentColor"
+					stroke-width="1"
+					transform={`rotate(${hour * 30} 12 12)`}
+				/>
+			))}
+			<line
+				x1="12"
+				y1="12"
+				x2="12"
+				y2="7.2"
+				stroke="currentColor"
+				stroke-width="1.7"
+				stroke-linecap="round"
+				transform={`rotate(${hours * 30} 12 12)`}
+			/>
+			<line
+				x1="12"
+				y1="12"
+				x2="12"
+				y2="5.4"
+				stroke="currentColor"
+				stroke-width="1.15"
+				stroke-linecap="round"
+				transform={`rotate(${minutes * 6} 12 12)`}
+			/>
+			{showSeconds && (
+				<line
+					x1="12"
+					y1="13.5"
+					x2="12"
+					y2="4.8"
+					class="text-[var(--color-signal)]"
+					stroke="currentColor"
+					stroke-width="0.8"
+					stroke-linecap="round"
+					transform={`rotate(${seconds * 6} 12 12)`}
+				/>
+			)}
+			<circle cx="12" cy="12" r="1" class="fill-[var(--color-signal)]" />
+		</svg>
+	);
+}
+
 export default function ThemeSwitcher() {
 	const [preference, setPreference] = useState<ThemePreference>('auto');
 	const [open, setOpen] = useState(false);
+	const [now, setNow] = useState(() => new Date());
+	const [reducedMotion, setReducedMotion] = useState(false);
 
 	useEffect(() => {
 		const saved = window.localStorage.getItem('worldtime:theme');
@@ -27,6 +95,19 @@ export default function ThemeSwitcher() {
 		}, 60_000);
 		return () => window.clearInterval(interval);
 	}, []);
+
+	useEffect(() => {
+		const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const updatePreference = () => setReducedMotion(mediaQuery.matches);
+		updatePreference();
+		mediaQuery.addEventListener('change', updatePreference);
+		return () => mediaQuery.removeEventListener('change', updatePreference);
+	}, []);
+
+	useEffect(() => {
+		const interval = window.setInterval(() => setNow(new Date()), reducedMotion ? 60_000 : 1_000);
+		return () => window.clearInterval(interval);
+	}, [reducedMotion]);
 
 	const choose = (next: ThemePreference) => {
 		setPreference(next);
@@ -46,7 +127,7 @@ export default function ThemeSwitcher() {
 					aria-label={`Choose colour theme. Current setting: ${preference}`}
 					class="grid size-11 place-items-center rounded-full border border-[var(--color-line)] bg-[var(--color-surface-elevated)] text-lg text-[var(--color-ink)] shadow-lg backdrop-blur active:scale-95"
 				>
-					<span aria-hidden="true">◐</span>
+					<AnalogClock now={now} showSeconds={!reducedMotion} />
 				</button>
 				{open && (
 					<div
@@ -77,6 +158,14 @@ export default function ThemeSwitcher() {
 				class="fixed bottom-4 right-4 z-[100] hidden items-center gap-1 rounded-full border border-[var(--color-line)] bg-[var(--color-surface-elevated)]/95 p-1 shadow-lg backdrop-blur sm:flex"
 				aria-label="Colour theme"
 			>
+				<time
+					datetime={now.toISOString()}
+					class="ml-1 grid size-8 place-items-center text-[var(--color-ink)]"
+					title={`Local time ${now.toLocaleTimeString()}`}
+				>
+					<span class="sr-only">Local time {now.toLocaleTimeString()}</span>
+					<AnalogClock now={now} className="size-5" showSeconds={!reducedMotion} />
+				</time>
 				{(['auto', 'paper', 'dark'] as ThemePreference[]).map((option) => (
 					<button
 						type="button"

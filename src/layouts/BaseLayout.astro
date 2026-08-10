@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
 import ThemeSwitcher from '../components/ThemeSwitcher';
 
 interface Props {
@@ -93,6 +94,7 @@ const adsensePageReady =
 		<title>{title}</title>
 	</head>
 	<body class="min-h-screen bg-[var(--color-canvas)] font-[Newsreader] text-[var(--color-ink)] antialiased selection:bg-[var(--color-signal)] selection:text-[var(--color-signal-ink)]">
+		<SiteHeader />
 		<slot />
 		<footer class="border-t border-[var(--color-line)] px-5 py-8 sm:px-8">
 			<div class="mx-auto flex max-w-[1500px] flex-col gap-5 text-sm text-[var(--color-muted)] sm:flex-row sm:items-center sm:justify-between">

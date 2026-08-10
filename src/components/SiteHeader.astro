@@ -1,0 +1,64 @@
+---
+import { cities } from '../lib/cities';
+
+const currentPath = Astro.url.pathname;
+const links = [
+	{ href: '/#world-clocks', label: 'World clocks', active: currentPath.startsWith('/time/') || currentPath === '/time-zones' },
+	{ href: '/meeting-planner', label: 'Meeting planner', active: currentPath === '/meeting-planner' },
+	{ href: '/astronomy', label: 'Sun & Moon', active: currentPath.startsWith('/astronomy') },
+	{ href: '/guides', label: 'Time guides', active: currentPath.startsWith('/guides') },
+];
+---
+
+<header class="relative z-50 border-b border-[var(--color-line)] bg-[var(--color-canvas)]/95 px-5 backdrop-blur-sm sm:px-8">
+	<div class="mx-auto flex h-20 max-w-[1500px] items-center justify-between gap-5">
+		<a href="/" class="flex shrink-0 items-center gap-3 text-[var(--color-ink)]" aria-label="WorldTime home">
+			<span class="grid size-9 place-items-center rounded-full bg-[var(--color-signal)] font-serif text-xl italic text-[var(--color-signal-ink)]">W</span>
+			<span class="font-serif text-xl tracking-[-0.03em]">WorldTime</span>
+		</a>
+
+		<nav class="hidden items-center gap-5 text-sm text-[var(--color-muted)] md:flex" aria-label="Primary navigation">
+			{links.map((link) => (
+				<a
+					href={link.href}
+					class:list={[
+						'whitespace-nowrap transition hover:text-[var(--color-ink)]',
+						link.active && 'text-[var(--color-signal)]',
+					]}
+					aria-current={link.active ? 'page' : undefined}
+				>
+					{link.label}
+				</a>
+			))}
+			<a href="/time-zones" class="rounded-full border border-[var(--color-line)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[var(--color-ink)] transition hover:border-[var(--color-signal)] hover:text-[var(--color-signal)]">
+				Live · {cities.length} cities
+			</a>
+		</nav>
+
+		<details class="group relative md:hidden">
+			<summary class="flex cursor-pointer list-none items-center gap-2 rounded-full border border-[var(--color-line)] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--color-ink)] transition hover:border-[var(--color-signal)] hover:text-[var(--color-signal)] [&::-webkit-details-marker]:hidden">
+				<span>Menu</span>
+				<svg viewBox="0 0 16 16" class="size-3 transition group-open:rotate-45" aria-hidden="true">
+					<path d="M8 2v12M2 8h12" fill="none" stroke="currentColor" stroke-linecap="round" />
+				</svg>
+			</summary>
+			<nav class="absolute right-0 top-[calc(100%+0.75rem)] w-64 border border-[var(--color-line)] bg-[var(--color-surface)] p-2 shadow-[0_18px_50px_rgba(35,28,20,0.18)]" aria-label="Mobile navigation">
+				{links.map((link) => (
+					<a
+						href={link.href}
+						class:list={[
+							'flex items-center justify-between border-b border-[var(--color-line)] px-4 py-3 text-sm text-[var(--color-muted)] last:border-b-0 hover:bg-[var(--color-canvas)] hover:text-[var(--color-ink)]',
+							link.active && 'text-[var(--color-signal)]',
+						]}
+						aria-current={link.active ? 'page' : undefined}
+					>
+						{link.label}<span aria-hidden="true">→</span>
+					</a>
+				))}
+				<a href="/time-zones" class="mt-2 flex items-center justify-between bg-[var(--color-ink)] px-4 py-3 font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--color-canvas)]">
+					Live world map <span>{cities.length} cities</span>
+				</a>
+			</nav>
+		</details>
+	</div>
+</header>

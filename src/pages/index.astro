@@ -9,22 +9,6 @@ const initialNow = Date.now();
 ---
 
 <BaseLayout canonical="/">
-	<header class="border-b border-stone-300 px-5 sm:px-8">
-		<div class="mx-auto flex h-20 max-w-[1500px] items-center justify-between">
-			<a href="/" class="flex items-center gap-3">
-				<span class="grid size-9 place-items-center rounded-full bg-orange-600 font-serif text-xl italic text-white">W</span>
-				<span class="font-serif text-xl tracking-[-0.03em]">WorldTime</span>
-			</a>
-			<nav class="flex items-center gap-5 text-sm text-stone-600">
-				<a href="#world-clocks" class="hidden hover:text-stone-950 sm:block">World clocks</a>
-				<a href="/meeting-planner" class="hidden hover:text-stone-950 sm:block">Meeting planner</a>
-				<a href="/astronomy" class="hidden hover:text-stone-950 lg:block">Sun & Moon</a>
-				<a href="/guides" class="hidden hover:text-stone-950 lg:block">Time guides</a>
-				<span class="rounded-full border border-stone-300 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider">Live · {cities.length} cities</span>
-			</nav>
-		</div>
-	</header>
-
 	<main>
 		<section class="atlas-hero relative overflow-hidden border-b border-stone-950/20 px-5 py-12 sm:px-8 sm:py-16 lg:py-20">
 			<img src="/world-atlas-bg.webp" alt="" class="pointer-events-none absolute inset-0 size-full object-cover opacity-80" aria-hidden="true" />
