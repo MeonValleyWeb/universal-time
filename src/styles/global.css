@@ -8,6 +8,7 @@
 
 html {
 	scroll-behavior: smooth;
+	scroll-padding-top: 6rem;
 }
 
 body {
@@ -19,7 +20,7 @@ body {
 	background-color: var(--color-canvas);
 	background-image:
 		linear-gradient(rgba(232, 227, 216, 0.2), rgba(232, 227, 216, 0.2)),
-		url("/time-field-v1.svg");
+		url("/time-field-v2.svg");
 	background-position:
 		center,
 		center top;
