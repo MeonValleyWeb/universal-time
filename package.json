@@ -12,8 +12,8 @@
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "preview": "astro preview",
     "cf:types": "wrangler types",
-    "cf:check": "wrangler deploy --dry-run",
-    "deploy:cloudflare": "npm run build && wrangler deploy",
+    "cf:check": "wrangler deploy --dry-run --config ./wrangler.jsonc --cwd .",
+    "deploy:cloudflare": "npm run build && wrangler deploy --config ./wrangler.jsonc --cwd .",
     "astro": "astro"
   },
   "dependencies": {
@@ -31,6 +31,10 @@
     "wrangler": "^4.115.0"
   },
   "overrides": {
-    "fast-uri": "3.1.5"
+    "fast-uri": "3.1.5",
+    "js-yaml": "4.3.1",
+    "nanoid": "3.3.18",
+    "postcss": "8.5.26",
+    "undici": "7.29.0"
   }
 }
