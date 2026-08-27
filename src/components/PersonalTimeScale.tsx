@@ -59,8 +59,8 @@ export default function PersonalTimeScale() {
 	};
 
 	return (
-		<section class="border-b border-[var(--color-line)] bg-[var(--color-ink)] px-5 py-16 text-[var(--color-canvas)] sm:px-8 lg:py-24">
-			<div class="mx-auto max-w-[1500px]">
+		<section class="border-y border-[var(--color-line)] bg-[oklch(0.15_0.027_255)] px-5 py-16 text-[var(--color-fg)] sm:px-8 lg:py-24">
+			<div class="mx-auto max-w-[1180px]">
 				<div class="grid gap-12 xl:grid-cols-[0.8fr_1.2fr] xl:gap-20">
 					<div>
 						<p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-signal)]">Your place on the absurdly long timeline</p>
@@ -81,7 +81,7 @@ export default function PersonalTimeScale() {
 									setBirthDate(event.currentTarget.value);
 									setState('idle');
 								}}
-								class="mt-3 block w-full max-w-sm border-b border-[var(--color-line)] bg-transparent py-3 font-serif text-3xl text-[var(--color-canvas)] outline-none focus:border-[var(--color-signal)]"
+								class="mt-3 block w-full max-w-sm border-b border-[var(--color-line)] bg-transparent py-3 font-serif text-3xl text-[var(--color-fg)] outline-none focus:border-[var(--color-signal)]"
 							/>
 						</div>
 
@@ -184,7 +184,7 @@ export default function PersonalTimeScale() {
 								<span>I am 18 or over and agree to receive the “On this day…” newsletter. I can unsubscribe at any time. Read the <a href="/privacy#newsletter" class="text-[var(--color-signal)] hover:underline">privacy details</a>.</span>
 							</label>
 							<div class="mt-6 flex flex-wrap items-center gap-4">
-								<button disabled={state === 'sending'} class="rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-medium text-[var(--color-canvas)] hover:bg-[var(--color-signal)] disabled:opacity-50">
+								<button disabled={state === 'sending'} class="rounded-[var(--radius-button)] bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-[var(--color-signal-ink)] hover:-translate-y-px hover:brightness-110 disabled:opacity-50">
 									{state === 'sending' ? 'Saving your place…' : 'Join the timeline →'}
 								</button>
 								<p aria-live="polite" class={`text-sm ${state === 'error' ? 'text-red-700' : 'text-[var(--color-muted)]'}`}>{message}</p>

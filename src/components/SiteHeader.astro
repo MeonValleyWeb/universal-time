@@ -1,0 +1,40 @@
+---
+interface Props {
+	compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+const path = Astro.url.pathname;
+const links = [
+	{ href: '/#world-clocks', label: 'World clocks', match: '/time/' },
+	{ href: '/meeting-planner', label: 'Meeting planner', match: '/meeting-planner' },
+	{ href: '/astronomy', label: 'Sun & Moon', match: '/astronomy' },
+	{ href: '/guides', label: 'Time guides', match: '/guides' },
+];
+---
+
+<header class="border-b border-[var(--color-border)] px-4 sm:px-6" data-site-header>
+	<div class:list={["mx-auto flex items-center justify-between", compact ? "h-[68px] max-w-[1180px]" : "h-[82px] max-w-[1180px]"]}>
+		<a href="/" class="flex items-center gap-[11px] font-serif text-2xl tracking-[-0.04em]" aria-label="WorldTime home">
+			<img src="/meridian-mark.svg" alt="" width="24" height="24" />
+			<span>WorldTime</span>
+		</a>
+		<nav class="hidden items-center gap-7 text-sm text-[var(--color-muted)] md:flex" aria-label="Primary navigation">
+			{links.map((link) => (
+				<a
+					href={link.href}
+					aria-current={path.startsWith(link.match) ? 'page' : undefined}
+					class="hover:text-[var(--color-fg)] aria-[current=page]:text-[var(--color-fg)]"
+				>
+					{link.label}
+				</a>
+			))}
+		</nav>
+		<a
+			href="/meeting-planner"
+			class="inline-flex min-h-11 items-center justify-center rounded-[var(--radius-button)] border border-[var(--color-border)] px-4 text-sm font-semibold text-[var(--color-fg)] hover:-translate-y-px hover:border-[var(--color-muted)] hover:bg-[var(--color-surface)]"
+		>
+			Plan a meeting
+		</a>
+	</div>
+</header>

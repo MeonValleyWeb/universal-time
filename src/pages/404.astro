@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 
 const quickRoutes = [
 	{ href: '/', label: 'Ask a time question', detail: 'Natural language, no timezone algebra' },
@@ -26,21 +27,13 @@ const timeFacts = [
 	title="404: this page missed its appointment · WorldTime"
 	description="The requested WorldTime page could not be found. Recover with live clocks, converters, meeting tools and genuinely useful time facts."
 >
-	<header class="border-b border-[var(--color-line)] px-5 sm:px-8">
-		<div class="mx-auto flex h-20 max-w-[1500px] items-center justify-between">
-			<a href="/" class="flex items-center gap-3">
-				<span class="grid size-9 place-items-center rounded-full bg-[var(--color-signal)] font-serif text-xl italic text-[var(--color-signal-ink)]">W</span>
-				<span class="font-serif text-xl">WorldTime</span>
-			</a>
-			<span class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-subtle)]">HTTP 404 · punctual, if unhelpful</span>
-		</div>
-	</header>
+	<SiteHeader />
 
 	<main>
 		<section class="atlas-hero relative overflow-hidden border-b border-[var(--color-line)] px-5 py-16 sm:px-8 lg:py-24">
 			<img src="/world-atlas-bg.webp" alt="" class="pointer-events-none absolute inset-0 size-full object-cover opacity-35" aria-hidden="true" />
 			<div class="atlas-wash pointer-events-none absolute inset-0 bg-gradient-to-r from-[#f6f0e4]/95 via-[#f6f0e4]/70 to-transparent" aria-hidden="true"></div>
-			<div class="relative mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
+			<div class="relative mx-auto grid max-w-[1180px] gap-12 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
 				<div>
 					<p class="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--color-signal)]">A tiny tear in the space-time continuum</p>
 					<p class="mt-4 font-['Share_Tech_Mono'] text-[clamp(7rem,20vw,19rem)] leading-[0.7] tracking-[-0.08em] text-[var(--color-ink)]" aria-hidden="true">404</p>
@@ -68,7 +61,7 @@ const timeFacts = [
 		</section>
 
 		<section class="px-5 py-16 sm:px-8 lg:py-24">
-			<div class="mx-auto max-w-[1500px]">
+			<div class="mx-auto max-w-[1180px]">
 				<div class="grid gap-10 lg:grid-cols-[.6fr_1.4fr]">
 					<div>
 						<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Choose a less fictional destination</p>
@@ -91,7 +84,7 @@ const timeFacts = [
 		</section>
 
 		<section class="border-y border-[var(--color-line)] bg-[var(--color-surface)] px-5 py-16 sm:px-8">
-			<div class="mx-auto max-w-[1500px]">
+			<div class="mx-auto max-w-[1180px]">
 				<div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
 					<div>
 						<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Popular rescues</p>
@@ -111,7 +104,7 @@ const timeFacts = [
 		</section>
 
 		<section class="px-5 py-16 sm:px-8 lg:py-24">
-			<div class="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[.75fr_1.25fr]">
+			<div class="mx-auto grid max-w-[1180px] gap-10 lg:grid-cols-[.75fr_1.25fr]">
 				<div>
 					<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Compensation for your inconvenience</p>
 					<h2 class="mt-4 max-w-lg font-serif text-5xl leading-none tracking-[-0.05em]">Three facts you did not ask for.</h2>

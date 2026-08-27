@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LocalSkyTimes from '../components/LocalSkyTimes';
 import SkyCountdowns from '../components/SkyCountdowns';
+import SiteHeader from '../components/SiteHeader.astro';
 
 const initialNow = Date.now();
 ---
@@ -11,21 +12,13 @@ const initialNow = Date.now();
 	description="Calculate local sunrise, sunset, solar noon, moonrise, moonset and lunar phase, then count down to major eclipses and comet-linked sky events."
 	canonical="/astronomy"
 >
-	<header class="border-b border-[var(--color-line)] px-5 sm:px-8">
-		<div class="mx-auto flex h-20 max-w-[1500px] items-center justify-between">
-			<a href="/" class="flex items-center gap-3">
-				<span class="grid size-9 place-items-center rounded-full bg-[var(--color-signal)] font-serif text-xl italic text-[var(--color-signal-ink)]">W</span>
-				<span class="font-serif text-xl">WorldTime</span>
-			</a>
-			<a href="/guides" class="text-sm text-[var(--color-muted)] hover:text-[var(--color-ink)]">Explore time itself →</a>
-		</div>
-	</header>
+	<SiteHeader />
 
 	<main>
 		<section class="atlas-hero relative overflow-hidden border-b border-[var(--color-line)] px-5 py-16 sm:px-8 lg:py-24">
 			<img src="/world-atlas-bg.webp" alt="" class="pointer-events-none absolute inset-0 size-full object-cover opacity-50" aria-hidden="true" />
 			<div class="atlas-wash pointer-events-none absolute inset-0 bg-gradient-to-r from-[#f6f0e4]/95 via-[#f6f0e4]/65 to-transparent" aria-hidden="true"></div>
-			<div class="relative mx-auto max-w-[1500px]">
+			<div class="relative mx-auto max-w-[1180px]">
 				<p class="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--color-signal)]">Astronomical time</p>
 				<h1 class="mt-5 max-w-5xl font-serif text-[clamp(4rem,9vw,9rem)] leading-[0.84] tracking-[-0.065em]">
 					The sky keeps<br /><em class="font-normal text-[var(--color-signal)]">its own clock.</em>
@@ -37,13 +30,13 @@ const initialNow = Date.now();
 		</section>
 
 		<section class="px-5 py-16 sm:px-8">
-			<div class="mx-auto max-w-[1500px]">
+			<div class="mx-auto max-w-[1180px]">
 				<LocalSkyTimes client:load />
 			</div>
 		</section>
 
 		<section class="border-y border-[var(--color-line)] bg-[var(--color-surface)] px-5 py-16 sm:px-8">
-			<div class="mx-auto max-w-[1500px]">
+			<div class="mx-auto max-w-[1180px]">
 				<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">What happens next</p>
 				<div class="mt-3 flex flex-wrap items-end justify-between gap-5">
 					<h2 class="max-w-3xl font-serif text-5xl leading-none tracking-[-0.045em]">Celestial countdowns</h2>

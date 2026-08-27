@@ -173,15 +173,15 @@ export default function TimeCanvas({ initialNow }: Props) {
 	const scoreLabel = meetingScore >= 90 ? 'Excellent' : meetingScore >= 70 ? 'Strong' : meetingScore >= 50 ? 'Workable' : 'Difficult';
 
 	return (
-		<section class="overflow-hidden border border-stone-950/20 bg-[var(--color-surface)]/95 shadow-[0_24px_70px_rgba(68,54,36,0.10)] backdrop-blur-[2px]">
+		<section class="overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-panel)]">
 			<div class="border-b border-[var(--color-line)] p-4 sm:p-6">
 				<div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
 					<div class="relative max-w-xl flex-1">
-						<label class="mb-2 block font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-orange-700" for="zone-search">
+						<label class="mb-2 block font-mono text-[10px] font-semibold uppercase tracking-[0.13em] text-[var(--color-accent)]" for="zone-search">
 							Add a place or time zone
 						</label>
-						<div class="flex items-center rounded-full border border-[var(--color-line)] bg-[var(--color-input)] px-4 transition focus-within:border-orange-600 focus-within:ring-4 focus-within:ring-orange-600/10">
-							<span aria-hidden="true" class="mr-3 text-orange-600">⌕</span>
+						<div class="flex items-center rounded-[var(--radius-control)] border border-[var(--color-line)] bg-[var(--color-input)] px-4 focus-within:border-[var(--color-accent)] focus-within:ring-4 focus-within:ring-[oklch(0.73_0.16_245/0.12)]">
+							<span aria-hidden="true" class="mr-3 text-[var(--color-accent)]">⌕</span>
 							<input
 								id="zone-search"
 								value={query}
@@ -192,12 +192,12 @@ export default function TimeCanvas({ initialNow }: Props) {
 							/>
 						</div>
 						{suggestions.length > 0 && (
-							<div class="absolute top-full z-50 mt-2 w-full overflow-hidden rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface-elevated)] p-1.5 shadow-2xl">
+							<div class="absolute top-full z-50 mt-2 w-full overflow-hidden rounded-[var(--radius-control)] border border-[var(--color-line)] bg-[var(--color-surface-elevated)] p-1.5 shadow-2xl">
 								{suggestions.map((zone) => (
 									<button
 										type="button"
 										onClick={() => addLocation(zone.id)}
-										class="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left transition hover:bg-orange-600/10 focus:bg-orange-600/10 focus:outline-none"
+									class="flex w-full items-center justify-between rounded-[var(--radius-control)] px-3 py-2.5 text-left hover:bg-[oklch(0.73_0.16_245/0.1)] focus:bg-[oklch(0.73_0.16_245/0.1)] focus:outline-none"
 									>
 										<span class="text-sm font-medium text-[var(--color-ink)]">{zone.city}</span>
 										<span class="ml-4 truncate font-mono text-[10px] uppercase tracking-wider text-[var(--color-muted)]">{zone.region}</span>
@@ -208,15 +208,15 @@ export default function TimeCanvas({ initialNow }: Props) {
 					</div>
 
 					<div class="flex flex-wrap items-center gap-2">
-						<div class="flex rounded-full border border-[var(--color-line)] bg-[var(--color-input)] p-1">
-							<button type="button" aria-label="Previous day" onClick={() => setDayOffset((value) => value - 1)} class="grid size-9 place-items-center rounded-full text-[var(--color-muted)] transition hover:bg-orange-600/10 hover:text-[var(--color-ink)]">←</button>
-							<button type="button" onClick={() => setDayOffset(0)} class="rounded-full px-3 font-mono text-[10px] font-bold uppercase tracking-widest text-orange-700 transition hover:bg-orange-600/10">Today</button>
-							<button type="button" aria-label="Next day" onClick={() => setDayOffset((value) => value + 1)} class="grid size-9 place-items-center rounded-full text-[var(--color-muted)] transition hover:bg-orange-600/10 hover:text-[var(--color-ink)]">→</button>
+						<div class="flex rounded-[var(--radius-button)] border border-[var(--color-line)] bg-[var(--color-input)] p-1">
+							<button type="button" aria-label="Previous day" onClick={() => setDayOffset((value) => value - 1)} class="grid size-9 place-items-center rounded-[var(--radius-control)] text-[var(--color-muted)] hover:bg-[oklch(0.73_0.16_245/0.1)] hover:text-[var(--color-ink)]">←</button>
+							<button type="button" onClick={() => setDayOffset(0)} class="rounded-[var(--radius-control)] px-3 font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] hover:bg-[oklch(0.73_0.16_245/0.1)]">Today</button>
+							<button type="button" aria-label="Next day" onClick={() => setDayOffset((value) => value + 1)} class="grid size-9 place-items-center rounded-[var(--radius-control)] text-[var(--color-muted)] hover:bg-[oklch(0.73_0.16_245/0.1)] hover:text-[var(--color-ink)]">→</button>
 						</div>
 						<button
 							type="button"
 							onClick={() => setHour12((value) => !value)}
-							class="h-11 rounded-full border border-[var(--color-line)] bg-[var(--color-input)] px-4 font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--color-muted)] transition hover:border-orange-600/60 hover:text-[var(--color-ink)]"
+							class="h-11 rounded-[var(--radius-button)] border border-[var(--color-line)] bg-[var(--color-input)] px-4 font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-ink)]"
 						>
 							{hour12 ? '12 hour' : '24 hour'}
 						</button>
@@ -231,12 +231,12 @@ export default function TimeCanvas({ initialNow }: Props) {
 								type="button"
 								onClick={() => setDurationMinutes(minutes)}
 								aria-pressed={durationMinutes === minutes}
-								class={`rounded-full border px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-wider transition ${durationMinutes === minutes ? 'border-orange-600 bg-orange-600 text-white' : 'border-[var(--color-line)] text-[var(--color-muted)] hover:border-orange-600/50'}`}
+								class={`rounded-[var(--radius-control)] border px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-wider ${durationMinutes === minutes ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-[var(--color-signal-ink)]' : 'border-[var(--color-line)] text-[var(--color-muted)] hover:border-[var(--color-accent)]'}`}
 							>
 								{minutes < 60 ? `${minutes} min` : `${minutes / 60} hr`}
 							</button>
 						))}
-						<button type="button" onClick={chooseBestMeeting} class="ml-1 rounded-full border border-orange-600/40 bg-orange-600/10 px-4 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-orange-700 transition hover:bg-orange-600/20">
+						<button type="button" onClick={chooseBestMeeting} class="ml-1 rounded-[var(--radius-button)] border border-[var(--color-accent)] bg-[oklch(0.73_0.16_245/0.1)] px-4 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-accent)] hover:bg-[oklch(0.73_0.16_245/0.18)]">
 							Best overlap · {bestMeeting.score}%
 						</button>
 					</div>
@@ -256,7 +256,7 @@ export default function TimeCanvas({ initialNow }: Props) {
 								<div class="min-w-0">
 									<div class="flex items-baseline gap-2">
 										<p class="truncate text-sm font-semibold text-[var(--color-ink)] sm:text-base">{option.city}</p>
-										{index === 0 && <span class="hidden font-mono text-[8px] uppercase tracking-widest text-orange-700 sm:inline">Home</span>}
+										{index === 0 && <span class="hidden font-mono text-[8px] uppercase tracking-widest text-[var(--color-accent)] sm:inline">Home</span>}
 									</div>
 									<p class="mt-1 font-mono text-[10px] text-[var(--color-muted)]">{formatClock(now, zone, hour12)} · {local.abbreviation}</p>
 									<p class="mt-1 font-mono text-[9px] text-[var(--color-subtle)]">{getDayPhase(now, zone)} · {formatOffset(getOffsetMinutes(now, zone))}</p>
@@ -275,7 +275,7 @@ export default function TimeCanvas({ initialNow }: Props) {
 					onPointerMove={handlePointerMove}
 					onPointerUp={stopDragging}
 					onPointerCancel={stopDragging}
-					class={`relative overflow-x-auto overscroll-x-contain ${dragging ? 'cursor-grabbing select-none' : 'cursor-grab'} [scrollbar-color:rgba(234,88,12,.45)_transparent] [scrollbar-width:thin]`}
+					class={`relative overflow-x-auto overscroll-x-contain ${dragging ? 'cursor-grabbing select-none' : 'cursor-grab'} [scrollbar-color:oklch(0.73_0.16_245/0.45)_transparent] [scrollbar-width:thin]`}
 				>
 					<div class="relative" style={{ width: `${HOURS_VISIBLE * CELL_WIDTH}px` }}>
 						<div class="grid h-16 border-b border-[var(--color-line)]" style={{ gridTemplateColumns: `repeat(${HOURS_VISIBLE}, ${CELL_WIDTH}px)` }}>
@@ -284,7 +284,7 @@ export default function TimeCanvas({ initialNow }: Props) {
 								return (
 									<div class="flex flex-col justify-end border-r border-[var(--color-line)] px-2 pb-2">
 										{parts.hour === 0 || timestamp === timestamps[0] ? (
-											<span class="font-mono text-[9px] font-bold uppercase tracking-wider text-orange-700">{parts.weekday} {parts.day}</span>
+											<span class="font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-accent)]">{parts.weekday} {parts.day}</span>
 										) : <span class="h-3" />}
 										<span class="mt-1 font-mono text-[9px] text-[var(--color-subtle)]">{formatClock(timestamp, homeZone, hour12)}</span>
 									</div>
@@ -304,10 +304,10 @@ export default function TimeCanvas({ initialNow }: Props) {
 											type="button"
 											onClick={() => setSelectedTime(timestamp)}
 											aria-label={`${formatFullDate(timestamp, zone)} at ${formatClock(timestamp, zone, hour12)} in ${zoneOption(zone).city}`}
-											class={`relative flex flex-col items-center justify-center border-r border-[var(--color-line)] transition focus:z-20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-orange-600 ${isNight ? 'bg-[var(--color-night-cell)]' : 'bg-[var(--color-day-cell)]'} ${isWork ? 'after:absolute after:inset-x-2 after:bottom-2 after:h-0.5 after:rounded-full after:bg-orange-600/60' : ''} ${selected ? 'text-orange-700' : 'text-[var(--color-muted)] hover:brightness-105'}`}
+										class={`relative flex flex-col items-center justify-center border-r border-[var(--color-line)] focus:z-20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--color-accent)] ${isNight ? 'bg-[var(--color-night-cell)]' : 'bg-[var(--color-day-cell)]'} ${isWork ? 'after:absolute after:inset-x-2 after:bottom-2 after:h-0.5 after:rounded-full after:bg-[oklch(0.73_0.16_245/0.76)]' : ''} ${selected ? 'text-[var(--color-accent)]' : 'text-[var(--color-muted)] hover:brightness-110'}`}
 										>
 											<span class="font-mono text-sm font-semibold">{formatClock(timestamp, zone, hour12).replace(':00', '')}</span>
-											{parts.hour === 0 && <span class="mt-1 font-mono text-[8px] uppercase tracking-wider text-orange-700/80">{parts.month} {parts.day}</span>}
+											{parts.hour === 0 && <span class="mt-1 font-mono text-[8px] uppercase tracking-wider text-[var(--color-accent)]">{parts.month} {parts.day}</span>}
 										</button>
 									);
 								})}
@@ -315,11 +315,11 @@ export default function TimeCanvas({ initialNow }: Props) {
 						))}
 
 						{nowIsVisible && (
-							<div aria-hidden="true" class="pointer-events-none absolute inset-y-0 z-30 w-px bg-orange-600 shadow-[0_0_12px_rgba(234,88,12,.45)]" style={{ left: `${nowPosition}px` }}>
-								<span class="absolute left-1 top-1.5 rounded-full bg-orange-600 px-2 py-1 font-mono text-[8px] font-bold uppercase tracking-wider text-white">Now</span>
+							<div aria-hidden="true" class="pointer-events-none absolute inset-y-0 z-30 w-px bg-[var(--color-accent)] shadow-[0_0_12px_oklch(0.73_0.16_245/0.45)]" style={{ left: `${nowPosition}px` }}>
+								<span class="absolute left-1 top-1.5 rounded-[var(--radius-control)] bg-[var(--color-accent)] px-2 py-1 font-mono text-[8px] font-bold uppercase tracking-wider text-[var(--color-signal-ink)]">Now</span>
 							</div>
 						)}
-						<div aria-hidden="true" class="pointer-events-none absolute bottom-0 top-16 z-20 border-x border-orange-600/50 bg-orange-600/10" style={{ left: `${selectedPosition}px`, width: `${selectionWidth}px` }} />
+						<div aria-hidden="true" class="pointer-events-none absolute bottom-0 top-16 z-20 border-x border-[var(--color-accent)] bg-[oklch(0.73_0.16_245/0.1)]" style={{ left: `${selectedPosition}px`, width: `${selectionWidth}px` }} />
 					</div>
 				</div>
 			</div>
@@ -327,14 +327,14 @@ export default function TimeCanvas({ initialNow }: Props) {
 			<div class="grid gap-6 border-t border-[var(--color-line)] bg-[var(--color-input)] p-5 lg:grid-cols-[0.9fr_2fr] lg:p-7">
 				<div>
 					<div class="flex items-center gap-2">
-						<p class="font-mono text-[9px] font-bold uppercase tracking-[0.28em] text-orange-700">Meeting window</p>
-						<span class={`rounded-full px-2 py-1 font-mono text-[8px] font-bold uppercase tracking-wider ${meetingScore >= 70 ? 'bg-emerald-400/15 text-emerald-500' : meetingScore >= 50 ? 'bg-amber-400/15 text-amber-500' : 'bg-rose-400/15 text-rose-500'}`}>
+						<p class="font-mono text-[9px] font-bold uppercase tracking-[0.13em] text-[var(--color-accent)]">Meeting window</p>
+						<span class="rounded-[var(--radius-control)] bg-[oklch(0.73_0.16_245/0.12)] px-2 py-1 font-mono text-[8px] font-bold uppercase tracking-wider text-[var(--color-accent)]">
 							{scoreLabel} · {meetingScore}%
 						</span>
 					</div>
 					<p class="mt-2 text-2xl font-semibold tracking-tight text-[var(--color-ink)]">{formatClock(selectedTime, homeZone, hour12)}–{formatClock(meetingEnd, homeZone, hour12)}</p>
 					<p class="mt-1 text-sm text-[var(--color-muted)]">{formatFullDate(selectedTime, homeZone)}</p>
-					<button type="button" onClick={copyMeeting} class="mt-4 rounded-full border border-[var(--color-line)] px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-muted)] transition hover:border-orange-600/50 hover:text-orange-700">
+					<button type="button" onClick={copyMeeting} class="mt-4 rounded-[var(--radius-button)] border border-[var(--color-line)] px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
 						{copied ? 'Copied' : 'Copy all times'}
 					</button>
 				</div>
@@ -343,7 +343,7 @@ export default function TimeCanvas({ initialNow }: Props) {
 						<div class="border-l border-[var(--color-line)] pl-3">
 							<div class="flex items-center justify-between gap-2">
 								<p class="truncate text-xs text-[var(--color-subtle)]">{zoneOption(zone).city}</p>
-								<p class="font-mono text-[8px] uppercase tracking-wider text-orange-700">{getDayPhase(selectedTime, zone)}</p>
+								<p class="font-mono text-[8px] uppercase tracking-wider text-[var(--color-accent)]">{getDayPhase(selectedTime, zone)}</p>
 							</div>
 							<p class="mt-1 font-mono text-sm text-[var(--color-ink)]">{formatClock(selectedTime, zone, hour12)}–{formatClock(meetingEnd, zone, hour12)}</p>
 							<p class="mt-0.5 font-mono text-[9px] uppercase tracking-wider text-[var(--color-subtle)]">{formatDate(selectedTime, zone)} · {getDayRelation(selectedTime, zone, homeZone)}</p>
