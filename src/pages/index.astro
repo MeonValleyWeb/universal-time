@@ -3,15 +3,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import NaturalTime from '../components/NaturalTime';
 import PersonalTimeScale from '../components/PersonalTimeScale';
 import WorldStrip from '../components/WorldStrip';
-import SiteHeader from '../components/SiteHeader.astro';
 import { cities } from '../lib/cities';
 
 const initialNow = Date.now();
 ---
 
-<BaseLayout>
-	<SiteHeader />
-
+<BaseLayout canonical="/">
 	<main>
 		<section class="border-b border-[var(--color-border)] px-4 py-14 sm:px-6 sm:py-16 lg:py-[92px]">
 			<div class="mx-auto grid max-w-[1180px] items-center gap-11 lg:grid-cols-[0.94fr_1.06fr] lg:gap-[72px]">

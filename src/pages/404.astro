@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SiteHeader from '../components/SiteHeader.astro';
 
 const quickRoutes = [
 	{ href: '/', label: 'Ask a time question', detail: 'Natural language, no timezone algebra' },
@@ -27,8 +26,6 @@ const timeFacts = [
 	title="404: this page missed its appointment · WorldTime"
 	description="The requested WorldTime page could not be found. Recover with live clocks, converters, meeting tools and genuinely useful time facts."
 >
-	<SiteHeader />
-
 	<main>
 		<section class="atlas-hero relative overflow-hidden border-b border-[var(--color-line)] px-5 py-16 sm:px-8 lg:py-24">
 			<img src="/world-atlas-bg.webp" alt="" class="pointer-events-none absolute inset-0 size-full object-cover opacity-35" aria-hidden="true" />

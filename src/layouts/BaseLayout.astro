@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
 
 interface Props {
 	title?: string;
@@ -79,6 +80,7 @@ const adsensePageReady =
 		<title>{title}</title>
 	</head>
 	<body class="min-h-screen bg-[var(--color-canvas)] text-[var(--color-ink)] antialiased">
+		<SiteHeader />
 		<slot />
 		<footer class="border-t border-[var(--color-line)] px-4 py-7 sm:px-6">
 			<div class="mx-auto flex max-w-[1180px] flex-col gap-5 text-sm text-[var(--color-muted)] sm:flex-row sm:items-center sm:justify-between">

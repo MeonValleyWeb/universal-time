@@ -12,6 +12,7 @@
 
 html {
 	scroll-behavior: smooth;
+	scroll-padding-top: 6rem;
 	background: var(--color-bg);
 }
 

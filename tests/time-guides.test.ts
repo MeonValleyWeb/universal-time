@@ -3,8 +3,27 @@ import test from 'node:test';
 import { timeGuides } from '../src/lib/guides.ts';
 
 test('time guides form a curated, useful first knowledge inventory', () => {
-	assert.ok(timeGuides.length >= 12);
+	assert.ok(timeGuides.length >= 27);
 	assert.equal(new Set(timeGuides.map((guide) => guide.slug)).size, timeGuides.length);
+	for (const slug of [
+		'who-invented-time-zones',
+		'international-meridian-conference-1884',
+		'why-time-zone-borders-are-crooked',
+		'why-some-time-zones-have-30-or-45-minutes',
+		'why-china-has-one-time-zone',
+		'iana-time-zones-vs-utc-offsets',
+		'why-governments-change-time-zones',
+		'why-time-zone-abbreviations-are-ambiguous',
+		'international-date-line-history',
+		'british-and-american-daylight-saving-time-history',
+		'arizona-navajo-nation-daylight-saving-time',
+		'india-nepal-time-zone-offsets',
+		'samoa-date-line-jump-2011',
+		'russia-turkey-permanent-time-changes',
+		'australia-state-daylight-saving-time',
+	]) {
+		assert.ok(timeGuides.some((guide) => guide.slug === slug), `missing Phase 1 guide: ${slug}`);
+	}
 
 	for (const guide of timeGuides) {
 		assert.ok(guide.title.length > 12, `${guide.slug} needs a descriptive title`);

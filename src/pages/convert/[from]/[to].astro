@@ -3,7 +3,6 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import AdSlot from '../../../components/AdSlot.astro';
 import NaturalTime from '../../../components/NaturalTime';
 import CityClock from '../../../components/CityClock';
-import SiteHeader from '../../../components/SiteHeader.astro';
 import { cities, converterPairs, type City } from '../../../lib/cities';
 import { getPairContext } from '../../../lib/search-context';
 
@@ -39,8 +38,6 @@ const schema = {
 	schema={schema}
 	adSlot={converterAdSlot}
 >
-	<SiteHeader />
-
 	<main class="px-5 py-14 sm:px-8 lg:py-20">
 		<div class="mx-auto max-w-[1180px]">
 			<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-orange-700">Time converter</p>

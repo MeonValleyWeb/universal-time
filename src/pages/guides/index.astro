@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { timeGuides } from '../../lib/guides';
-import SiteHeader from '../../components/SiteHeader.astro';
 
 const categories = [...new Set(timeGuides.map((guide) => guide.category))];
 ---
@@ -11,8 +10,6 @@ const categories = [...new Set(timeGuides.map((guide) => guide.category))];
 	description="Clear, sourced explanations of time zones, daylight saving, atomic clocks, UTC, calendars and the history of timekeeping."
 	canonical="/guides"
 >
-	<SiteHeader />
-
 	<main>
 		<section class="px-5 py-16 sm:px-8 lg:py-24">
 			<div class="mx-auto max-w-[1180px]">

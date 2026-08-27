@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CityClock from '../../components/CityClock';
-import SiteHeader from '../../components/SiteHeader.astro';
 import { cities, converterPairs, type City } from '../../lib/cities';
 import { getCitySeasonalContext } from '../../lib/search-context';
 import { formatOffset, getLocalParts, getOffsetMinutes } from '../../lib/time';
@@ -38,8 +37,6 @@ const schema = {
 	canonical={`/time/${city.slug}`}
 	schema={schema}
 >
-	<SiteHeader />
-
 	<main>
 		<section class="px-5 py-16 sm:px-8 lg:py-24">
 			<div class="mx-auto max-w-[1180px]">

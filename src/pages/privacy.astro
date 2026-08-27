@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SiteHeader from '../components/SiteHeader.astro';
 
 const adsActive =
 	import.meta.env.PUBLIC_ADSENSE_ENABLED === 'true'
@@ -15,8 +14,6 @@ const privacyEmail = import.meta.env.PUBLIC_PRIVACY_EMAIL?.trim() || 'privacy@un
 	description="A plain-English explanation of what WorldTime stores, what stays in your browser, how Cloudflare operates the site and how advertising will work."
 	canonical="/privacy"
 >
-	<SiteHeader />
-
 	<main>
 		<section class="border-b border-[var(--color-line)] px-5 py-16 sm:px-8 lg:py-24">
 			<div class="mx-auto max-w-[1180px]">
