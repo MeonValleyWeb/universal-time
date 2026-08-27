@@ -28,7 +28,7 @@ const schema = {
 	adSlot={guideAdSlot}
 >
 	<main class="px-5 py-14 sm:px-8 lg:py-20">
-		<article class="mx-auto max-w-[1200px]">
+		<article class="mx-auto max-w-[1180px]">
 			<p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-signal)]">{guide.category}</p>
 			<h1 class="mt-5 max-w-5xl font-serif text-[clamp(3.5rem,8vw,7.5rem)] leading-[0.88] tracking-[-0.06em]">{guide.title}</h1>
 			<p class="mt-8 max-w-3xl border-l border-[var(--color-signal)] pl-5 text-xl leading-8 text-[var(--color-muted)]">{guide.summary}</p>
@@ -66,7 +66,7 @@ const schema = {
 		<AdSlot slotId={guideAdSlot} placement="time-guide-after-article" minHeight={140} />
 
 		{related.length > 0 && (
-			<section class="mx-auto mt-20 max-w-[1200px] border-t border-[var(--color-line)] pt-12">
+			<section class="mx-auto mt-20 max-w-[1180px] border-t border-[var(--color-line)] pt-12">
 				<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-subtle)]">Keep exploring</p>
 				<div class="mt-6 grid gap-px bg-[var(--color-line)] sm:grid-cols-3">
 					{related.map((item) => (

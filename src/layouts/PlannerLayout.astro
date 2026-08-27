@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
-import ThemeSwitcher from '../components/ThemeSwitcher';
 
 interface Props {
 	title?: string;
@@ -16,32 +15,18 @@ const canonicalUrl = new URL('/meeting-planner', Astro.site ?? Astro.url);
 ---
 
 <!doctype html>
-<html lang="en" data-theme="paper" data-theme-preference="auto">
+<html lang="en" data-theme="meridian">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<script is:inline>
-			try {
-				const saved = localStorage.getItem('worldtime:theme');
-				const preference = ['auto', 'paper', 'dark'].includes(saved) ? saved : 'auto';
-				const hour = new Date().getHours();
-				const theme = preference === 'auto' ? (hour >= 7 && hour < 19 ? 'paper' : 'dark') : preference;
-				document.documentElement.dataset.theme = theme;
-				document.documentElement.dataset.themePreference = preference;
-			} catch {}
-		</script>
 		<meta name="description" content={description} />
-		<meta name="theme-color" content="#f2efe8" />
+		<meta name="theme-color" content="#111a2a" />
 		<link rel="canonical" href={canonicalUrl} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Newsreader:opsz,wght@6..72,300;6..72,500&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 		<title>{title}</title>
 	</head>
-	<body class="min-h-screen bg-[var(--color-canvas)] font-[Newsreader] text-[var(--color-ink)] antialiased selection:bg-[var(--color-signal)] selection:text-[var(--color-signal-ink)]">
+	<body class="min-h-screen bg-[var(--color-canvas)] text-[var(--color-ink)] antialiased">
 		<SiteHeader />
 		<slot />
-		<ThemeSwitcher client:load />
 	</body>
 </html>

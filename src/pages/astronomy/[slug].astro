@@ -46,7 +46,7 @@ const schema = [
 		<section class="atlas-hero relative overflow-hidden border-b border-[var(--color-line)] px-5 py-16 sm:px-8 lg:py-24">
 			<img src="/world-atlas-bg.webp" alt="" class="pointer-events-none absolute inset-0 size-full object-cover opacity-50" aria-hidden="true" />
 			<div class="atlas-wash pointer-events-none absolute inset-0 bg-gradient-to-r from-[#f6f0e4]/95 via-[#f6f0e4]/65 to-transparent" aria-hidden="true"></div>
-			<div class="relative mx-auto max-w-[1500px]">
+			<div class="relative mx-auto max-w-[1180px]">
 				<p class="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--color-signal)]">{event.kind}</p>
 				<h1 class="mt-5 max-w-5xl font-serif text-[clamp(3.5rem,8vw,7.5rem)] leading-[0.88] tracking-[-0.06em]">{event.name}</h1>
 				<p class="mt-8 max-w-2xl text-lg leading-8 text-[var(--color-muted)]">{heroSummary}</p>
@@ -66,13 +66,13 @@ const schema = [
 				</section>
 
 				<section class="border-y border-[var(--color-line)] bg-[var(--color-surface)] px-5 py-14 sm:px-8 lg:py-20">
-					<div class="mx-auto max-w-[1500px]">
+					<div class="mx-auto max-w-[1180px]">
 						<EquinoxDaylightChart />
 					</div>
 				</section>
 
 				<section class="px-5 py-14 sm:px-8 lg:py-20">
-					<div class="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(360px,1.2fr)] lg:items-start">
+					<div class="mx-auto grid max-w-[1180px] gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(360px,1.2fr)] lg:items-start">
 						<img src="/astronomy/equinox-declination-study.png" alt="An archival-style celestial study showing the Sun centred on the equator with seasonal arcs and the Moon at different positions." width="2172" height="724" loading="lazy" class="w-full border border-[var(--color-line)] object-cover" />
 						<div>
 							<h2 class="font-serif text-5xl leading-[0.95] tracking-[-0.045em]">A shared moment, different local stories.</h2>
@@ -87,7 +87,7 @@ const schema = [
 			</>
 		)}
 		<section class="px-5 py-14 sm:px-8 lg:py-20">
-			<div class="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.7fr)] lg:items-start">
+			<div class="mx-auto grid max-w-[1180px] gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.7fr)] lg:items-start">
 				<div>
 					<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Where it matters</p>
 					<h2 class="mt-4 font-serif text-5xl leading-none tracking-[-0.045em]">The view is local.<br />The moment is shared.</h2>
@@ -110,7 +110,7 @@ const schema = [
 			</section>
 		)}
 		<section class="border-t border-[var(--color-line)] bg-[var(--color-surface)] px-5 py-12 sm:px-8">
-			<div class="mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-6">
+			<div class="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-6">
 				<div><p class="font-serif text-3xl tracking-[-0.04em]">Need local Sun and Moon times?</p><p class="mt-2 text-sm text-[var(--color-muted)]">Use your approximate location only in your browser.</p></div>
 				<a href="/astronomy" class="bg-[var(--color-ink)] px-5 py-3 text-sm text-[var(--color-canvas)] hover:bg-[var(--color-signal)] hover:text-[var(--color-signal-ink)]">Open the sky clock →</a>
 			</div>

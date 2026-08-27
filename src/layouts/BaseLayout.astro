@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
-import ThemeSwitcher from '../components/ThemeSwitcher';
 
 interface Props {
 	title?: string;
@@ -50,23 +49,13 @@ const adsensePageReady =
 ---
 
 <!doctype html>
-<html lang="en" data-theme="paper" data-theme-preference="auto">
+<html lang="en" data-theme="meridian">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<script is:inline>
-			try {
-				const saved = localStorage.getItem('worldtime:theme');
-				const preference = ['auto', 'paper', 'dark'].includes(saved) ? saved : 'auto';
-				const hour = new Date().getHours();
-				const theme = preference === 'auto' ? (hour >= 7 && hour < 19 ? 'paper' : 'dark') : preference;
-				document.documentElement.dataset.theme = theme;
-				document.documentElement.dataset.themePreference = preference;
-			} catch {}
-		</script>
 		<meta name="description" content={description} />
 		<meta name="generator" content={Astro.generator} />
-		<meta name="theme-color" content="#e8e3d8" />
+		<meta name="theme-color" content="#111a2a" />
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="WorldTime" />
 		<meta property="og:title" content={title} />
@@ -80,9 +69,6 @@ const adsensePageReady =
 		{canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Newsreader:opsz,wght@6..72,300;6..72,500&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 		{adsensePageReady && (
 			<script
 				is:inline
@@ -93,19 +79,19 @@ const adsensePageReady =
 		)}
 		<title>{title}</title>
 	</head>
-	<body class="min-h-screen bg-[var(--color-canvas)] font-[Newsreader] text-[var(--color-ink)] antialiased selection:bg-[var(--color-signal)] selection:text-[var(--color-signal-ink)]">
+	<body class="min-h-screen bg-[var(--color-canvas)] text-[var(--color-ink)] antialiased">
 		<SiteHeader />
 		<slot />
-		<footer class="border-t border-[var(--color-line)] px-5 py-8 sm:px-8">
-			<div class="mx-auto flex max-w-[1500px] flex-col gap-5 text-sm text-[var(--color-muted)] sm:flex-row sm:items-center sm:justify-between">
-				<p><span class="text-[var(--color-ink)]">WorldTime</span> · Built around UTC, not around you.</p>
+		<footer class="border-t border-[var(--color-line)] px-4 py-7 sm:px-6">
+			<div class="mx-auto flex max-w-[1180px] flex-col gap-5 text-sm text-[var(--color-muted)] sm:flex-row sm:items-center sm:justify-between">
+				<p><span class="font-serif text-lg text-[var(--color-ink)]">WorldTime</span> · Time zones, without the mental overhead.</p>
 				<nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Legal and information">
+					<a href="/astronomy" class="hover:text-[var(--color-signal)]">Sun & Moon</a>
 					<a href="/guides" class="hover:text-[var(--color-signal)]">How time works</a>
 					<a href="/privacy" class="hover:text-[var(--color-signal)]">Privacy & cookies</a>
 				</nav>
 			</div>
 		</footer>
-		<ThemeSwitcher client:load />
 		{cloudflareAnalyticsToken && (
 			<script
 				is:inline

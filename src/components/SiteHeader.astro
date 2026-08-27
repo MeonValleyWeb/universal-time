@@ -3,7 +3,7 @@ import { cities } from '../lib/cities';
 
 const currentPath = Astro.url.pathname;
 const links = [
-	{ href: '/#world-clocks', label: 'World clocks', active: currentPath.startsWith('/time/') },
+	{ href: '/#world-clocks', label: 'World clocks', active: currentPath.startsWith('/time/') && currentPath !== '/time-zones' },
 	{ href: '/time-zones', label: 'Time zones', active: currentPath === '/time-zones' },
 	{ href: '/meeting-planner', label: 'Meeting planner', active: currentPath === '/meeting-planner' },
 	{ href: '/astronomy', label: 'Sun & Moon', active: currentPath.startsWith('/astronomy') },
@@ -11,54 +11,49 @@ const links = [
 ];
 ---
 
-<header class="sticky top-0 z-[90] border-b border-[var(--color-line)] bg-[var(--color-canvas)]/95 px-5 shadow-[0_1px_12px_rgba(35,28,20,0.04)] backdrop-blur-sm sm:px-8">
-	<div class="mx-auto flex h-20 max-w-[1500px] items-center justify-between gap-5">
-		<a href="/" class="flex shrink-0 items-center gap-3 text-[var(--color-ink)]" aria-label="WorldTime home" aria-current={currentPath === '/' ? 'page' : undefined}>
-			<span class="grid size-9 place-items-center rounded-full bg-[var(--color-signal)] font-serif text-xl italic text-[var(--color-signal-ink)]">W</span>
-			<span class="font-serif text-xl tracking-[-0.03em]">WorldTime</span>
+<header class="sticky top-0 z-[90] border-b border-[var(--color-border)] bg-[var(--color-bg)]/95 px-4 backdrop-blur-sm sm:px-6" data-site-header>
+	<div class="mx-auto flex h-[82px] max-w-[1180px] items-center justify-between gap-5">
+		<a href="/" class="flex shrink-0 items-center gap-[11px] font-serif text-2xl tracking-[-0.04em]" aria-label="WorldTime home" aria-current={currentPath === '/' ? 'page' : undefined}>
+			<img src="/meridian-mark.svg" alt="" width="24" height="24" />
+			<span>WorldTime</span>
 		</a>
 
-		<nav class="hidden items-center gap-4 text-sm text-[var(--color-muted)] lg:flex" aria-label="Primary navigation">
-			{links.map((link) => (
+		<nav class="hidden items-center gap-6 text-sm text-[var(--color-muted)] lg:flex" aria-label="Primary navigation">
+			{links.filter((link) => link.href !== '/meeting-planner').map((link) => (
 				<a
 					href={link.href}
-					class:list={[
-						'whitespace-nowrap transition hover:text-[var(--color-ink)]',
-						link.active && 'text-[var(--color-signal)]',
-					]}
+					class:list={['whitespace-nowrap hover:text-[var(--color-fg)]', link.active && 'text-[var(--color-fg)]']}
 					aria-current={link.active ? 'page' : undefined}
 				>
 					{link.label}
 				</a>
 			))}
-			<span class="hidden rounded-full border border-[var(--color-line)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[var(--color-ink)] xl:inline">
-				Live · {cities.length} cities
-			</span>
+			<span class="hidden font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-muted)] xl:inline">Live · {cities.length} cities</span>
 		</nav>
 
-		<details class="group relative lg:hidden">
-			<summary class="flex cursor-pointer list-none items-center gap-2 rounded-full border border-[var(--color-line)] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--color-ink)] transition hover:border-[var(--color-signal)] hover:text-[var(--color-signal)] [&::-webkit-details-marker]:hidden">
+		<a
+			href="/meeting-planner"
+			class="hidden min-h-11 items-center justify-center rounded-[var(--radius-button)] border border-[var(--color-border)] px-4 text-sm font-semibold text-[var(--color-fg)] hover:-translate-y-px hover:border-[var(--color-muted)] hover:bg-[var(--color-surface)] sm:inline-flex"
+		>
+			Plan a meeting
+		</a>
+
+		<details class="group relative sm:hidden">
+			<summary class="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-border)] px-3 font-mono text-[10px] uppercase tracking-[0.13em] text-[var(--color-fg)] hover:border-[var(--color-muted)] [&::-webkit-details-marker]:hidden">
 				<span>Menu</span>
-				<svg viewBox="0 0 16 16" class="size-3 transition group-open:rotate-45" aria-hidden="true">
-					<path d="M8 2v12M2 8h12" fill="none" stroke="currentColor" stroke-linecap="round" />
-				</svg>
+				<svg viewBox="0 0 16 16" class="size-3 transition group-open:rotate-45" aria-hidden="true"><path d="M8 2v12M2 8h12" fill="none" stroke="currentColor" stroke-linecap="round" /></svg>
 			</summary>
-			<nav class="absolute right-0 top-[calc(100%+0.75rem)] w-64 border border-[var(--color-line)] bg-[var(--color-surface)] p-2 shadow-[0_18px_50px_rgba(35,28,20,0.18)]" aria-label="Mobile navigation">
+			<nav class="absolute right-0 top-[calc(100%+0.75rem)] w-64 overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-border)] bg-[var(--color-surface)] p-2 shadow-[var(--shadow-panel)]" aria-label="Mobile navigation">
 				{links.map((link) => (
 					<a
 						href={link.href}
-						class:list={[
-							'flex items-center justify-between border-b border-[var(--color-line)] px-4 py-3 text-sm text-[var(--color-muted)] last:border-b-0 hover:bg-[var(--color-canvas)] hover:text-[var(--color-ink)]',
-							link.active && 'text-[var(--color-signal)]',
-						]}
+						class:list={['flex min-h-11 items-center justify-between border-b border-[var(--color-border)] px-3 text-sm text-[var(--color-muted)] last:border-b-0 hover:bg-[var(--color-surface-elevated)] hover:text-[var(--color-fg)]', link.active && 'text-[var(--color-accent)]']}
 						aria-current={link.active ? 'page' : undefined}
 					>
 						{link.label}<span aria-hidden="true">→</span>
 					</a>
 				))}
-				<p class="mt-2 flex items-center justify-between bg-[var(--color-ink)] px-4 py-3 font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--color-canvas)]">
-					Live world map <span>{cities.length} cities</span>
-				</p>
+				<p class="mt-2 flex items-center justify-between rounded-[var(--radius-control)] bg-[var(--color-bg)] px-3 py-3 font-mono text-[9px] uppercase tracking-[0.13em] text-[var(--color-muted)]">Live world map <span>{cities.length} cities</span></p>
 			</nav>
 		</details>
 	</div>
