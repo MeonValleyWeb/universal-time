@@ -4,8 +4,20 @@ import NaturalTime from '../components/NaturalTime';
 import PersonalTimeScale from '../components/PersonalTimeScale';
 import WorldStrip from '../components/WorldStrip';
 import { cities } from '../lib/cities';
+import { formatOffset, getOffsetMinutes } from '../lib/time';
 
 const initialNow = Date.now();
+const citiesByOffset = cities.reduce((groups, city) => {
+	const offset = getOffsetMinutes(initialNow, city.zone);
+	groups.set(offset, [...(groups.get(offset) ?? []), city]);
+	return groups;
+}, new Map<number, typeof cities>());
+const clockGroups = [...citiesByOffset.entries()]
+	.sort(([leftOffset], [rightOffset]) => leftOffset - rightOffset)
+	.map(([offset, groupedCities]) => ({
+		label: offset === 0 ? 'UTC / GMT' : formatOffset(offset),
+		cities: [...groupedCities].sort((left, right) => left.name.localeCompare(right.name)),
+	}));
 ---
 
 <BaseLayout canonical="/">
@@ -114,14 +126,25 @@ const initialNow = Date.now();
 
 		<section id="world-clocks" class="px-5 py-16 sm:px-8">
 			<div class="mx-auto max-w-[1180px]">
-				<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-stone-500">Popular city clocks</p>
+				<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-stone-500">Popular city clocks · grouped by current UTC offset</p>
 				<h2 class="mt-2 font-serif text-3xl tracking-[-0.04em]">Find your place</h2>
-				<div class="mt-8 grid gap-x-8 border-t border-stone-300 sm:grid-cols-2 lg:grid-cols-4">
-					{cities.map((city) => (
-						<a href={`/time/${city.slug}`} class="flex items-center justify-between border-b border-stone-300 py-4 text-sm hover:text-orange-700">
-							<span>{city.name}</span>
-							<span class="font-mono text-[9px] text-stone-500">{city.country}</span>
-						</a>
+				<p class="mt-3 max-w-2xl text-sm leading-6 text-[var(--color-muted)]">Cities share the clock that applies right now. Seasonal rules can move a place to another offset later in the year.</p>
+				<div class="mt-8 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+					{clockGroups.map((group) => (
+						<section class="border-t border-stone-300 pt-4" aria-label={`${group.label} city clocks`}>
+							<div class="flex items-baseline justify-between gap-3">
+								<h3 class="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">{group.label}</h3>
+								<span class="font-mono text-[9px] uppercase tracking-[0.13em] text-stone-500">{group.cities.length} {group.cities.length === 1 ? 'place' : 'places'}</span>
+							</div>
+							<div class="mt-2">
+								{group.cities.map((city) => (
+									<a href={`/time/${city.slug}`} class="flex items-center justify-between gap-3 border-b border-stone-300 py-3 text-sm hover:text-orange-700">
+										<span>{city.name}</span>
+										<span class="shrink-0 font-mono text-[9px] text-stone-500">{city.country}</span>
+									</a>
+								))}
+							</div>
+						</section>
 					))}
 				</div>
 			</div>

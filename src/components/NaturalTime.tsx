@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { cities, type City } from '../lib/cities';
-import { parseNaturalTime } from '../lib/natural-time';
+import { parseNaturalTime, type NaturalTimeResult } from '../lib/natural-time';
 import {
 	formatClock,
 	formatDate,
@@ -27,16 +27,30 @@ const cityForBrowserZone = (zone: string): City =>
 
 export default function NaturalTime({
 	initialNow,
-	initialQuery = '3pm London in Tokyo next Thursday',
+	initialQuery,
 }: Props) {
 	const [now, setNow] = useState(initialNow);
-	const [query, setQuery] = useState(initialQuery);
-	const [submitted, setSubmitted] = useState(initialQuery);
+	const [query, setQuery] = useState(initialQuery ?? '');
+	const [submitted, setSubmitted] = useState(initialQuery ?? '');
 	const [copied, setCopied] = useState(false);
 	const [localTarget, setLocalTarget] = useState<City>(cities.find((city) => city.slug === 'london')!);
-	const result = useMemo(() => parseNaturalTime(submitted, now, localTarget), [submitted, now, localTarget]);
+	const localTimeResult = useMemo<NaturalTimeResult>(() => ({
+		source: localTarget,
+		target: localTarget,
+		answer: localTarget,
+		timestamp: now,
+		isCurrentTime: true,
+		detectedTimeCount: 0,
+		intent: 'current',
+		warnings: [],
+	}), [now, localTarget]);
+	const result = useMemo(
+		() => submitted ? parseNaturalTime(submitted, now, localTarget) : localTimeResult,
+		[submitted, now, localTarget, localTimeResult],
+	);
 
 	useEffect(() => {
+		setNow(Date.now());
 		const interval = window.setInterval(() => setNow(Date.now()), 30_000);
 		const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		setLocalTarget(cityForBrowserZone(localZone));
@@ -60,7 +74,9 @@ export default function NaturalTime({
 
 	const copy = async () => {
 		if (!result) return;
-		const text = `${formatDate(result.timestamp, result.source.zone)} ${formatClock(result.timestamp, result.source.zone, true)} ${result.source.name} · ${formatDate(result.timestamp, result.target.zone)} ${formatClock(result.timestamp, result.target.zone, true)} ${result.target.name}`;
+		const text = result.isCurrentTime
+			? `${formatDate(result.timestamp, result.answer.zone)} ${formatClock(result.timestamp, result.answer.zone, true)} in ${result.answer.name}`
+			: `${formatDate(result.timestamp, result.source.zone)} ${formatClock(result.timestamp, result.source.zone, true)} ${result.source.name} · ${formatDate(result.timestamp, result.target.zone)} ${formatClock(result.timestamp, result.target.zone, true)} ${result.target.name}`;
 		await navigator.clipboard.writeText(text);
 		setCopied(true);
 	};
@@ -83,25 +99,25 @@ export default function NaturalTime({
 	return (
 			<section class="atlas-panel min-w-0 overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-panel)] sm:p-7 lg:p-8">
 				<form onSubmit={submit}>
-					<div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+					<div class="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
 						<label for="time-query" class="block font-mono text-[11px] uppercase tracking-[0.13em] text-[var(--color-muted)]">
 							Ask anything about time
 						</label>
 						<span class="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.13em] text-[var(--color-fg)] before:size-1.5 before:rounded-full before:bg-[var(--color-accent)] before:shadow-[0_0_0_4px_oklch(0.73_0.16_245/0.12)]">
-							Your time · {localTarget.name}
+							Your time · {localTarget.name} · {formatClock(now, localTarget.zone, false)} {getLocalParts(now, localTarget.zone).abbreviation}
 						</span>
 					</div>
-					<div class="relative border-b border-[var(--color-border)] pb-3 focus-within:border-[var(--color-accent)]">
+					<div class="flex items-center gap-3 border-b border-[var(--color-border)] pb-3 focus-within:border-[var(--color-accent)]">
 						<input
 							id="time-query"
 							value={query}
 							onInput={(event) => setQuery(event.currentTarget.value)}
-							class="w-full bg-transparent pr-14 font-serif text-xl leading-tight tracking-[-0.025em] text-[var(--color-fg)] outline-none placeholder:text-[var(--color-subtle)] sm:text-3xl"
-							placeholder="4pm New York in London tomorrow"
+							class="min-w-0 flex-1 bg-transparent font-serif text-xl leading-tight tracking-[-0.025em] text-[var(--color-fg)] outline-none placeholder:text-[var(--color-subtle)] sm:text-3xl"
+							placeholder="Try 4pm New York in London tomorrow"
 							autocomplete="off"
 						/>
-						<button aria-label="Convert time" class="absolute bottom-3 right-0 grid size-11 place-items-center rounded-[var(--radius-button)] border border-[var(--color-accent)] bg-[var(--color-accent)] text-xl text-[var(--color-signal-ink)] hover:-translate-y-px hover:brightness-110 active:translate-y-0">
-							→
+						<button type="submit" class="inline-flex h-11 shrink-0 items-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-accent)] bg-[var(--color-accent)] px-3 font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--color-signal-ink)] hover:-translate-y-px hover:brightness-110 active:translate-y-0" aria-label="Answer time question">
+							Ask <span aria-hidden="true" class="text-base leading-none">→</span>
 						</button>
 					</div>
 				</form>
@@ -111,7 +127,9 @@ export default function NaturalTime({
 						<div>
 							<div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.13em] text-[var(--color-muted)]">
 								<span class={`size-2 rounded-full ${goodTime ? 'bg-[var(--color-accent)]' : 'bg-amber-400'}`} />
-								{result.intent === 'before-bed'
+								{result.isCurrentTime
+									? 'Your local time now'
+									: result.intent === 'before-bed'
 									? (goodTime ? `A good time to call ${result.target.name}` : `${result.target.name} may be asleep`)
 									: (goodTime ? 'A good time to call' : 'Outside usual working hours')}
 								{result.detectedTimeCount > 1 && <span>· first of {result.detectedTimeCount} times</span>}
@@ -128,7 +146,9 @@ export default function NaturalTime({
 								<div>
 									<p class="font-serif text-2xl text-[var(--color-fg)]">{formatFullDate(result.timestamp, result.answer.zone)} in {result.answer.name}</p>
 									<p class="mt-1 text-sm text-[var(--color-muted)]">
-										{result.intent === 'before-bed'
+										{result.isCurrentTime
+											? `Browser-reported time zone: ${result.answer.zone}`
+											: result.intent === 'before-bed'
 											? `${formatClock(result.timestamp, result.target.zone, false)} ${formatFullDate(result.timestamp, result.target.zone)} in ${result.target.name}`
 											: hourDifference === 0
 											? `Same time as ${result.source.name}`
@@ -142,16 +162,18 @@ export default function NaturalTime({
 									<button type="button" onClick={copy} class="rounded-[var(--radius-button)] border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-fg)] hover:border-[var(--color-muted)] hover:bg-[var(--color-surface-elevated)]">
 										{copied ? 'Copied' : 'Copy answer'}
 									</button>
-									<button type="button" onClick={share} class="rounded-[var(--radius-button)] border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-fg)] hover:border-[var(--color-muted)] hover:bg-[var(--color-surface-elevated)]">
-										Share query
-									</button>
-									{result.source.slug !== 'local' ? (
+									{submitted && (
+										<button type="button" onClick={share} class="rounded-[var(--radius-button)] border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-fg)] hover:border-[var(--color-muted)] hover:bg-[var(--color-surface-elevated)]">
+											Share query
+										</button>
+									)}
+									{!result.isCurrentTime && result.source.slug !== 'local' ? (
 										<a href={`/convert/${result.source.slug}/${result.target.slug}`} class="inline-flex min-h-11 items-center rounded-[var(--radius-button)] bg-[var(--color-accent)] px-4 text-sm font-semibold text-[var(--color-signal-ink)] hover:-translate-y-px hover:brightness-110">
 											Open converter
 										</a>
 									) : (
-										<a href="/meeting-planner" class="inline-flex min-h-11 items-center rounded-[var(--radius-button)] bg-[var(--color-accent)] px-4 text-sm font-semibold text-[var(--color-signal-ink)] hover:-translate-y-px hover:brightness-110">
-											Open planner
+										<a href={result.isCurrentTime ? '/time-zones' : '/meeting-planner'} class="inline-flex min-h-11 items-center rounded-[var(--radius-button)] bg-[var(--color-accent)] px-4 text-sm font-semibold text-[var(--color-signal-ink)] hover:-translate-y-px hover:brightness-110">
+											{result.isCurrentTime ? 'Explore time zones' : 'Open planner'}
 										</a>
 									)}
 								</div>

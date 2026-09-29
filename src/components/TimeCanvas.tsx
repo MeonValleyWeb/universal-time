@@ -53,6 +53,7 @@ export default function TimeCanvas({ initialNow }: Props) {
 	);
 	const homeZone = locations[0] ?? 'UTC';
 	const meetingEnd = selectedTime + durationMinutes * 60_000;
+	const dayLabel = dayOffset === 0 ? 'Today' : formatDate(timelineStart + 6 * HOUR, homeZone);
 	const meetingScore = useMemo(
 		() => getMeetingScore(selectedTime, durationMinutes, locations),
 		[selectedTime, durationMinutes, locations],
@@ -210,7 +211,7 @@ export default function TimeCanvas({ initialNow }: Props) {
 					<div class="flex flex-wrap items-center gap-2">
 						<div class="flex rounded-[var(--radius-button)] border border-[var(--color-line)] bg-[var(--color-input)] p-1">
 							<button type="button" aria-label="Previous day" onClick={() => setDayOffset((value) => value - 1)} class="grid size-9 place-items-center rounded-[var(--radius-control)] text-[var(--color-muted)] hover:bg-[oklch(0.73_0.16_245/0.1)] hover:text-[var(--color-ink)]">←</button>
-							<button type="button" onClick={() => setDayOffset(0)} class="rounded-[var(--radius-control)] px-3 font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] hover:bg-[oklch(0.73_0.16_245/0.1)]">Today</button>
+							<button type="button" onClick={() => setDayOffset(0)} aria-label={dayOffset === 0 ? 'Viewing today' : 'Return to today'} class="min-w-20 rounded-[var(--radius-control)] px-3 font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] hover:bg-[oklch(0.73_0.16_245/0.1)]">{dayLabel}</button>
 							<button type="button" aria-label="Next day" onClick={() => setDayOffset((value) => value + 1)} class="grid size-9 place-items-center rounded-[var(--radius-control)] text-[var(--color-muted)] hover:bg-[oklch(0.73_0.16_245/0.1)] hover:text-[var(--color-ink)]">→</button>
 						</div>
 						<button
