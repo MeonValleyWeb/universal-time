@@ -33,10 +33,51 @@ const clockGroups = [...citiesByOffset.entries()]
 						<p class="mt-6 max-w-[470px] text-[19px] leading-[1.55] text-[var(--color-muted)]">
 							Ask naturally, paste a time, or compare cities. WorldTime gives you one clear answer without timezone arithmetic.
 						</p>
+						<a href="/meeting-planner" class="group mt-8 inline-flex min-h-12 items-center gap-4 rounded-[var(--radius-button)] bg-[var(--color-accent)] px-5 font-sans text-[10px] font-bold normal-case tracking-[0.13em] text-[var(--color-signal-ink)] shadow-[0_12px_30px_oklch(0.08_0.03_255/0.28)] transition hover:-translate-y-0.5 hover:brightness-110">
+							<span>Plan across time zones</span>
+							<span aria-hidden="true" class="text-base leading-none transition-transform group-hover:translate-x-1">→</span>
+						</a>
 						<div class="mt-10 flex items-center gap-4 text-[13px] text-[var(--color-muted)]"><span class="block w-[34px] border-t border-[var(--color-border)]"></span><span>Accurate time zones. Clear context. No clutter.</span></div>
 					</div>
 				</div>
 				<NaturalTime client:load initialNow={initialNow} />
+			</div>
+			<div class="mx-auto mt-10 max-w-[1180px] lg:mt-14">
+				<a href="/meeting-planner" class="group relative block overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-panel)] transition hover:-translate-y-1 hover:border-[var(--color-accent)] sm:p-7 lg:p-9">
+					<div class="pointer-events-none absolute -right-24 -top-28 size-80 rounded-full border border-[oklch(0.73_0.16_245/0.22)]" aria-hidden="true"></div>
+					<div class="pointer-events-none absolute -right-8 top-10 size-48 rounded-full border border-[oklch(0.73_0.16_245/0.14)]" aria-hidden="true"></div>
+					<div class="relative grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end lg:gap-16">
+						<div>
+							<p class="font-sans text-[10px] font-bold normal-case tracking-[0.2em] text-[var(--color-accent)]">The meeting planner</p>
+							<h2 class="mt-4 max-w-xl font-serif text-[clamp(2.45rem,5vw,4.6rem)] leading-[0.91] tracking-[-0.055em] text-[var(--color-fg)]">Find the overlap,<br /><em class="font-normal text-[var(--color-accent)]">not the compromise.</em></h2>
+							<p class="mt-5 max-w-lg text-base leading-7 text-[var(--color-muted)]">See every working day together, choose a fair window, and make daylight-saving changes someone else’s problem.</p>
+							<span class="mt-7 inline-flex items-center gap-3 font-sans text-[10px] font-bold normal-case tracking-[0.16em] text-[var(--color-fg)]">Open the planner <span aria-hidden="true" class="text-lg leading-none transition-transform group-hover:translate-x-1">→</span></span>
+						</div>
+						<div class="overflow-hidden rounded-[var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-input)] p-4 sm:p-5">
+							<div class="flex items-center justify-between gap-4 border-b border-[var(--color-border)] pb-3">
+								<span class="font-sans text-[9px] font-bold normal-case tracking-[0.16em] text-[var(--color-muted)]">One shared working day</span>
+								<span class="rounded-full bg-[oklch(0.73_0.16_245/0.14)] px-2.5 py-1 font-sans text-[8px] font-bold normal-case tracking-wider text-[var(--color-accent)]">Fair window</span>
+							</div>
+							<div class="mt-5 space-y-3">
+								{[
+									['London', '09:00', '17:00', 'bg-[oklch(0.73_0.16_245/0.9)]'],
+									['New York', '04:00', '12:00', 'bg-[oklch(0.73_0.16_245/0.58)]'],
+									['Tokyo', '17:00', '01:00', 'bg-[oklch(0.73_0.16_245/0.36)]'],
+								].map(([place, start, end, colour]) => (
+									<div class="grid grid-cols-[5.5rem_1fr_3.25rem] items-center gap-3">
+										<span class="truncate font-sans text-[10px] font-bold normal-case tracking-wide text-[var(--color-fg)]">{place}</span>
+										<span class="relative h-2 overflow-hidden rounded-full bg-[var(--color-border)]"><span class={`absolute inset-y-0 left-[32%] w-[37%] rounded-full ${colour}`}></span></span>
+										<span class="text-right font-sans text-[9px] text-[var(--color-muted)]">{start}–{end}</span>
+									</div>
+								))}
+							</div>
+							<div class="mt-5 grid grid-cols-12 gap-px overflow-hidden rounded-[3px] border border-[var(--color-border)] bg-[var(--color-border)]">
+								{Array.from({ length: 12 }, (_, index) => <span class={`h-8 bg-[var(--color-surface)] ${index >= 5 && index <= 7 ? 'bg-[oklch(0.73_0.16_245/0.34)]' : ''}`}></span>)}
+							</div>
+							<p class="mt-3 font-sans text-[9px] normal-case tracking-[0.15em] text-[var(--color-subtle)]">The bright band is a workable window for everyone.</p>
+						</div>
+					</div>
+				</a>
 			</div>
 			<div class="mx-auto mt-12 max-w-[1180px] lg:mt-16">
 				<div class="mb-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.13em] text-[var(--color-muted)]">
@@ -68,23 +109,6 @@ const clockGroups = [...citiesByOffset.entries()]
 						</article>
 					))}
 				</div>
-			</div>
-		</section>
-
-		<section class="border-b border-[var(--color-border)] px-4 py-16 sm:px-6 lg:py-20">
-			<div class="mx-auto grid max-w-[1180px] items-end gap-10 lg:grid-cols-[1fr_auto]">
-				<div>
-					<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-orange-700">Need the whole picture?</p>
-					<h2 class="mt-3 max-w-3xl font-serif text-4xl leading-none tracking-[-0.045em] sm:text-6xl">
-						Compare every working day on one timeline.
-					</h2>
-					<p class="mt-5 max-w-2xl text-base leading-7 text-stone-600">
-						Move from a quick answer to the visual meeting planner when several cities, daylight and fairness all matter.
-					</p>
-				</div>
-				<a href="/meeting-planner" class="inline-flex min-h-11 items-center justify-center rounded-[var(--radius-button)] border border-[var(--color-accent)] bg-[var(--color-accent)] px-6 text-sm font-semibold text-[var(--color-signal-ink)] hover:-translate-y-px hover:brightness-110">
-					Open meeting planner →
-				</a>
 			</div>
 		</section>
 
