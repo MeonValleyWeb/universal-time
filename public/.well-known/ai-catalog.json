@@ -1,0 +1,31 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "WorldTime",
+    "identifier": "did:web:universaltime.app"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:universaltime.app:website:world-time",
+      "displayName": "WorldTime city clocks and time-zone guides",
+      "type": "text/html",
+      "url": "https://universaltime.app/",
+      "representativeQueries": [
+        "What time is it in London right now?",
+        "Convert a meeting time between London and New York.",
+        "Explain the difference between UTC and GMT."
+      ]
+    },
+    {
+      "identifier": "urn:air:universaltime.app:skill:worldtime-navigation",
+      "displayName": "WorldTime navigation skill",
+      "type": "text/markdown",
+      "url": "https://universaltime.app/.well-known/agent-skills/worldtime-navigation/SKILL.md",
+      "representativeQueries": [
+        "Find the current time for a supported city.",
+        "Open a city-to-city time converter.",
+        "Find a guide about daylight saving time."
+      ]
+    }
+  ]
+}

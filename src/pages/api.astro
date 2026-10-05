@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+	title="WorldTime API · Newsletter consent endpoint"
+	description="Reference documentation for WorldTime's consent-based newsletter API."
+	canonical="/api"
+>
+	<main class="px-5 py-16 sm:px-8 lg:py-24">
+		<article class="mx-auto max-w-3xl">
+			<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Service documentation</p>
+			<h1 class="mt-5 font-serif text-5xl tracking-[-0.05em] sm:text-6xl">WorldTime Newsletter API</h1>
+			<p class="mt-6 max-w-2xl text-base leading-7 text-[var(--color-muted)]">
+				This small same-origin API records an adult visitor’s explicit opt-in to the future “On this day…” newsletter. It is not an authentication, registration or general time-conversion API.
+			</p>
+
+			<section class="mt-12 border-t border-[var(--color-line)] pt-8">
+				<h2 class="font-serif text-3xl tracking-[-0.04em]">Before calling it</h2>
+				<p class="mt-4 text-sm leading-6 text-[var(--color-muted)]">
+					Only submit an address when the person is 18 or older and has personally, explicitly consented to receive the newsletter. Agents must not provide consent or subscribe people on their behalf.
+				</p>
+			</section>
+
+			<section class="mt-10 border-t border-[var(--color-line)] pt-8">
+				<h2 class="font-serif text-3xl tracking-[-0.04em]">Endpoints</h2>
+				<dl class="mt-5 space-y-5 text-sm leading-6">
+					<div>
+						<dt class="font-mono text-xs text-[var(--color-accent)]">POST /api/newsletter</dt>
+						<dd class="mt-1 text-[var(--color-muted)]">Stores an explicitly consenting adult subscriber. Requires JSON fields for email, date of birth and consent.</dd>
+					</div>
+					<div>
+						<dt class="font-mono text-xs text-[var(--color-accent)]">POST /api/newsletter/unsubscribe</dt>
+						<dd class="mt-1 text-[var(--color-muted)]">Marks a subscription as unsubscribed using the token supplied in a newsletter edition.</dd>
+					</div>
+					<div>
+						<dt class="font-mono text-xs text-[var(--color-accent)]">GET /api/health</dt>
+						<dd class="mt-1 text-[var(--color-muted)]">Reports whether the public Worker endpoint is available.</dd>
+					</div>
+				</dl>
+				<a href="/openapi.json" class="mt-8 inline-flex border-b border-[var(--color-accent)] pb-1 text-sm text-[var(--color-accent)] hover:text-[var(--color-fg)]">Read the OpenAPI description →</a>
+			</section>
+		</article>
+	</main>
+</BaseLayout>

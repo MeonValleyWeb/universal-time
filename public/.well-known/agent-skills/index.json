@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "worldtime-navigation",
+      "type": "skill-md",
+      "description": "Find WorldTime's city clocks, directional converters, meeting planner and time-zone guides.",
+      "url": "https://universaltime.app/.well-known/agent-skills/worldtime-navigation/SKILL.md",
+      "digest": "sha256:8306e974e4772b7df3bb20b076b3fe1f43c8a5a44ff49147416a50ff0751bc0d"
+    }
+  ]
+}

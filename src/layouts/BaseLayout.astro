@@ -67,6 +67,8 @@ const adsensePageReady =
 		{bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
 		{/^ca-pub-\d+$/.test(adsenseClient) && <meta name="google-adsense-account" content={adsenseClient} />}
 		{canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+		<link rel="ai-catalog" href="/.well-known/ai-catalog.json" type="application/json" />
+		<link rel="service-desc" href="/openapi.json" type="application/vnd.oai.openapi+json;version=3.1" />
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		{adsensePageReady && (
@@ -100,5 +102,37 @@ const adsensePageReady =
 				data-cf-beacon={JSON.stringify({ token: cloudflareAnalyticsToken })}
 			></script>
 		)}
+		<script is:inline>
+			{`(() => {
+				const modelContext = document.modelContext || navigator.modelContext;
+				if (!modelContext || typeof modelContext.registerTool !== 'function') return;
+
+				const controller = new AbortController();
+				window.addEventListener('pagehide', () => controller.abort(), { once: true });
+				void modelContext.registerTool({
+					name: 'open-time-converter',
+					title: 'Open a WorldTime city converter',
+					description: 'Returns a WorldTime converter URL for two lowercase city slugs. This is a read-only navigation tool.',
+					inputSchema: {
+						type: 'object',
+						properties: {
+							from: { type: 'string', description: 'Source city slug, for example london.' },
+							to: { type: 'string', description: 'Destination city slug, for example new-york.' },
+						},
+						required: ['from', 'to'],
+						additionalProperties: false,
+					},
+					annotations: { readOnlyHint: true },
+					execute: ({ from, to }) => {
+						const source = typeof from === 'string' ? from.trim().toLowerCase() : '';
+						const destination = typeof to === 'string' ? to.trim().toLowerCase() : '';
+						if (!/^[a-z0-9-]+$/.test(source) || !/^[a-z0-9-]+$/.test(destination)) {
+							throw new TypeError('City slugs must contain lowercase letters, digits or hyphens.');
+						}
+						return { url: new URL('/convert/' + source + '/' + destination, location.origin).toString() };
+					},
+				}, { signal: controller.signal }).catch(() => undefined);
+			})();`}
+		</script>
 	</body>
 </html>

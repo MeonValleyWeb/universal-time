@@ -1,0 +1,24 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://universaltime.app/api/newsletter",
+      "link": [
+        {
+          "rel": "service-desc",
+          "href": "https://universaltime.app/openapi.json",
+          "type": "application/vnd.oai.openapi+json;version=3.1"
+        },
+        {
+          "rel": "service-doc",
+          "href": "https://universaltime.app/api",
+          "type": "text/html"
+        },
+        {
+          "rel": "status",
+          "href": "https://universaltime.app/api/health",
+          "type": "application/json"
+        }
+      ]
+    }
+  ]
+}
