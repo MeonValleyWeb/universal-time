@@ -5,15 +5,47 @@ import {
 
 const canonicalHost = 'universaltime.app';
 const maxJsonBytes = 8_192;
+const contentSignal = 'ai-train=no, search=yes, ai-input=yes';
+const homepageLinks = [
+	'</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"',
+	'</openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json;version=3.1"',
+	'</api>; rel="service-doc"; type="text/html"',
+	'</.well-known/ai-catalog.json>; rel="describedby"; type="application/json"',
+	'</.well-known/agent-skills/index.json>; rel="describedby"; type="application/json"',
+].join(', ');
 
 const json = (body: unknown, status = 200): Response =>
 	Response.json(body, {
 		status,
 		headers: {
 			'cache-control': 'no-store',
+			'content-signal': contentSignal,
 			'x-content-type-options': 'nosniff',
 		},
 	});
+
+const withDiscoveryHeaders = (response: Response, pathname: string): Response => {
+	const headers = new Headers(response.headers);
+	headers.set('content-signal', contentSignal);
+
+	if (pathname === '/') headers.set('link', homepageLinks);
+	if (pathname === '/.well-known/api-catalog') {
+		headers.set('content-type', 'application/linkset+json; charset=utf-8');
+	}
+	if (pathname === '/openapi.json') {
+		headers.set('content-type', 'application/vnd.oai.openapi+json;version=3.1; charset=utf-8');
+	}
+	if (pathname === '/.well-known/ai-catalog.json') {
+		headers.set('content-type', 'application/json; charset=utf-8');
+		headers.set('access-control-allow-origin', '*');
+	}
+
+	return new Response(response.body, {
+		status: response.status,
+		statusText: response.statusText,
+		headers,
+	});
+};
 
 const requestIsSameOrigin = (request: Request): boolean => {
 	const origin = request.headers.get('origin');
@@ -165,6 +197,10 @@ export default {
 			});
 		}
 
+		if (request.method === 'GET' && url.pathname === '/api/health') {
+			return json({ ok: true, service: 'worldtime-api' });
+		}
+
 		if (request.method === 'POST' && url.pathname === '/api/newsletter') {
 			return subscribe(request, env);
 		}
@@ -172,6 +208,6 @@ export default {
 			return unsubscribe(request, env);
 		}
 
-		return env.ASSETS.fetch(request);
+		return withDiscoveryHeaders(await env.ASSETS.fetch(request), url.pathname);
 	},
 } satisfies ExportedHandler<Env>;

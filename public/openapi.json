@@ -1,0 +1,147 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "WorldTime Newsletter API",
+    "version": "1.0.0",
+    "description": "A same-origin API for an adult visitor to opt in to the WorldTime newsletter. Do not submit this endpoint without the person's explicit consent."
+  },
+  "servers": [
+    {
+      "url": "https://universaltime.app"
+    }
+  ],
+  "paths": {
+    "/api/newsletter": {
+      "post": {
+        "summary": "Subscribe an explicitly consenting adult visitor",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewsletterSubscription"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscription accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid consent or input"
+          },
+          "403": {
+            "description": "Cross-origin request rejected"
+          },
+          "415": {
+            "description": "JSON content type required"
+          },
+          "503": {
+            "description": "Newsletter storage temporarily unavailable"
+          }
+        }
+      }
+    },
+    "/api/newsletter/unsubscribe": {
+      "post": {
+        "summary": "Unsubscribe using a newsletter-issued token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnsubscribeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Unsubscribed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "summary": "Check public API availability",
+        "responses": {
+          "200": {
+            "description": "Service is available"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NewsletterSubscription": {
+        "type": "object",
+        "required": ["email", "birthDate", "consent"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date",
+            "description": "The visitor must be 18 to 120 years old."
+          },
+          "consent": {
+            "type": "boolean",
+            "const": true,
+            "description": "Must reflect the visitor's explicit consent."
+          },
+          "website": {
+            "type": "string",
+            "description": "Leave empty; this is a spam honeypot."
+          }
+        },
+        "additionalProperties": false
+      },
+      "UnsubscribeRequest": {
+        "type": "object",
+        "required": ["token"],
+        "properties": {
+          "token": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Success": {
+        "type": "object",
+        "required": ["ok", "message"],
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "const": true
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
