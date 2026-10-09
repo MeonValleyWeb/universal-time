@@ -17,14 +17,17 @@ const writeCard = async (path, svg) => {
 	await writeFile(path, image);
 };
 
-await Promise.all([
-	writeCard(join(output, 'home.png'), homepageSocialCard()),
-	writeCard(join(output, 'planner.png'), plannerSocialCard()),
-	...cities.map((city) => writeCard(join(output, 'city', `${city.slug}.png`), citySocialCard(city))),
+
+const cards = [
+	{ path: join(output, 'home.png'), svg: homepageSocialCard() },
+	{ path: join(output, 'planner.png'), svg: plannerSocialCard() },
+	...cities.map((city) => ({ path: join(output, 'city', `${city.slug}.png`), svg: citySocialCard(city) })),
 	...converterPairs.map((pair) => {
 		const from = cities.find((city) => city.slug === pair.from);
 		const to = cities.find((city) => city.slug === pair.to);
 		if (!from || !to) throw new Error(`Unknown social-card route: ${pair.from}/${pair.to}`);
-		return writeCard(join(output, 'convert', `${pair.from}-to-${pair.to}.png`), converterSocialCard(from, to));
+		return { path: join(output, 'convert', `${pair.from}-to-${pair.to}.png`), svg: converterSocialCard(from, to) };
 	}),
-]);
+];
+
+for (const card of cards) await writeCard(card.path, card.svg);
