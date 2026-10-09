@@ -145,8 +145,13 @@ export default function TimeCanvas({ initialNow }: Props) {
 		}
 	};
 
+	const selectMeetingTime = (timestamp: number) => {
+		setSelectedTime(timestamp);
+		setCopied(false);
+	};
 	const handlePointerDown = (event: PointerEvent) => {
 		if (event.pointerType !== 'mouse' || event.button !== 0) return;
+		if (event.target instanceof Element && event.target.closest('button, input, select, textarea, a')) return;
 		const target = event.currentTarget as HTMLDivElement;
 		drag.current = {
 			pointerId: event.pointerId,
@@ -303,7 +308,8 @@ export default function TimeCanvas({ initialNow }: Props) {
 									return (
 										<button
 											type="button"
-											onClick={() => setSelectedTime(timestamp)}
+											onClick={() => selectMeetingTime(timestamp)}
+											onDblClick={() => selectMeetingTime(timestamp)}
 											aria-label={`${formatFullDate(timestamp, zone)} at ${formatClock(timestamp, zone, hour12)} in ${zoneOption(zone).city}`}
 										class={`relative flex flex-col items-center justify-center border-r border-[var(--color-line)] focus:z-20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--color-accent)] ${isNight ? 'bg-[var(--color-night-cell)]' : 'bg-[var(--color-day-cell)]'} ${isWork ? 'after:absolute after:inset-x-2 after:bottom-2 after:h-0.5 after:rounded-full after:bg-[oklch(0.73_0.16_245/0.76)]' : ''} ${selected ? 'text-[var(--color-accent)]' : 'text-[var(--color-muted)] hover:brightness-110'}`}
 										>
