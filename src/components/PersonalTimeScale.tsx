@@ -95,15 +95,15 @@ export default function PersonalTimeScale() {
 									<div class="h-full rounded-full bg-[var(--color-signal)] transition-[width] duration-700" style={{ width: `${life.progress}%` }} />
 								</div>
 								<div class="mt-6 grid gap-px bg-[var(--color-line)] sm:grid-cols-3">
-									<div class="bg-[var(--color-ink)] p-5">
+									<div class="bg-[var(--color-surface-elevated)] p-5">
 										<p class="font-serif text-3xl">{number.format(life.daysLived)}</p>
 										<p class="mt-2 font-mono text-[9px] uppercase tracking-wider text-[var(--color-subtle)]">days lived</p>
 									</div>
-									<div class="bg-[var(--color-ink)] p-5">
+									<div class="bg-[var(--color-surface-elevated)] p-5">
 										<p class="font-serif text-3xl">{life.orbits}</p>
 										<p class="mt-2 font-mono text-[9px] uppercase tracking-wider text-[var(--color-subtle)]">orbits of the Sun</p>
 									</div>
-									<div class="bg-[var(--color-ink)] p-5">
+									<div class="bg-[var(--color-surface-elevated)] p-5">
 										<p class="font-serif text-3xl">{number.format(life.daysToYardstick)}</p>
 										<p class="mt-2 font-mono text-[9px] uppercase tracking-wider text-[var(--color-subtle)]">days to 80*</p>
 									</div>
