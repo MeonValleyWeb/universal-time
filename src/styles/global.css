@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 @theme {
-	--font-mono: var(--font-mono);
+	--font-sans: var(--font-sans);
 	--font-serif: var(--font-display);
 }
 
@@ -65,9 +65,9 @@ button,
 
 .meridian-eyebrow {
 	color: var(--color-accent);
-	font: 700 12px/1 var(--font-mono);
+	font: 700 12px/1 var(--font-sans);
 	letter-spacing: 0.13em;
-	text-transform: uppercase;
+	text-transform: none;
 }
 
 .meridian-panel,
@@ -135,7 +135,7 @@ body > div > img {
 
 .font-\[\'Share_Tech_Mono\'\],
 .font-\[Share_Tech_Mono\] {
-	font-family: var(--font-mono) !important;
+	font-family: var(--font-sans) !important;
 	font-variant-numeric: tabular-nums;
 }
 

@@ -37,16 +37,16 @@ export default function TimeZoneExplorer({ initialNow }: { initialNow: number })
 		<div class="border border-[var(--color-line)] bg-[var(--color-surface)]">
 			<div class="grid border-b border-[var(--color-line)] lg:grid-cols-[1fr_.82fr]">
 				<div class="p-6 sm:p-8">
-					<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-subtle)]">Your reference clock</p>
+					<p class="font-sans text-[10px] normal-case tracking-[0.2em] text-[var(--color-subtle)]">Your reference clock</p>
 					<label class="mt-5 block text-sm text-[var(--color-muted)]" for="reference-zone">Compare every city with</label>
 					<select id="reference-zone" value={referenceZone} onChange={(event) => setReferenceZone(event.currentTarget.value)} class="mt-2 w-full border border-[var(--color-line)] bg-[var(--color-canvas)] px-4 py-3 font-serif text-xl text-[var(--color-ink)] outline-none focus:border-[var(--color-signal)]">
 						{cities.filter((city, index, items) => items.findIndex((item) => item.zone === city.zone) === index).map((city) => <option value={city.zone}>{city.name} · {city.zone}</option>)}
 					</select>
-					<p class="mt-7 font-mono text-5xl tracking-[-0.07em] sm:text-6xl">{formatClock(now, referenceZone, false)}</p>
+					<p class="mt-7 font-sans text-5xl tracking-[-0.07em] sm:text-6xl">{formatClock(now, referenceZone, false)}</p>
 					<p class="mt-3 text-sm text-[var(--color-muted)]">{formatDate(now, referenceZone)} · {getLocalParts(now, referenceZone).abbreviation} · {formatOffset(getOffsetMinutes(now, referenceZone))}</p>
 				</div>
-				<div class="border-t border-[var(--color-line)] bg-[var(--color-surface-elevated)] p-6 text-[var(--color-ink)] lg:border-l lg:border-t-0 sm:p-8">
-					<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">What this changes</p>
+				<div class="border-t border-[var(--color-line)] bg-[var(--color-ink)] p-6 text-[var(--color-canvas)] lg:border-l lg:border-t-0 sm:p-8">
+					<p class="font-sans text-[10px] normal-case tracking-[0.2em] text-[var(--color-signal)]">What this changes</p>
 					<p class="mt-5 font-serif text-3xl leading-tight">A city name carries the date and clock rule. An offset alone does not.</p>
 					<p class="mt-5 text-sm leading-6 text-[var(--color-subtle)]">{reference.name} uses {referenceZone}. {seasonalRule(referenceZone, now)}. Switch the reference to see what your own local time means elsewhere.</p>
 				</div>
@@ -64,10 +64,10 @@ export default function TimeZoneExplorer({ initialNow }: { initialNow: number })
 					{visibleCities.map((city: City) => {
 						const currentOffset = getOffsetMinutes(now, city.zone);
 						return <article class="group bg-[var(--color-surface)] p-5 hover:bg-[var(--color-canvas)]">
-							<div class="flex items-start justify-between gap-4"><div><p class="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--color-subtle)]">{city.country}</p><h3 class="mt-2 font-serif text-3xl tracking-[-0.04em]">{city.name}</h3></div><span class="font-mono text-xs text-[var(--color-signal)]">{formatOffset(currentOffset)}</span></div>
-							<p class="mt-7 font-mono text-4xl tracking-[-0.07em]">{formatClock(now, city.zone, false)}</p>
+							<div class="flex items-start justify-between gap-4"><div><p class="font-sans text-[9px] normal-case tracking-[0.16em] text-[var(--color-subtle)]">{city.country}</p><h3 class="mt-2 font-serif text-3xl tracking-[-0.04em]">{city.name}</h3></div><span class="font-sans text-xs text-[var(--color-signal)]">{formatOffset(currentOffset)}</span></div>
+							<p class="mt-7 font-sans text-4xl tracking-[-0.07em]">{formatClock(now, city.zone, false)}</p>
 							<p class="mt-2 text-sm text-[var(--color-muted)]">{formatDate(now, city.zone)} · {getDayRelation(now, city.zone, referenceZone)}</p>
-							<div class="mt-6 flex flex-wrap gap-x-4 gap-y-2 font-mono text-[9px] uppercase tracking-[0.12em]"><a href={`/time/${city.slug}`} class="text-[var(--color-ink)] hover:text-[var(--color-signal)]">City time →</a>{city.zone !== referenceZone && <a href="/meeting-planner" class="text-[var(--color-muted)] hover:text-[var(--color-signal)]">Plan together →</a>}</div>
+							<div class="mt-6 flex flex-wrap gap-x-4 gap-y-2 font-sans text-[9px] normal-case tracking-[0.12em]"><a href={`/time/${city.slug}`} class="text-[var(--color-ink)] hover:text-[var(--color-signal)]">City time →</a>{city.zone !== referenceZone && <a href="/meeting-planner" class="text-[var(--color-muted)] hover:text-[var(--color-signal)]">Plan together →</a>}</div>
 						</article>;
 					})}
 				</div>

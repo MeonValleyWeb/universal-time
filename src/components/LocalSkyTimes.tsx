@@ -173,7 +173,7 @@ export default function LocalSkyTimes() {
 						type="button"
 						onClick={locate}
 						disabled={status === 'loading'}
-						class="mt-7 min-h-12 bg-[var(--color-signal)] px-5 py-3 text-sm font-semibold text-[var(--color-signal-ink)] active:translate-y-px disabled:opacity-60"
+						class="mt-7 min-h-12 bg-[var(--color-signal)] px-5 py-3 text-sm font-medium text-[var(--color-signal-ink)] active:translate-y-px disabled:opacity-60"
 					>
 						{status === 'loading' ? 'Finding your location…' : status === 'idle' ? 'Use my location' : 'Try my location again'}
 					</button>
@@ -184,7 +184,7 @@ export default function LocalSkyTimes() {
 
 				<div class="grid lg:grid-cols-2">
 					<form onSubmit={useCity} class="border-b border-[var(--color-line)] p-7 lg:border-b-0 lg:border-r sm:p-10">
-						<label for="sky-city" class="block font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Choose a city</label>
+						<label for="sky-city" class="block font-sans text-[10px] normal-case tracking-[0.18em] text-[var(--color-subtle)]">Choose a city</label>
 						<select
 							id="sky-city"
 							value={selectedPlace}
@@ -200,7 +200,7 @@ export default function LocalSkyTimes() {
 					</form>
 
 					<form onSubmit={useCoordinates} class="p-7 sm:p-10">
-						<p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Or enter coordinates</p>
+						<p class="font-sans text-[10px] normal-case tracking-[0.18em] text-[var(--color-subtle)]">Or enter coordinates</p>
 						<div class="mt-3 grid gap-5 sm:grid-cols-2">
 							<div>
 								<label for="sky-latitude" class="block text-sm text-[var(--color-muted)]">Latitude</label>
@@ -263,9 +263,9 @@ export default function LocalSkyTimes() {
 					<p class="mt-2 text-xs leading-5 text-[var(--color-muted)]">{locationNote}</p>
 				</div>
 				<div class="text-left sm:text-right">
-					<p class="font-mono text-[9px] uppercase tracking-[0.12em] text-[var(--color-subtle)]">{location.source === 'device' ? 'Approximate area' : 'Coordinates'}</p>
-					<p class="mt-1 font-mono text-xs text-[var(--color-ink)]">{coordinateLabel}</p>
-					<p class="mt-1 font-mono text-[9px] uppercase tracking-[0.12em] text-[var(--color-subtle)]">{location.timeZone}</p>
+					<p class="font-sans text-[9px] normal-case tracking-[0.12em] text-[var(--color-subtle)]">{location.source === 'device' ? 'Approximate area' : 'Coordinates'}</p>
+					<p class="mt-1 font-sans text-xs text-[var(--color-ink)]">{coordinateLabel}</p>
+					<p class="mt-1 font-sans text-[9px] normal-case tracking-[0.12em] text-[var(--color-subtle)]">{location.timeZone}</p>
 					<button type="button" onClick={() => setLocation(null)} class="mt-3 border-b border-[var(--color-ink)] pb-1 text-sm text-[var(--color-ink)] hover:border-[var(--color-signal)] hover:text-[var(--color-signal)]">
 						Change location
 					</button>
@@ -283,7 +283,7 @@ export default function LocalSkyTimes() {
 					['Direction', sky.illumination.waxing ? 'Waxing' : 'Waning', 'Illumination is increasing or decreasing'],
 				].map(([label, value, note]) => (
 					<article class="border-b border-r border-[var(--color-line)] p-5 sm:p-6">
-						<p class="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--color-subtle)]">{label}</p>
+						<p class="font-sans text-[9px] normal-case tracking-[0.16em] text-[var(--color-subtle)]">{label}</p>
 						<p class="mt-5 font-['Share_Tech_Mono'] text-3xl tracking-[-0.05em] text-[var(--color-ink)]">{value}</p>
 						<p class="mt-2 text-xs leading-5 text-[var(--color-muted)]">{note}</p>
 					</article>

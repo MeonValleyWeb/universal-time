@@ -47,7 +47,7 @@ const schema = [
 			<img src="/world-atlas-bg.webp" alt="" class="pointer-events-none absolute inset-0 size-full object-cover opacity-50" aria-hidden="true" />
 			<div class="atlas-wash pointer-events-none absolute inset-0 bg-gradient-to-r from-[#f6f0e4]/95 via-[#f6f0e4]/65 to-transparent" aria-hidden="true"></div>
 			<div class="relative mx-auto max-w-[1180px]">
-				<p class="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--color-signal)]">{event.kind}</p>
+				<p class="font-sans text-[10px] normal-case tracking-[0.24em] text-[var(--color-signal)]">{event.kind}</p>
 				<h1 class="mt-5 max-w-5xl font-serif text-[clamp(3.5rem,8vw,7.5rem)] leading-[0.88] tracking-[-0.06em]">{event.name}</h1>
 				<p class="mt-8 max-w-2xl text-lg leading-8 text-[var(--color-muted)]">{heroSummary}</p>
 			</div>
@@ -89,10 +89,10 @@ const schema = [
 		<section class="px-5 py-14 sm:px-8 lg:py-20">
 			<div class="mx-auto grid max-w-[1180px] gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.7fr)] lg:items-start">
 				<div>
-					<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Where it matters</p>
+					<p class="font-sans text-[10px] normal-case tracking-[0.2em] text-[var(--color-signal)]">Where it matters</p>
 					<h2 class="mt-4 font-serif text-5xl leading-none tracking-[-0.045em]">The view is local.<br />The moment is shared.</h2>
 					<p class="mt-8 max-w-2xl text-base leading-7 text-[var(--color-muted)]">{event.visibility}</p>
-					<a href={event.source.url} target="_blank" rel="noreferrer" class="mt-8 inline-flex border-b border-[var(--color-signal)] pb-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-signal)] hover:text-[var(--color-ink)]">{event.source.name} ↗</a>
+					<a href={event.source.url} target="_blank" rel="noreferrer" class="mt-8 inline-flex border-b border-[var(--color-signal)] pb-1 font-sans text-[10px] normal-case tracking-[0.14em] text-[var(--color-signal)] hover:text-[var(--color-ink)]">{event.source.name} ↗</a>
 				</div>
 				<EventLocalTime client:load event={event} />
 			</div>
