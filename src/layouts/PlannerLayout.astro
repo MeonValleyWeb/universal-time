@@ -20,8 +20,16 @@ const canonicalUrl = new URL('/meeting-planner', Astro.site ?? Astro.url);
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="description" content={description} />
+		<meta name="robots" content="index,follow,max-image-preview:large" />
 		<meta name="theme-color" content="#111a2a" />
 		<link rel="canonical" href={canonicalUrl} />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="WorldTime" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={new URL('/og/planner.png', Astro.site ?? Astro.url)} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image" content={new URL('/og/planner.png', Astro.site ?? Astro.url)} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<title>{title}</title>
 	</head>

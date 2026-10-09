@@ -13,6 +13,12 @@ import {
 	getTimeZoneOptions,
 	zoneOption,
 } from '../lib/time';
+import {
+	meetingCalendar,
+	meetingPlanSearch,
+	parseMeetingPlan,
+	type MeetingPlan,
+} from '../lib/meeting-share';
 
 interface Props {
 	initialNow: number;
@@ -40,9 +46,12 @@ export default function TimeCanvas({ initialNow }: Props) {
 	const [selectedTime, setSelectedTime] = useState(Math.ceil(initialNow / HOUR) * HOUR);
 	const [durationMinutes, setDurationMinutes] = useState(60);
 	const [copied, setCopied] = useState(false);
+	const [shared, setShared] = useState(false);
+	const [calendarDownloaded, setCalendarDownloaded] = useState(false);
 	const [dragging, setDragging] = useState(false);
 	const timelineRef = useRef<HTMLDivElement>(null);
 	const drag = useRef({ pointerId: 0, startX: 0, startScroll: 0 });
+	const sharedPlanRef = useRef<MeetingPlan | null>(null);
 
 	const zoneOptions = useMemo(() => getTimeZoneOptions(), []);
 	const baseStart = Math.floor(initialNow / HOUR) * HOUR - 6 * HOUR;
@@ -82,9 +91,17 @@ export default function TimeCanvas({ initialNow }: Props) {
 
 	useEffect(() => {
 		const interval = window.setInterval(() => setNow(Date.now()), 30_000);
-		const saved = window.localStorage.getItem(STORAGE_KEY);
+		const sharedPlan = parseMeetingPlan(window.location.search, zoneOptions.map((zone) => zone.id));
 
-		if (saved) {
+		if (sharedPlan) {
+			sharedPlanRef.current = sharedPlan;
+			setLocations(sharedPlan.locations);
+			setDurationMinutes(sharedPlan.durationMinutes);
+			setHour12(sharedPlan.hour12);
+			setDayOffset(Math.floor((sharedPlan.selectedTime - baseStart) / (24 * HOUR)));
+		} else {
+			const saved = window.localStorage.getItem(STORAGE_KEY);
+			if (saved) {
 			try {
 				const parsed = JSON.parse(saved);
 				if (Array.isArray(parsed) && parsed.every((zone) => typeof zone === 'string')) {
@@ -93,9 +110,10 @@ export default function TimeCanvas({ initialNow }: Props) {
 			} catch {
 				window.localStorage.removeItem(STORAGE_KEY);
 			}
-		} else {
-			const detected = Intl.DateTimeFormat().resolvedOptions().timeZone;
-			setLocations(unique([detected, ...fallbackLocations]));
+			} else {
+				const detected = Intl.DateTimeFormat().resolvedOptions().timeZone;
+				setLocations(unique([detected, ...fallbackLocations]));
+			}
 		}
 
 		window.requestAnimationFrame(() => {
@@ -103,14 +121,21 @@ export default function TimeCanvas({ initialNow }: Props) {
 		});
 
 		return () => window.clearInterval(interval);
-	}, []);
+	}, [baseStart, zoneOptions]);
 
 	useEffect(() => {
 		window.localStorage.setItem(STORAGE_KEY, JSON.stringify(locations));
 	}, [locations]);
 
 	useEffect(() => {
-		setSelectedTime(Math.ceil((timelineStart + 6 * HOUR) / HOUR) * HOUR);
+		const sharedPlan = sharedPlanRef.current;
+		const sharedTimeIsVisible = sharedPlan
+			&& sharedPlan.selectedTime >= timelineStart
+			&& sharedPlan.selectedTime < timelineStart + HOURS_VISIBLE * HOUR;
+		setSelectedTime(sharedTimeIsVisible
+			? sharedPlan.selectedTime
+			: Math.ceil((timelineStart + 6 * HOUR) / HOUR) * HOUR);
+		if (sharedTimeIsVisible) sharedPlanRef.current = null;
 		if (timelineRef.current) timelineRef.current.scrollTo({ left: CELL_WIDTH * 4.5, behavior: 'smooth' });
 	}, [timelineStart]);
 
@@ -143,6 +168,45 @@ export default function TimeCanvas({ initialNow }: Props) {
 		} catch {
 			setCopied(false);
 		}
+	};
+
+	const shareUrl = () => {
+		const plan = { locations, selectedTime, durationMinutes, hour12 };
+		const url = new URL('/meeting-planner', window.location.origin);
+		url.search = meetingPlanSearch(plan);
+		return url;
+	};
+
+	const shareMeeting = async () => {
+		const url = shareUrl();
+		try {
+			await navigator.clipboard.writeText(url.toString());
+			window.history.replaceState({}, '', `${url.pathname}${url.search}`);
+			setShared(true);
+			window.setTimeout(() => setShared(false), 1600);
+		} catch {
+			setShared(false);
+		}
+	};
+
+	const downloadCalendar = () => {
+		const plan = { locations, selectedTime, durationMinutes, hour12 };
+		const lines = locations.map((zone) => {
+			const city = zoneOption(zone).city;
+			return `${city}: ${formatDate(selectedTime, zone)}, ${formatClock(selectedTime, zone, hour12)}–${formatClock(meetingEnd, zone, hour12)}`;
+		});
+		const calendar = meetingCalendar({ plan, url: shareUrl().toString(), lines });
+		const blob = new Blob([calendar], { type: 'text/calendar;charset=utf-8' });
+		const href = URL.createObjectURL(blob);
+		const link = document.createElement('a');
+		link.href = href;
+		link.download = 'worldtime-meeting.ics';
+		document.body.appendChild(link);
+		link.click();
+		link.remove();
+		URL.revokeObjectURL(href);
+		setCalendarDownloaded(true);
+		window.setTimeout(() => setCalendarDownloaded(false), 1600);
 	};
 
 	const handlePointerDown = (event: PointerEvent) => {
@@ -335,9 +399,17 @@ export default function TimeCanvas({ initialNow }: Props) {
 					</div>
 					<p class="mt-2 text-2xl font-semibold tracking-tight text-[var(--color-ink)]">{formatClock(selectedTime, homeZone, hour12)}–{formatClock(meetingEnd, homeZone, hour12)}</p>
 					<p class="mt-1 text-sm text-[var(--color-muted)]">{formatFullDate(selectedTime, homeZone)}</p>
-					<button type="button" onClick={copyMeeting} class="mt-4 rounded-[var(--radius-button)] border border-[var(--color-line)] px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
-						{copied ? 'Copied' : 'Copy all times'}
-					</button>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<button type="button" onClick={copyMeeting} class="rounded-[var(--radius-button)] border border-[var(--color-line)] px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
+							{copied ? 'Copied' : 'Copy all times'}
+						</button>
+						<button type="button" onClick={shareMeeting} class="rounded-[var(--radius-button)] border border-[var(--color-line)] px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
+							{shared ? 'Link copied' : 'Share plan'}
+						</button>
+						<button type="button" onClick={downloadCalendar} class="rounded-[var(--radius-button)] border border-[var(--color-line)] px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
+							{calendarDownloaded ? 'Downloaded' : 'Add to calendar'}
+						</button>
+					</div>
 				</div>
 				<div class="grid gap-x-6 gap-y-3 sm:grid-cols-2 xl:grid-cols-4" aria-live="polite">
 					{locations.map((zone) => (
