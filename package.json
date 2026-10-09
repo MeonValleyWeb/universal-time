@@ -5,8 +5,10 @@
   "engines": {
     "node": ">=22.12.0"
   },
-  "scripts": {
-    "dev": "astro dev",
+	"scripts": {
+		"generate:social": "node scripts/generate-social-images.mjs",
+		"prebuild": "npm run generate:social",
+		"dev": "astro dev",
     "build": "astro build",
     "check": "astro check",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
@@ -25,13 +27,14 @@
     "tailwindcss": "^4.3.2"
   },
   "devDependencies": {
-    "@astrojs/check": "0.9.10",
-    "@types/node": "^26.6.4",
+		"@astrojs/check": "0.9.10",
+		"@resvg/resvg-js": "^2.6.2",
+		"@types/node": "^26.6.4",
     "typescript": "^6.0.3",
     "wrangler": "^4.147.0"
   },
   "overrides": {
-    "fast-uri": "3.1.8",
+    "fast-uri": "4.2.1",
     "js-yaml": "4.3.2",
     "nanoid": "6.0.2",
     "postcss": "8.5.29",

@@ -13,6 +13,12 @@ import {
 	getTimeZoneOptions,
 	zoneOption,
 } from '../lib/time';
+import {
+	meetingCalendar,
+	meetingPlanSearch,
+	parseMeetingPlan,
+	type MeetingPlan,
+} from '../lib/meeting-share';
 
 interface Props {
 	initialNow: number;
@@ -40,9 +46,12 @@ export default function TimeCanvas({ initialNow }: Props) {
 	const [selectedTime, setSelectedTime] = useState(Math.ceil(initialNow / HOUR) * HOUR);
 	const [durationMinutes, setDurationMinutes] = useState(60);
 	const [copied, setCopied] = useState(false);
+	const [shared, setShared] = useState(false);
+	const [calendarDownloaded, setCalendarDownloaded] = useState(false);
 	const [dragging, setDragging] = useState(false);
 	const timelineRef = useRef<HTMLDivElement>(null);
 	const drag = useRef({ pointerId: 0, startX: 0, startScroll: 0 });
+	const sharedPlanRef = useRef<MeetingPlan | null>(null);
 
 	const zoneOptions = useMemo(() => getTimeZoneOptions(), []);
 	const baseStart = Math.floor(initialNow / HOUR) * HOUR - 6 * HOUR;
@@ -82,9 +91,17 @@ export default function TimeCanvas({ initialNow }: Props) {
 
 	useEffect(() => {
 		const interval = window.setInterval(() => setNow(Date.now()), 30_000);
-		const saved = window.localStorage.getItem(STORAGE_KEY);
+		const sharedPlan = parseMeetingPlan(window.location.search, zoneOptions.map((zone) => zone.id));
 
-		if (saved) {
+		if (sharedPlan) {
+			sharedPlanRef.current = sharedPlan;
+			setLocations(sharedPlan.locations);
+			setDurationMinutes(sharedPlan.durationMinutes);
+			setHour12(sharedPlan.hour12);
+			setDayOffset(Math.floor((sharedPlan.selectedTime - baseStart) / (24 * HOUR)));
+		} else {
+			const saved = window.localStorage.getItem(STORAGE_KEY);
+			if (saved) {
 			try {
 				const parsed = JSON.parse(saved);
 				if (Array.isArray(parsed) && parsed.every((zone) => typeof zone === 'string')) {
@@ -93,9 +110,10 @@ export default function TimeCanvas({ initialNow }: Props) {
 			} catch {
 				window.localStorage.removeItem(STORAGE_KEY);
 			}
-		} else {
-			const detected = Intl.DateTimeFormat().resolvedOptions().timeZone;
-			setLocations(unique([detected, ...fallbackLocations]));
+			} else {
+				const detected = Intl.DateTimeFormat().resolvedOptions().timeZone;
+				setLocations(unique([detected, ...fallbackLocations]));
+			}
 		}
 
 		window.requestAnimationFrame(() => {
@@ -103,14 +121,21 @@ export default function TimeCanvas({ initialNow }: Props) {
 		});
 
 		return () => window.clearInterval(interval);
-	}, []);
+	}, [baseStart, zoneOptions]);
 
 	useEffect(() => {
 		window.localStorage.setItem(STORAGE_KEY, JSON.stringify(locations));
 	}, [locations]);
 
 	useEffect(() => {
-		setSelectedTime(Math.ceil((timelineStart + 6 * HOUR) / HOUR) * HOUR);
+		const sharedPlan = sharedPlanRef.current;
+		const sharedTimeIsVisible = sharedPlan
+			&& sharedPlan.selectedTime >= timelineStart
+			&& sharedPlan.selectedTime < timelineStart + HOURS_VISIBLE * HOUR;
+		setSelectedTime(sharedTimeIsVisible
+			? sharedPlan.selectedTime
+			: Math.ceil((timelineStart + 6 * HOUR) / HOUR) * HOUR);
+		if (sharedTimeIsVisible) sharedPlanRef.current = null;
 		if (timelineRef.current) timelineRef.current.scrollTo({ left: CELL_WIDTH * 4.5, behavior: 'smooth' });
 	}, [timelineStart]);
 
@@ -143,6 +168,45 @@ export default function TimeCanvas({ initialNow }: Props) {
 		} catch {
 			setCopied(false);
 		}
+	};
+
+	const shareUrl = () => {
+		const plan = { locations, selectedTime, durationMinutes, hour12 };
+		const url = new URL('/meeting-planner', window.location.origin);
+		url.search = meetingPlanSearch(plan);
+		return url;
+	};
+
+	const shareMeeting = async () => {
+		const url = shareUrl();
+		try {
+			await navigator.clipboard.writeText(url.toString());
+			window.history.replaceState({}, '', `${url.pathname}${url.search}`);
+			setShared(true);
+			window.setTimeout(() => setShared(false), 1600);
+		} catch {
+			setShared(false);
+		}
+	};
+
+	const downloadCalendar = () => {
+		const plan = { locations, selectedTime, durationMinutes, hour12 };
+		const lines = locations.map((zone) => {
+			const city = zoneOption(zone).city;
+			return `${city}: ${formatDate(selectedTime, zone)}, ${formatClock(selectedTime, zone, hour12)}–${formatClock(meetingEnd, zone, hour12)}`;
+		});
+		const calendar = meetingCalendar({ plan, url: shareUrl().toString(), lines });
+		const blob = new Blob([calendar], { type: 'text/calendar;charset=utf-8' });
+		const href = URL.createObjectURL(blob);
+		const link = document.createElement('a');
+		link.href = href;
+		link.download = 'worldtime-meeting.ics';
+		document.body.appendChild(link);
+		link.click();
+		link.remove();
+		URL.revokeObjectURL(href);
+		setCalendarDownloaded(true);
+		window.setTimeout(() => setCalendarDownloaded(false), 1600);
 	};
 
 	const handlePointerDown = (event: PointerEvent) => {
@@ -181,7 +245,7 @@ export default function TimeCanvas({ initialNow }: Props) {
 						<label class="mb-2 block font-mono text-[10px] font-semibold uppercase tracking-[0.13em] text-[var(--color-accent)]" for="zone-search">
 							Add a place or time zone
 						</label>
-						<div class="flex items-center rounded-[var(--radius-control)] border border-[var(--color-line)] bg-[var(--color-input)] px-4 focus-within:border-[var(--color-accent)] focus-within:ring-4 focus-within:ring-[oklch(0.73_0.16_245/0.12)]">
+						<div class="flex items-center rounded-[var(--radius-control)] border border-[var(--color-line)] bg-[var(--color-input)] px-4 focus-within:border-[var(--color-accent)] focus-within:ring-4 focus-within:ring-[color-mix(in_srgb,var(--color-accent)_12%,transparent)]">
 							<span aria-hidden="true" class="mr-3 text-[var(--color-accent)]">⌕</span>
 							<input
 								id="zone-search"
@@ -198,7 +262,7 @@ export default function TimeCanvas({ initialNow }: Props) {
 									<button
 										type="button"
 										onClick={() => addLocation(zone.id)}
-									class="flex w-full items-center justify-between rounded-[var(--radius-control)] px-3 py-2.5 text-left hover:bg-[oklch(0.73_0.16_245/0.1)] focus:bg-[oklch(0.73_0.16_245/0.1)] focus:outline-none"
+								class="flex w-full items-center justify-between rounded-[var(--radius-control)] px-3 py-2.5 text-left hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] focus:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] focus:outline-none"
 									>
 										<span class="text-sm font-medium text-[var(--color-ink)]">{zone.city}</span>
 										<span class="ml-4 truncate font-mono text-[10px] uppercase tracking-wider text-[var(--color-muted)]">{zone.region}</span>
@@ -210,9 +274,9 @@ export default function TimeCanvas({ initialNow }: Props) {
 
 					<div class="flex flex-wrap items-center gap-2">
 						<div class="flex rounded-[var(--radius-button)] border border-[var(--color-line)] bg-[var(--color-input)] p-1">
-							<button type="button" aria-label="Previous day" onClick={() => setDayOffset((value) => value - 1)} class="grid size-9 place-items-center rounded-[var(--radius-control)] text-[var(--color-muted)] hover:bg-[oklch(0.73_0.16_245/0.1)] hover:text-[var(--color-ink)]">←</button>
-							<button type="button" onClick={() => setDayOffset(0)} aria-label={dayOffset === 0 ? 'Viewing today' : 'Return to today'} class="min-w-20 rounded-[var(--radius-control)] px-3 font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] hover:bg-[oklch(0.73_0.16_245/0.1)]">{dayLabel}</button>
-							<button type="button" aria-label="Next day" onClick={() => setDayOffset((value) => value + 1)} class="grid size-9 place-items-center rounded-[var(--radius-control)] text-[var(--color-muted)] hover:bg-[oklch(0.73_0.16_245/0.1)] hover:text-[var(--color-ink)]">→</button>
+							<button type="button" aria-label="Previous day" onClick={() => setDayOffset((value) => value - 1)} class="grid size-9 place-items-center rounded-[var(--radius-control)] text-[var(--color-muted)] hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] hover:text-[var(--color-ink)]">←</button>
+							<button type="button" onClick={() => setDayOffset(0)} aria-label={dayOffset === 0 ? 'Viewing today' : 'Return to today'} class="min-w-20 rounded-[var(--radius-control)] px-3 font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)]">{dayLabel}</button>
+							<button type="button" aria-label="Next day" onClick={() => setDayOffset((value) => value + 1)} class="grid size-9 place-items-center rounded-[var(--radius-control)] text-[var(--color-muted)] hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] hover:text-[var(--color-ink)]">→</button>
 						</div>
 						<button
 							type="button"
@@ -237,7 +301,7 @@ export default function TimeCanvas({ initialNow }: Props) {
 								{minutes < 60 ? `${minutes} min` : `${minutes / 60} hr`}
 							</button>
 						))}
-						<button type="button" onClick={chooseBestMeeting} class="ml-1 rounded-[var(--radius-button)] border border-[var(--color-accent)] bg-[oklch(0.73_0.16_245/0.1)] px-4 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-accent)] hover:bg-[oklch(0.73_0.16_245/0.18)]">
+						<button type="button" onClick={chooseBestMeeting} class="ml-1 rounded-[var(--radius-button)] border border-[var(--color-accent)] bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] px-4 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-accent)] hover:bg-[color-mix(in_srgb,var(--color-accent)_18%,transparent)]">
 							Best overlap · {bestMeeting.score}%
 						</button>
 					</div>
@@ -276,7 +340,7 @@ export default function TimeCanvas({ initialNow }: Props) {
 					onPointerMove={handlePointerMove}
 					onPointerUp={stopDragging}
 					onPointerCancel={stopDragging}
-					class={`relative overflow-x-auto overscroll-x-contain ${dragging ? 'cursor-grabbing select-none' : 'cursor-grab'} [scrollbar-color:oklch(0.73_0.16_245/0.45)_transparent] [scrollbar-width:thin]`}
+					class={`relative overflow-x-auto overscroll-x-contain ${dragging ? 'cursor-grabbing select-none' : 'cursor-grab'} [scrollbar-color:color-mix(in_srgb,var(--color-accent)_45%,transparent)_transparent] [scrollbar-width:thin]`}
 				>
 					<div class="relative" style={{ width: `${HOURS_VISIBLE * CELL_WIDTH}px` }}>
 						<div class="grid h-16 border-b border-[var(--color-line)]" style={{ gridTemplateColumns: `repeat(${HOURS_VISIBLE}, ${CELL_WIDTH}px)` }}>
@@ -305,7 +369,7 @@ export default function TimeCanvas({ initialNow }: Props) {
 											type="button"
 											onClick={() => setSelectedTime(timestamp)}
 											aria-label={`${formatFullDate(timestamp, zone)} at ${formatClock(timestamp, zone, hour12)} in ${zoneOption(zone).city}`}
-										class={`relative flex flex-col items-center justify-center border-r border-[var(--color-line)] focus:z-20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--color-accent)] ${isNight ? 'bg-[var(--color-night-cell)]' : 'bg-[var(--color-day-cell)]'} ${isWork ? 'after:absolute after:inset-x-2 after:bottom-2 after:h-0.5 after:rounded-full after:bg-[oklch(0.73_0.16_245/0.76)]' : ''} ${selected ? 'text-[var(--color-accent)]' : 'text-[var(--color-muted)] hover:brightness-110'}`}
+									class={`relative flex flex-col items-center justify-center border-r border-[var(--color-line)] focus:z-20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[var(--color-accent)] ${isNight ? 'bg-[var(--color-night-cell)]' : 'bg-[var(--color-day-cell)]'} ${isWork ? 'after:absolute after:inset-x-2 after:bottom-2 after:h-0.5 after:rounded-full after:bg-[color-mix(in_srgb,var(--color-accent)_76%,transparent)]' : ''} ${selected ? 'text-[var(--color-accent)]' : 'text-[var(--color-muted)] hover:brightness-110'}`}
 										>
 											<span class="font-mono text-sm font-semibold">{formatClock(timestamp, zone, hour12).replace(':00', '')}</span>
 											{parts.hour === 0 && <span class="mt-1 font-mono text-[8px] uppercase tracking-wider text-[var(--color-accent)]">{parts.month} {parts.day}</span>}
@@ -316,11 +380,11 @@ export default function TimeCanvas({ initialNow }: Props) {
 						))}
 
 						{nowIsVisible && (
-							<div aria-hidden="true" class="pointer-events-none absolute inset-y-0 z-30 w-px bg-[var(--color-accent)] shadow-[0_0_12px_oklch(0.73_0.16_245/0.45)]" style={{ left: `${nowPosition}px` }}>
+						<div aria-hidden="true" class="pointer-events-none absolute inset-y-0 z-30 w-px bg-[var(--color-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--color-accent)_45%,transparent)]" style={{ left: `${nowPosition}px` }}>
 								<span class="absolute left-1 top-1.5 rounded-[var(--radius-control)] bg-[var(--color-accent)] px-2 py-1 font-mono text-[8px] font-bold uppercase tracking-wider text-[var(--color-signal-ink)]">Now</span>
 							</div>
 						)}
-						<div aria-hidden="true" class="pointer-events-none absolute bottom-0 top-16 z-20 border-x border-[var(--color-accent)] bg-[oklch(0.73_0.16_245/0.1)]" style={{ left: `${selectedPosition}px`, width: `${selectionWidth}px` }} />
+						<div aria-hidden="true" class="pointer-events-none absolute bottom-0 top-16 z-20 border-x border-[var(--color-accent)] bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)]" style={{ left: `${selectedPosition}px`, width: `${selectionWidth}px` }} />
 					</div>
 				</div>
 			</div>
@@ -329,15 +393,23 @@ export default function TimeCanvas({ initialNow }: Props) {
 				<div>
 					<div class="flex items-center gap-2">
 						<p class="font-mono text-[9px] font-bold uppercase tracking-[0.13em] text-[var(--color-accent)]">Meeting window</p>
-						<span class="rounded-[var(--radius-control)] bg-[oklch(0.73_0.16_245/0.12)] px-2 py-1 font-mono text-[8px] font-bold uppercase tracking-wider text-[var(--color-accent)]">
+						<span class="rounded-[var(--radius-control)] bg-[color-mix(in_srgb,var(--color-accent)_12%,transparent)] px-2 py-1 font-mono text-[8px] font-bold uppercase tracking-wider text-[var(--color-accent)]">
 							{scoreLabel} · {meetingScore}%
 						</span>
 					</div>
 					<p class="mt-2 text-2xl font-semibold tracking-tight text-[var(--color-ink)]">{formatClock(selectedTime, homeZone, hour12)}–{formatClock(meetingEnd, homeZone, hour12)}</p>
 					<p class="mt-1 text-sm text-[var(--color-muted)]">{formatFullDate(selectedTime, homeZone)}</p>
-					<button type="button" onClick={copyMeeting} class="mt-4 rounded-[var(--radius-button)] border border-[var(--color-line)] px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
-						{copied ? 'Copied' : 'Copy all times'}
-					</button>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<button type="button" onClick={copyMeeting} class="rounded-[var(--radius-button)] border border-[var(--color-line)] px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
+							{copied ? 'Copied' : 'Copy all times'}
+						</button>
+						<button type="button" onClick={shareMeeting} class="rounded-[var(--radius-button)] border border-[var(--color-line)] px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
+							{shared ? 'Link copied' : 'Share plan'}
+						</button>
+						<button type="button" onClick={downloadCalendar} class="rounded-[var(--radius-button)] border border-[var(--color-line)] px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-wider text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
+							{calendarDownloaded ? 'Downloaded' : 'Add to calendar'}
+						</button>
+					</div>
 				</div>
 				<div class="grid gap-x-6 gap-y-3 sm:grid-cols-2 xl:grid-cols-4" aria-live="polite">
 					{locations.map((zone) => (
