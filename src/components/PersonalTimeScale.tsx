@@ -59,7 +59,7 @@ export default function PersonalTimeScale() {
 	};
 
 	return (
-		<section class="border-y border-[var(--color-line)] bg-[oklch(0.15_0.027_255)] px-5 py-16 text-[var(--color-fg)] sm:px-8 lg:py-24">
+		<section data-theme="meridian" class="border-y border-[var(--color-line)] bg-[oklch(0.15_0.027_255)] px-5 py-16 text-[var(--color-fg)] sm:px-8 lg:py-24">
 			<div class="mx-auto max-w-[1180px]">
 				<div class="grid gap-12 xl:grid-cols-[0.8fr_1.2fr] xl:gap-20">
 					<div>

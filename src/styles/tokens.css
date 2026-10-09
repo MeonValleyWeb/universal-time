@@ -1,4 +1,5 @@
-:root {
+:root,
+[data-theme="meridian"] {
 	color-scheme: dark;
 
 	/* Meridian foundations — kept in sync with the OpenDesign handoff. */
@@ -42,4 +43,27 @@
 	--shadow-panel: 0 28px 65px oklch(0.08 0.03 255 / 0.42);
 	--ease-ui: 180ms ease;
 	--shell: min(1180px, calc(100% - 48px));
+}
+
+[data-theme="daylight"] {
+	color-scheme: light;
+
+	--color-bg: #f3f6f7;
+	--color-surface: #ffffff;
+	--color-fg: #1d2a36;
+	--color-muted: #586977;
+	--color-border: #d5dde2;
+	--color-accent: #176a80;
+
+	--color-canvas: var(--color-bg);
+	--color-surface-elevated: #edf2f4;
+	--color-input: #ffffff;
+	--color-ink: var(--color-fg);
+	--color-subtle: #657681;
+	--color-line: var(--color-border);
+	--color-night-cell: #e9eef0;
+	--color-day-cell: #d5e9e5;
+	--color-warm: var(--color-fg);
+	--color-signal: var(--color-accent);
+	--color-signal-ink: #ffffff;
 }
