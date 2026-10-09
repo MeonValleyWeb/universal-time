@@ -103,7 +103,7 @@ export default function NaturalTime({
 						<label for="time-query" class="block font-mono text-[11px] uppercase tracking-[0.13em] text-[var(--color-muted)]">
 							Ask anything about time
 						</label>
-						<span class="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.13em] text-[var(--color-fg)] before:size-1.5 before:rounded-full before:bg-[var(--color-accent)] before:shadow-[0_0_0_4px_oklch(0.73_0.16_245/0.12)]">
+						<span class="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.13em] text-[var(--color-fg)] before:size-1.5 before:rounded-full before:bg-[var(--color-accent)] before:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-accent)_12%,transparent)]">
 							Your time · {localTarget.name} · {formatClock(now, localTarget.zone, false)} {getLocalParts(now, localTarget.zone).abbreviation}
 						</span>
 					</div>

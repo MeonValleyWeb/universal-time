@@ -30,7 +30,7 @@ export default function WorldStrip({ initialNow }: Props) {
 								{city.country}
 							</span>
 							<span
-								class={`mt-1 size-1.5 shrink-0 rounded-full ${daylight ? 'bg-[var(--color-accent)] shadow-[0_0_0_4px_oklch(0.73_0.16_245/0.12)]' : 'bg-[var(--color-subtle)]'}`}
+								class={`mt-1 size-1.5 shrink-0 rounded-full ${daylight ? 'bg-[var(--color-accent)] shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-accent)_12%,transparent)]' : 'bg-[var(--color-subtle)]'}`}
 							/>
 						</div>
 						<p class="mt-7 truncate font-serif text-xl">{city.name}</p>

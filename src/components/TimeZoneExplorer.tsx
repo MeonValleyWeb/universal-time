@@ -45,7 +45,7 @@ export default function TimeZoneExplorer({ initialNow }: { initialNow: number })
 					<p class="mt-7 font-mono text-5xl tracking-[-0.07em] sm:text-6xl">{formatClock(now, referenceZone, false)}</p>
 					<p class="mt-3 text-sm text-[var(--color-muted)]">{formatDate(now, referenceZone)} · {getLocalParts(now, referenceZone).abbreviation} · {formatOffset(getOffsetMinutes(now, referenceZone))}</p>
 				</div>
-				<div class="border-t border-[var(--color-line)] bg-[var(--color-ink)] p-6 text-[var(--color-canvas)] lg:border-l lg:border-t-0 sm:p-8">
+				<div class="border-t border-[var(--color-line)] bg-[var(--color-surface-elevated)] p-6 text-[var(--color-ink)] lg:border-l lg:border-t-0 sm:p-8">
 					<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">What this changes</p>
 					<p class="mt-5 font-serif text-3xl leading-tight">A city name carries the date and clock rule. An offset alone does not.</p>
 					<p class="mt-5 text-sm leading-6 text-[var(--color-subtle)]">{reference.name} uses {referenceZone}. {seasonalRule(referenceZone, now)}. Switch the reference to see what your own local time means elsewhere.</p>

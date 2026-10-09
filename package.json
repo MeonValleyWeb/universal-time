@@ -36,8 +36,8 @@
   "overrides": {
     "fast-uri": "3.1.8",
     "js-yaml": "4.3.2",
-    "nanoid": "6.0.1",
-    "postcss": "8.5.28",
-    "undici": "7.29.1"
+    "nanoid": "6.0.2",
+    "postcss": "8.5.29",
+    "undici": "7.30.0"
   }
 }

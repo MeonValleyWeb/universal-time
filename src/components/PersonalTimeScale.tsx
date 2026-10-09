@@ -59,7 +59,7 @@ export default function PersonalTimeScale() {
 	};
 
 	return (
-		<section class="border-y border-[var(--color-line)] bg-[oklch(0.15_0.027_255)] px-5 py-16 text-[var(--color-fg)] sm:px-8 lg:py-24">
+		<section data-theme="meridian" class="border-y border-[var(--color-line)] bg-[oklch(0.15_0.027_255)] px-5 py-16 text-[var(--color-fg)] sm:px-8 lg:py-24">
 			<div class="mx-auto max-w-[1180px]">
 				<div class="grid gap-12 xl:grid-cols-[0.8fr_1.2fr] xl:gap-20">
 					<div>
@@ -95,15 +95,15 @@ export default function PersonalTimeScale() {
 									<div class="h-full rounded-full bg-[var(--color-signal)] transition-[width] duration-700" style={{ width: `${life.progress}%` }} />
 								</div>
 								<div class="mt-6 grid gap-px bg-[var(--color-line)] sm:grid-cols-3">
-									<div class="bg-[var(--color-ink)] p-5">
+									<div class="bg-[var(--color-surface-elevated)] p-5">
 										<p class="font-serif text-3xl">{number.format(life.daysLived)}</p>
 										<p class="mt-2 font-mono text-[9px] uppercase tracking-wider text-[var(--color-subtle)]">days lived</p>
 									</div>
-									<div class="bg-[var(--color-ink)] p-5">
+									<div class="bg-[var(--color-surface-elevated)] p-5">
 										<p class="font-serif text-3xl">{life.orbits}</p>
 										<p class="mt-2 font-mono text-[9px] uppercase tracking-wider text-[var(--color-subtle)]">orbits of the Sun</p>
 									</div>
-									<div class="bg-[var(--color-ink)] p-5">
+									<div class="bg-[var(--color-surface-elevated)] p-5">
 										<p class="font-serif text-3xl">{number.format(life.daysToYardstick)}</p>
 										<p class="mt-2 font-mono text-[9px] uppercase tracking-wider text-[var(--color-subtle)]">days to 80*</p>
 									</div>
