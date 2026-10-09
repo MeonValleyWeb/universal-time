@@ -100,10 +100,10 @@ export default function NaturalTime({
 			<section class="atlas-panel min-w-0 overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-panel)] sm:p-7 lg:p-8">
 				<form onSubmit={submit}>
 					<div class="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-						<label for="time-query" class="block font-mono text-[11px] uppercase tracking-[0.13em] text-[var(--color-muted)]">
+						<label for="time-query" class="block font-sans text-[11px] normal-case tracking-[0.13em] text-[var(--color-muted)]">
 							Ask anything about time
 						</label>
-						<span class="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.13em] text-[var(--color-fg)] before:size-1.5 before:rounded-full before:bg-[var(--color-accent)] before:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-accent)_12%,transparent)]">
+						<span class="flex items-center gap-2 font-sans text-[9px] normal-case tracking-[0.13em] text-[var(--color-fg)] before:size-1.5 before:rounded-full before:bg-[var(--color-accent)] before:shadow-[0_0_0_4px_oklch(0.73_0.16_245/0.12)]">
 							Your time · {localTarget.name} · {formatClock(now, localTarget.zone, false)} {getLocalParts(now, localTarget.zone).abbreviation}
 						</span>
 					</div>
@@ -116,7 +116,7 @@ export default function NaturalTime({
 							placeholder="Try 4pm New York in London tomorrow"
 							autocomplete="off"
 						/>
-						<button type="submit" class="inline-flex h-11 shrink-0 items-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-accent)] bg-[var(--color-accent)] px-3 font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--color-signal-ink)] hover:-translate-y-px hover:brightness-110 active:translate-y-0" aria-label="Answer time question">
+						<button type="submit" class="inline-flex h-11 shrink-0 items-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-accent)] bg-[var(--color-accent)] px-3 font-sans text-[10px] font-bold normal-case tracking-wider text-[var(--color-signal-ink)] hover:-translate-y-px hover:brightness-110 active:translate-y-0" aria-label="Answer time question">
 							Ask <span aria-hidden="true" class="text-base leading-none">→</span>
 						</button>
 					</div>
@@ -125,7 +125,7 @@ export default function NaturalTime({
 				<div aria-live="polite" class="mt-8 min-h-[255px]">
 					{result ? (
 						<div>
-							<div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.13em] text-[var(--color-muted)]">
+							<div class="flex items-center gap-3 font-sans text-[11px] normal-case tracking-[0.13em] text-[var(--color-muted)]">
 								<span class={`size-2 rounded-full ${goodTime ? 'bg-[var(--color-accent)]' : 'bg-amber-400'}`} />
 								{result.isCurrentTime
 									? 'Your local time now'
@@ -138,7 +138,7 @@ export default function NaturalTime({
 								<span class="min-w-0 font-serif text-[clamp(4.25rem,9vw,7rem)] font-medium leading-[0.82] tracking-[-0.065em] text-[var(--color-fg)] tabular-nums">
 									{formatClock(result.timestamp, result.answer.zone, false)}
 								</span>
-								<span class="ml-3 mt-1 rounded-[var(--radius-control)] bg-[var(--color-accent)] px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--color-signal-ink)] sm:mt-3">
+								<span class="ml-3 mt-1 rounded-[var(--radius-control)] bg-[var(--color-accent)] px-3 py-1 font-sans text-[10px] font-bold normal-case tracking-wider text-[var(--color-signal-ink)] sm:mt-3">
 									{getLocalParts(result.timestamp, result.answer.zone).abbreviation}
 								</span>
 							</div>
@@ -159,20 +159,20 @@ export default function NaturalTime({
 									))}
 								</div>
 								<div class="flex flex-wrap gap-2">
-									<button type="button" onClick={copy} class="rounded-[var(--radius-button)] border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-fg)] hover:border-[var(--color-muted)] hover:bg-[var(--color-surface-elevated)]">
+									<button type="button" onClick={copy} class="rounded-[var(--radius-button)] border border-[var(--color-border)] px-4 py-2 text-sm font-medium text-[var(--color-fg)] hover:border-[var(--color-muted)] hover:bg-[var(--color-surface-elevated)]">
 										{copied ? 'Copied' : 'Copy answer'}
 									</button>
 									{submitted && (
-										<button type="button" onClick={share} class="rounded-[var(--radius-button)] border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-fg)] hover:border-[var(--color-muted)] hover:bg-[var(--color-surface-elevated)]">
+										<button type="button" onClick={share} class="rounded-[var(--radius-button)] border border-[var(--color-border)] px-4 py-2 text-sm font-medium text-[var(--color-fg)] hover:border-[var(--color-muted)] hover:bg-[var(--color-surface-elevated)]">
 											Share query
 										</button>
 									)}
 									{!result.isCurrentTime && result.source.slug !== 'local' ? (
-										<a href={`/convert/${result.source.slug}/${result.target.slug}`} class="inline-flex min-h-11 items-center rounded-[var(--radius-button)] bg-[var(--color-accent)] px-4 text-sm font-semibold text-[var(--color-signal-ink)] hover:-translate-y-px hover:brightness-110">
+										<a href={`/convert/${result.source.slug}/${result.target.slug}`} class="inline-flex min-h-11 items-center rounded-[var(--radius-button)] bg-[var(--color-accent)] px-4 text-sm font-medium text-[var(--color-signal-ink)] hover:-translate-y-px hover:brightness-110">
 											Open converter
 										</a>
 									) : (
-										<a href={result.isCurrentTime ? '/time-zones' : '/meeting-planner'} class="inline-flex min-h-11 items-center rounded-[var(--radius-button)] bg-[var(--color-accent)] px-4 text-sm font-semibold text-[var(--color-signal-ink)] hover:-translate-y-px hover:brightness-110">
+										<a href={result.isCurrentTime ? '/time-zones' : '/meeting-planner'} class="inline-flex min-h-11 items-center rounded-[var(--radius-button)] bg-[var(--color-accent)] px-4 text-sm font-medium text-[var(--color-signal-ink)] hover:-translate-y-px hover:brightness-110">
 											{result.isCurrentTime ? 'Explore time zones' : 'Open planner'}
 										</a>
 									)}

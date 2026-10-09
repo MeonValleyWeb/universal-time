@@ -36,23 +36,22 @@ const schema = {
 	description={`Convert ${from.name} time to ${to.name}. See the current time difference and choose a good time to call.`}
 	canonical={`/convert/${from.slug}/${to.slug}`}
 	schema={schema}
-	socialImage={`/og/convert/${from.slug}-to-${to.slug}.png`}
 	adSlot={converterAdSlot}
 >
 	<main class="px-5 py-14 sm:px-8 lg:py-20">
 		<div class="mx-auto max-w-[1180px]">
-			<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-orange-700">Time converter</p>
+			<p class="font-sans text-[10px] normal-case tracking-[0.2em] text-orange-700">Time converter</p>
 			<h1 class="mt-3 max-w-5xl font-serif text-5xl leading-[0.95] tracking-[-0.055em] sm:text-7xl">
 				{from.name} <span class="text-stone-400">to</span> {to.name}
 			</h1>
 			<div class="mt-12 grid gap-px overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-border)] bg-[var(--color-border)] shadow-[var(--shadow-panel)] lg:grid-cols-2">
 				<div class="bg-[#e8e4dc] p-8 sm:p-10">
-					<p class="font-mono text-[10px] uppercase tracking-wider text-stone-500">{from.country}</p>
+					<p class="font-sans text-[10px] normal-case tracking-wider text-stone-500">{from.country}</p>
 					<h2 class="mt-2 font-serif text-3xl">{from.name}</h2>
 					<div class="mt-8"><CityClock client:load zone={from.zone} initialNow={initialNow} /></div>
 				</div>
 				<div class="bg-stone-950 p-8 text-white sm:p-10">
-					<p class="font-mono text-[10px] uppercase tracking-wider text-stone-400">{to.country}</p>
+					<p class="font-sans text-[10px] normal-case tracking-wider text-stone-400">{to.country}</p>
 					<h2 class="mt-2 font-serif text-3xl">{to.name}</h2>
 					<div class="mt-8"><CityClock client:load zone={to.zone} initialNow={initialNow} /></div>
 				</div>
@@ -64,23 +63,23 @@ const schema = {
 			<section class="mt-16 border-t border-[var(--color-line)] pt-12">
 				<div class="grid gap-10 lg:grid-cols-[.72fr_1.28fr]">
 					<div>
-						<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Working together</p>
+						<p class="font-sans text-[10px] normal-case tracking-[0.2em] text-[var(--color-signal)]">Working together</p>
 						<h2 class="mt-3 font-serif text-4xl tracking-[-0.04em]">The useful part of the difference</h2>
 						<p class="mt-5 max-w-md text-sm leading-6 text-[var(--color-muted)]">{reason}</p>
 					</div>
 					<div class="grid gap-px bg-[var(--color-line)] sm:grid-cols-2">
 						<article class="bg-[var(--color-surface)] p-6">
-							<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Working-hour overlap</p>
+							<p class="font-sans text-[9px] normal-case tracking-[0.18em] text-[var(--color-subtle)]">Working-hour overlap</p>
 							<h3 class="mt-5 font-serif text-2xl">When both cities are at work</h3>
 							<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">{context.overlapSummary}</p>
 						</article>
 						<article class="bg-[var(--color-surface)] p-6">
-							<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Calendar boundary</p>
+							<p class="font-sans text-[9px] normal-case tracking-[0.18em] text-[var(--color-subtle)]">Calendar boundary</p>
 							<h3 class="mt-5 font-serif text-2xl">Check the date, not just the hour</h3>
 							<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">{context.dateSummary}</p>
 						</article>
 						<article class="bg-[var(--color-surface)] p-6 sm:col-span-2">
-							<p class="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-subtle)]">Daylight saving time</p>
+							<p class="font-sans text-[9px] normal-case tracking-[0.18em] text-[var(--color-subtle)]">Daylight saving time</p>
 							<h3 class="mt-5 font-serif text-2xl">The gap can move during the year</h3>
 							<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">{context.dstSummary}</p>
 						</article>

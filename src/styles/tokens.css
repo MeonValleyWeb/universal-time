@@ -25,7 +25,7 @@
 
 	--font-display: "Iowan Old Style", Charter, Georgia, serif;
 	--font-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-	--font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	--font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
 	--space-1: 4px;
 	--space-2: 8px;
@@ -66,5 +66,4 @@
 	--color-warm: var(--color-fg);
 	--color-signal: var(--color-accent);
 	--color-signal-ink: #ffffff;
-	--shadow-panel: 0 18px 44px rgb(29 42 54 / 0.1);
 }

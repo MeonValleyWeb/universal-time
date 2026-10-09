@@ -28,18 +28,18 @@ const links = [
 					{link.label}
 				</a>
 			))}
-			<span class="hidden font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-muted)] xl:inline">Live · {cities.length} cities</span>
+			<span class="hidden font-sans text-[10px] normal-case tracking-[0.1em] text-[var(--color-muted)] xl:inline">Live · {cities.length} cities</span>
 		</nav>
 
 		<a
 			href="/meeting-planner"
-			class="hidden min-h-11 items-center justify-center rounded-[var(--radius-button)] border border-[var(--color-border)] px-4 text-sm font-semibold text-[var(--color-fg)] hover:-translate-y-px hover:border-[var(--color-muted)] hover:bg-[var(--color-surface)] sm:inline-flex"
+			class="hidden min-h-11 items-center justify-center rounded-[var(--radius-button)] border border-[var(--color-border)] px-4 text-sm font-medium text-[var(--color-fg)] hover:-translate-y-px hover:border-[var(--color-muted)] hover:bg-[var(--color-surface)] sm:inline-flex"
 		>
 			Plan a meeting
 		</a>
 
 		<details class="group relative sm:hidden">
-			<summary class="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-border)] px-3 font-mono text-[10px] uppercase tracking-[0.13em] text-[var(--color-fg)] hover:border-[var(--color-muted)] [&::-webkit-details-marker]:hidden">
+			<summary class="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-border)] px-3 font-sans text-[10px] normal-case tracking-[0.13em] text-[var(--color-fg)] hover:border-[var(--color-muted)] [&::-webkit-details-marker]:hidden">
 				<span>Menu</span>
 				<svg viewBox="0 0 16 16" class="size-3 transition group-open:rotate-45" aria-hidden="true"><path d="M8 2v12M2 8h12" fill="none" stroke="currentColor" stroke-linecap="round" /></svg>
 			</summary>
@@ -53,7 +53,7 @@ const links = [
 						{link.label}<span aria-hidden="true">→</span>
 					</a>
 				))}
-				<p class="mt-2 flex items-center justify-between rounded-[var(--radius-control)] bg-[var(--color-bg)] px-3 py-3 font-mono text-[9px] uppercase tracking-[0.13em] text-[var(--color-muted)]">Live world map <span>{cities.length} cities</span></p>
+				<p class="mt-2 flex items-center justify-between rounded-[var(--radius-control)] bg-[var(--color-bg)] px-3 py-3 font-sans text-[9px] normal-case tracking-[0.13em] text-[var(--color-muted)]">Live world map <span>{cities.length} cities</span></p>
 			</nav>
 		</details>
 	</div>
