@@ -20,151 +20,114 @@ const clockGroups = [...citiesByOffset.entries()]
 	}));
 ---
 
-<BaseLayout canonical="/">
-	<main>
-		<section class="border-b border-[var(--color-border)] px-4 py-14 sm:px-6 sm:py-16 lg:py-[92px]">
-			<div class="mx-auto grid max-w-[1180px] items-center gap-11 lg:grid-cols-[0.94fr_1.06fr] lg:gap-[72px]">
-				<div>
-					<div>
-						<div class="meridian-eyebrow">World time, made clear</div>
-						<h1 class="mt-[18px] max-w-[530px] font-serif text-[clamp(3.1rem,6vw,4.875rem)] font-medium leading-[0.96] tracking-[-0.06em]">
-							Every hour, in its right place.
-						</h1>
-						<p class="mt-6 max-w-[470px] text-[19px] leading-[1.55] text-[var(--color-muted)]">
-							Ask naturally, paste a time, or compare cities. WorldTime gives you one clear answer without timezone arithmetic.
-						</p>
-						<a href="/meeting-planner" class="group mt-8 inline-flex min-h-12 items-center gap-4 rounded-[var(--radius-button)] bg-[var(--color-accent)] px-5 font-sans text-[10px] font-bold normal-case tracking-[0.13em] text-[var(--color-signal-ink)] shadow-[0_12px_30px_oklch(0.08_0.03_255/0.28)] transition hover:-translate-y-0.5 hover:brightness-110">
-							<span>Plan across time zones</span>
-							<span aria-hidden="true" class="text-base leading-none transition-transform group-hover:translate-x-1">→</span>
-						</a>
-						<div class="mt-10 flex items-center gap-4 text-[13px] text-[var(--color-muted)]"><span class="block w-[34px] border-t border-[var(--color-border)]"></span><span>Accurate time zones. Clear context. No clutter.</span></div>
-					</div>
+<BaseLayout
+	title="World Time Converter, Meeting Planner & City Clocks · WorldTime"
+	description="Convert time between cities, find a fair meeting window, and check live world clocks with daylight-saving context."
+	canonical="/"
+>
+	<main data-theme="daylight" class="bg-[var(--color-canvas)] text-[var(--color-ink)]">
+		<section class="border-b border-[var(--color-border)] px-4 pb-12 pt-12 sm:px-6 sm:pb-16 sm:pt-16 lg:pt-20">
+			<div class="mx-auto grid max-w-[1180px] items-start gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:gap-14">
+				<div class="max-w-xl">
+					<p class="text-sm font-medium text-[var(--color-accent)]">WorldTime</p>
+					<h1 class="mt-4 font-serif text-[clamp(2.75rem,5vw,4.5rem)] font-medium leading-[0.98] tracking-[-0.045em]">
+						Time zones, made clear.
+					</h1>
+					<p class="mt-5 max-w-md text-base leading-7 text-[var(--color-muted)] sm:text-lg">
+						Check the local time, convert a date, or find a meeting time that works across cities.
+					</p>
+					<a href="/meeting-planner" class="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-[var(--color-fg)] underline decoration-[var(--color-accent)] underline-offset-4 hover:text-[var(--color-accent)]">
+						Open the meeting planner <span aria-hidden="true">→</span>
+					</a>
 				</div>
 				<NaturalTime client:load initialNow={initialNow} />
 			</div>
-			<div class="mx-auto mt-10 max-w-[1180px] lg:mt-14">
-				<a href="/meeting-planner" class="group relative block overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-panel)] transition hover:-translate-y-1 hover:border-[var(--color-accent)] sm:p-7 lg:p-9">
-					<div class="pointer-events-none absolute -right-24 -top-28 size-80 rounded-full border border-[oklch(0.73_0.16_245/0.22)]" aria-hidden="true"></div>
-					<div class="pointer-events-none absolute -right-8 top-10 size-48 rounded-full border border-[oklch(0.73_0.16_245/0.14)]" aria-hidden="true"></div>
-					<div class="relative grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end lg:gap-16">
-						<div>
-							<p class="font-sans text-[10px] font-bold normal-case tracking-[0.2em] text-[var(--color-accent)]">The meeting planner</p>
-							<h2 class="mt-4 max-w-xl font-serif text-[clamp(2.45rem,5vw,4.6rem)] leading-[0.91] tracking-[-0.055em] text-[var(--color-fg)]">Find the overlap,<br /><em class="font-normal text-[var(--color-accent)]">not the compromise.</em></h2>
-							<p class="mt-5 max-w-lg text-base leading-7 text-[var(--color-muted)]">See every working day together, choose a fair window, and make daylight-saving changes someone else’s problem.</p>
-							<span class="mt-7 inline-flex items-center gap-3 font-sans text-[10px] font-bold normal-case tracking-[0.16em] text-[var(--color-fg)]">Open the planner <span aria-hidden="true" class="text-lg leading-none transition-transform group-hover:translate-x-1">→</span></span>
-						</div>
-						<div class="overflow-hidden rounded-[var(--radius-control)] border border-[var(--color-border)] bg-[var(--color-input)] p-4 sm:p-5">
-							<div class="flex items-center justify-between gap-4 border-b border-[var(--color-border)] pb-3">
-								<span class="font-sans text-[9px] font-bold normal-case tracking-[0.16em] text-[var(--color-muted)]">One shared working day</span>
-								<span class="rounded-full bg-[oklch(0.73_0.16_245/0.14)] px-2.5 py-1 font-sans text-[8px] font-bold normal-case tracking-wider text-[var(--color-accent)]">Fair window</span>
-							</div>
-							<div class="mt-5 space-y-3">
-								{[
-									['London', '09:00', '17:00', 'bg-[oklch(0.73_0.16_245/0.9)]'],
-									['New York', '04:00', '12:00', 'bg-[oklch(0.73_0.16_245/0.58)]'],
-									['Tokyo', '17:00', '01:00', 'bg-[oklch(0.73_0.16_245/0.36)]'],
-								].map(([place, start, end, colour]) => (
-									<div class="grid grid-cols-[5.5rem_1fr_3.25rem] items-center gap-3">
-										<span class="truncate font-sans text-[10px] font-bold normal-case tracking-wide text-[var(--color-fg)]">{place}</span>
-										<span class="relative h-2 overflow-hidden rounded-full bg-[var(--color-border)]"><span class={`absolute inset-y-0 left-[32%] w-[37%] rounded-full ${colour}`}></span></span>
-										<span class="text-right font-sans text-[9px] text-[var(--color-muted)]">{start}–{end}</span>
-									</div>
-								))}
-							</div>
-							<div class="mt-5 grid grid-cols-12 gap-px overflow-hidden rounded-[3px] border border-[var(--color-border)] bg-[var(--color-border)]">
-								{Array.from({ length: 12 }, (_, index) => <span class={`h-8 bg-[var(--color-surface)] ${index >= 5 && index <= 7 ? 'bg-[oklch(0.73_0.16_245/0.34)]' : ''}`}></span>)}
-							</div>
-							<p class="mt-3 font-sans text-[9px] normal-case tracking-[0.15em] text-[var(--color-subtle)]">The bright band is a workable window for everyone.</p>
-						</div>
-					</div>
-				</a>
-			</div>
+
 			<div class="mx-auto mt-12 max-w-[1180px] lg:mt-16">
-				<div class="mb-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.13em] text-[var(--color-muted)]">
-					<span>Live around the world</span>
-					<span class="hidden sm:inline">Daylight shown in the accent colour</span>
+				<div class="mb-3 flex items-center justify-between gap-4 text-xs text-[var(--color-muted)]">
+					<h2 class="font-medium text-[var(--color-fg)]">Current time in six cities</h2>
+					<span class="hidden sm:inline">Select a city for local details</span>
 				</div>
 				<WorldStrip client:load initialNow={initialNow} />
 			</div>
 		</section>
 
-		<section id="how-it-works" class="border-b border-[var(--color-border)] bg-[oklch(0.15_0.027_255)] px-4 py-16 sm:px-6 lg:py-24">
-			<div class="mx-auto max-w-[1180px]">
-				<div>
-					<p class="meridian-eyebrow">Made for the details</p>
-					<h2 class="mt-4 max-w-[660px] font-serif text-[clamp(2.25rem,4vw,3.3rem)] font-medium leading-[1.04] tracking-[-0.05em]">
-						Confidence belongs in the small print.
-					</h2>
+		<section class="border-b border-[var(--color-border)] px-4 py-12 sm:px-6 lg:py-16">
+			<div class="mx-auto grid max-w-[1180px] gap-8 rounded-[var(--radius-panel)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-12">
+				<div class="max-w-2xl">
+					<p class="text-sm font-medium text-[var(--color-accent)]">Meeting planner</p>
+					<h2 class="mt-2 font-serif text-3xl tracking-[-0.035em] sm:text-4xl">Find a time that works for everyone.</h2>
+					<p class="mt-3 text-sm leading-6 text-[var(--color-muted)] sm:text-base">Compare working hours across cities and choose a meeting window with the local dates and daylight-saving changes accounted for.</p>
 				</div>
-				<div class="mt-12 grid gap-5 md:grid-cols-3 md:gap-[42px]">
+				<a href="/meeting-planner" class="inline-flex min-h-11 items-center justify-center gap-3 self-start rounded-[var(--radius-button)] bg-[var(--color-accent)] px-5 text-sm font-medium text-[var(--color-signal-ink)] hover:brightness-110 lg:self-center">
+					Plan a meeting <span aria-hidden="true">→</span>
+				</a>
+			</div>
+		</section>
+
+		<section id="how-it-works" class="border-b border-[var(--color-border)] px-4 py-14 sm:px-6 lg:py-20">
+			<div class="mx-auto max-w-[1180px]">
+				<div class="max-w-2xl">
+					<p class="text-sm font-medium text-[var(--color-accent)]">Reliable by date and place</p>
+					<h2 class="mt-3 font-serif text-3xl font-medium tracking-[-0.04em] sm:text-4xl">The details are handled.</h2>
+				</div>
+				<div class="mt-9 grid gap-7 md:grid-cols-3 md:gap-10">
 					{[
-						['01', 'Daylight-saving, handled.', 'Future conversions use the correct local offset for that date, even when the clocks change.'],
-						['02', 'Time with context.', 'Every answer carries its city, zone, relative difference and working-hour context.'],
-						['03', 'Ready to share.', 'Copy a clear dual-time answer or open the full planner when more cities matter.'],
+						['01', 'Daylight-saving changes', 'Conversions use the local offset for the date you choose, including seasonal clock changes.'],
+						['02', 'Local context', 'See the city, time-zone abbreviation and date alongside each result.'],
+						['03', 'Easy to share', 'Copy a conversion or share a query with the people you are planning with.'],
 					].map(([number, heading, copy]) => (
 						<article class="border-t border-[var(--color-border)] pt-4">
-							<span class="font-mono text-xs font-bold text-[var(--color-accent)]">{number}</span>
-							<h3 class="mt-6 font-serif text-[26px] font-medium leading-[1.05] tracking-[-0.04em]">{heading}</h3>
-							<p class="mt-3 text-[15px] leading-6 text-[var(--color-muted)]">{copy}</p>
+							<span class="text-xs tabular-nums text-[var(--color-subtle)]">{number}</span>
+							<h3 class="mt-4 text-base font-medium">{heading}</h3>
+							<p class="mt-2 text-sm leading-6 text-[var(--color-muted)]">{copy}</p>
 						</article>
 					))}
 				</div>
 			</div>
 		</section>
 
-		<section class="border-b border-[var(--color-line)] px-5 py-16 sm:px-8 lg:py-24">
-			<div class="mx-auto max-w-[1180px]">
-				<div class="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
-					<div>
-						<p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-signal)]">Beyond time zones</p>
-						<h2 class="mt-4 max-w-xl font-serif text-5xl leading-[0.94] tracking-[-0.05em] sm:text-6xl">
-							Everything that keeps, shapes and marks time.
-						</h2>
-						<p class="mt-5 max-w-lg text-base leading-7 text-[var(--color-muted)]">
-							Follow the Sun and Moon, count down to celestial events, or understand the standards and stories behind the clock.
-						</p>
-					</div>
-					<div class="grid gap-px bg-[var(--color-line)] sm:grid-cols-2">
-						<a href="/astronomy" class="group min-h-80 bg-[var(--color-surface)] p-7 hover:bg-[var(--color-ink)] hover:text-[var(--color-canvas)] sm:p-9">
-							<span class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Sun · Moon · Sky</span>
-							<h3 class="mt-20 font-serif text-4xl tracking-[-0.045em]">Your local sky clock</h3>
-							<p class="mt-4 text-sm leading-6 text-[var(--color-muted)] group-hover:text-[var(--color-subtle)]">
-								Sunrise, sunset, solar noon, moon phase and live countdowns to eclipses and comet-linked meteor showers.
-							</p>
-							<span class="mt-8 inline-flex text-sm text-[var(--color-signal)]">Explore astronomical time →</span>
-						</a>
-						<a href="/guides" class="group min-h-80 bg-[var(--color-surface)] p-7 hover:bg-[var(--color-ink)] hover:text-[var(--color-canvas)] sm:p-9">
-							<span class="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-signal)]">Atomic · Civil · Historic</span>
-							<h3 class="mt-20 font-serif text-4xl tracking-[-0.045em]">Why time works this way</h3>
-							<p class="mt-4 text-sm leading-6 text-[var(--color-muted)] group-hover:text-[var(--color-subtle)]">
-								Atomic clocks, UTC and GMT, US zone abbreviations, leap seconds, calendars and the reason a day has 24 hours.
-							</p>
-							<span class="mt-8 inline-flex text-sm text-[var(--color-signal)]">Read the time guides →</span>
-						</a>
-					</div>
+		<section class="border-b border-[var(--color-border)] px-4 py-14 sm:px-6 lg:py-20">
+			<div class="mx-auto grid max-w-[1180px] gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-14">
+				<div>
+					<p class="text-sm font-medium text-[var(--color-accent)]">More to explore</p>
+					<h2 class="mt-3 max-w-md font-serif text-3xl font-medium leading-tight tracking-[-0.04em] sm:text-4xl">Time connects to more than the clock.</h2>
+					<p class="mt-4 max-w-md text-sm leading-6 text-[var(--color-muted)]">Explore the local sky or learn how the standards behind everyday timekeeping work.</p>
+				</div>
+				<div class="grid gap-3 sm:grid-cols-2">
+					<a href="/astronomy" class="group rounded-[var(--radius-control)] border border-[var(--color-border)] p-5 transition-colors hover:bg-[var(--color-surface)] sm:p-6">
+						<h3 class="font-medium">Sun, Moon and sky</h3>
+						<p class="mt-2 text-sm leading-6 text-[var(--color-muted)]">Sunrise, sunset, moon phase and upcoming celestial events for your city.</p>
+						<span class="mt-5 inline-flex items-center gap-2 text-sm text-[var(--color-accent)]">Explore astronomy <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span></span>
+					</a>
+					<a href="/guides" class="group rounded-[var(--radius-control)] border border-[var(--color-border)] p-5 transition-colors hover:bg-[var(--color-surface)] sm:p-6">
+						<h3 class="font-medium">Time guides</h3>
+						<p class="mt-2 text-sm leading-6 text-[var(--color-muted)]">Clear explanations of UTC, GMT, time-zone abbreviations and calendars.</p>
+						<span class="mt-5 inline-flex items-center gap-2 text-sm text-[var(--color-accent)]">Read the guides <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span></span>
+					</a>
 				</div>
 			</div>
 		</section>
 
 		<PersonalTimeScale client:load />
 
-		<section id="world-clocks" class="px-5 py-16 sm:px-8">
+		<section id="world-clocks" class="px-4 py-14 sm:px-6 lg:py-20">
 			<div class="mx-auto max-w-[1180px]">
-				<p class="font-mono text-[10px] uppercase tracking-[0.2em] text-stone-500">Popular city clocks · grouped by current UTC offset</p>
-				<h2 class="mt-2 font-serif text-3xl tracking-[-0.04em]">Find your place</h2>
-				<p class="mt-3 max-w-2xl text-sm leading-6 text-[var(--color-muted)]">Cities share the clock that applies right now. Seasonal rules can move a place to another offset later in the year.</p>
-				<div class="mt-8 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+				<p class="text-sm font-medium text-[var(--color-accent)]">Browse by time zone</p>
+				<h2 class="mt-2 font-serif text-3xl font-medium tracking-[-0.04em]">Local times around the world</h2>
+				<p class="mt-3 max-w-2xl text-sm leading-6 text-[var(--color-muted)]">Cities are grouped by their current UTC offset. Seasonal clock changes can move a city to a different group.</p>
+				<div class="mt-8 grid gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-3">
 					{clockGroups.map((group) => (
-						<section class="border-t border-stone-300 pt-4" aria-label={`${group.label} city clocks`}>
+						<section class="border-t border-[var(--color-border)] pt-4" aria-label={`${group.label} city clocks`}>
 							<div class="flex items-baseline justify-between gap-3">
-								<h3 class="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--color-accent)]">{group.label}</h3>
-								<span class="font-mono text-[9px] uppercase tracking-[0.13em] text-stone-500">{group.cities.length} {group.cities.length === 1 ? 'place' : 'places'}</span>
+								<h3 class="text-sm font-medium text-[var(--color-accent)]">{group.label}</h3>
+								<span class="text-xs text-[var(--color-subtle)]">{group.cities.length} {group.cities.length === 1 ? 'place' : 'places'}</span>
 							</div>
 							<div class="mt-2">
 								{group.cities.map((city) => (
-									<a href={`/time/${city.slug}`} class="flex items-center justify-between gap-3 border-b border-stone-300 py-3 text-sm hover:text-orange-700">
+									<a href={`/time/${city.slug}`} class="flex items-center justify-between gap-3 border-b border-[var(--color-border)] py-3 text-sm text-[var(--color-fg)] hover:text-[var(--color-accent)]">
 										<span>{city.name}</span>
-										<span class="shrink-0 font-mono text-[9px] text-stone-500">{city.country}</span>
+										<span class="shrink-0 text-xs text-[var(--color-subtle)]">{city.country}</span>
 									</a>
 								))}
 							</div>
@@ -173,6 +136,5 @@ const clockGroups = [...citiesByOffset.entries()]
 				</div>
 			</div>
 		</section>
-
 	</main>
 </BaseLayout>

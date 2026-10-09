@@ -7,6 +7,7 @@ interface Props {
 	description?: string;
 	canonical?: string;
 	schema?: Record<string, unknown> | Record<string, unknown>[];
+	socialImage?: string;
 	adSlot?: string;
 }
 
@@ -15,10 +16,11 @@ const {
 	description = 'Convert any time, compare cities and find the right moment to call.',
 	canonical,
 	schema,
+	socialImage = '/og/home.png',
 	adSlot = '',
 } = Astro.props;
 const baseUrl = Astro.site ?? Astro.url;
-const socialImage = new URL('/og.png', baseUrl);
+const socialImageUrl = new URL(socialImage, baseUrl);
 const canonicalUrl = canonical && Astro.site ? new URL(canonical, Astro.site) : undefined;
 const websiteSchema = {
 	'@context': 'https://schema.org',
@@ -49,20 +51,21 @@ const adsensePageReady =
 ---
 
 <!doctype html>
-<html lang="en" data-theme="meridian">
+<html lang="en" data-theme="daylight">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="description" content={description} />
+		<meta name="robots" content="index,follow,max-image-preview:large" />
 		<meta name="generator" content={Astro.generator} />
-		<meta name="theme-color" content="#111a2a" />
+		<meta name="theme-color" content="#f3f6f7" />
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="WorldTime" />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:image" content={socialImage} />
+		<meta property="og:image" content={socialImageUrl} />
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:image" content={socialImage} />
+		<meta name="twitter:image" content={socialImageUrl} />
 		{googleVerification && <meta name="google-site-verification" content={googleVerification} />}
 		{bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
 		{/^ca-pub-\d+$/.test(adsenseClient) && <meta name="google-adsense-account" content={adsenseClient} />}
