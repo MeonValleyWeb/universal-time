@@ -21,7 +21,7 @@
   "dependencies": {
     "@astrojs/preact": "^6.0.5",
     "@tailwindcss/vite": "^4.3.2",
-    "astro": "7.3.6",
+    "astro": "7.3.8",
     "preact": "^10.29.8",
     "suncalc": "^2.1.0",
     "tailwindcss": "^4.3.2"
@@ -34,7 +34,7 @@
     "wrangler": "^4.147.0"
   },
   "overrides": {
-    "fast-uri": "4.2.1",
+    "fast-uri": "4.2.2",
     "js-yaml": "4.3.2",
     "nanoid": "6.0.2",
     "postcss": "8.5.29",
