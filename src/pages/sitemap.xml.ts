@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { cities, converterPairs } from '../lib/cities';
 import { timeGuides } from '../lib/guides';
 import { celestialEvents } from '../lib/celestial-events';
+import { countryTimeGuides } from '../lib/country-times';
 
 export const prerender = true;
 
@@ -24,6 +25,7 @@ export const GET: APIRoute = ({ site, url }) => {
 			frequency: 'monthly',
 		})),
 		...cities.map((city) => ({ path: `/time/${city.slug}`, priority: '0.8', frequency: 'daily' })),
+		...countryTimeGuides.map((guide) => ({ path: `/time/${guide.slug}`, priority: '0.8', frequency: 'daily' })),
 		...converterPairs.map((pair) => ({
 			path: `/convert/${pair.from}/${pair.to}`,
 			priority: '0.7',

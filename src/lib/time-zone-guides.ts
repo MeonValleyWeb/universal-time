@@ -84,8 +84,8 @@ export const phaseOneTimeZoneGuides: TimeGuide[] = [
 	},
 	{
 		slug: 'iana-time-zones-vs-utc-offsets',
-		title: 'IANA time zones vs UTC offsets: what is the difference?',
-		summary: 'UTC+1 is a number. Europe/Paris is a history, a rule set and a prediction for a particular place.',
+		title: 'Time zone vs UTC offset: what is the difference?',
+		summary: 'A UTC offset is today’s number. A time zone is the named rule set that can calculate the right local time for a particular place and date.',
 		category: 'Standards',
 		sections: [
 			{ heading: 'An offset answers one narrow question', body: 'A UTC offset tells you the difference between UTC and a local clock at a particular instant. It is excellent for displaying a finished conversion, but it carries no information about where the rule came from or when it may change.' },

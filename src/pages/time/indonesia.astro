@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MultiZoneClocks from '../../components/MultiZoneClocks';
+import { countryTimeGuides } from '../../lib/country-times';
+
+const indonesia = countryTimeGuides.find((guide) => guide.slug === 'indonesia')!;
+const initialNow = Date.now();
+const schema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebPage',
+	name: 'Time in Indonesia now: WIB, WITA and WIT',
+	description: 'Live clocks for Indonesia’s three official time zones: WIB, WITA and WIT.',
+	about: { '@type': 'Country', name: 'Indonesia' },
+};
+---
+
+<BaseLayout
+	title="Time in Indonesia now: WIB, WITA and WIT · WorldTime"
+	description="See the current time in Indonesia’s three official time zones: WIB (UTC+7), WITA (UTC+8) and WIT (UTC+9). Find the right clock for Jakarta, Bali and Papua."
+	canonical="/time/indonesia"
+	schema={schema}
+>
+	<main>
+		<section class="px-5 py-16 sm:px-8 lg:py-24">
+			<div class="mx-auto max-w-[1180px]">
+				<p class="font-sans text-[10px] normal-case tracking-[0.18em] text-[var(--color-accent)]">Indonesia / live local time</p>
+				<div class="mt-8 grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
+					<div>
+						<h1 class="max-w-3xl font-serif text-[clamp(3.5rem,8vw,7rem)] font-medium leading-[0.88] tracking-[-0.06em]">Time in Indonesia now</h1>
+						<p class="mt-7 max-w-2xl text-xl leading-8 text-[var(--color-muted)]">{indonesia.summary}</p>
+					</div>
+					<div class="border-l border-[var(--color-accent)] pl-5 lg:mb-2">
+						<p class="font-sans text-[10px] normal-case tracking-[0.16em] text-[var(--color-muted)]">The quick answer</p>
+						<p class="mt-3 font-serif text-2xl leading-snug">Jakarta uses WIB. Bali is one hour ahead on WITA; Papua is two hours ahead on WIT.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="border-y border-[var(--color-line)] bg-[var(--color-input)] px-5 py-5 sm:px-8 sm:py-8">
+			<div class="mx-auto max-w-[1180px]">
+				<h2 class="sr-only">Current time in the three Indonesian time zones</h2>
+				<MultiZoneClocks client:load zones={indonesia.zones} initialNow={initialNow} />
+			</div>
+		</section>
+
+		<section class="px-5 py-16 sm:px-8 lg:py-20">
+			<div class="mx-auto grid max-w-[1180px] gap-12 lg:grid-cols-[.72fr_1.28fr] lg:gap-20">
+				<div>
+					<p class="font-sans text-[10px] normal-case tracking-[0.18em] text-[var(--color-accent)]">Plan by place</p>
+					<h2 class="mt-3 font-serif text-4xl tracking-[-0.045em]">Which Indonesian time should I use?</h2>
+				</div>
+				<div class="space-y-8 text-lg leading-8 text-[var(--color-muted)]">
+					<p>Use the city or island in an invitation. “10:00 Indonesia time” can mean three different moments, while “10:00 Jakarta” unambiguously means WIB.</p>
+					<p>For a call that includes Jakarta, Bali or Papua, add each place to the meeting planner. It calculates the local result from a named time zone rather than assuming one national offset.</p>
+					<div class="flex flex-wrap gap-3 pt-2">
+						<a href="/time/jakarta" class="inline-flex min-h-11 items-center rounded-[var(--radius-button)] border border-[var(--color-line)] px-4 text-sm font-medium hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">Jakarta time →</a>
+						<a href="/meeting-planner" class="inline-flex min-h-11 items-center rounded-[var(--radius-button)] bg-[var(--color-accent)] px-4 text-sm font-medium text-[var(--color-signal-ink)] hover:brightness-110">Plan across time zones →</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="border-t border-[var(--color-line)] px-5 py-14 sm:px-8 lg:py-16">
+			<div class="mx-auto flex max-w-[1180px] flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+				<div>
+					<p class="font-sans text-[10px] normal-case tracking-[0.18em] text-[var(--color-muted)]">Source and method</p>
+					<p class="mt-3 max-w-2xl text-sm leading-6 text-[var(--color-muted)]">The three-zone split and regional coverage follow Indonesia’s national time reference. Live clocks use IANA time-zone identifiers so the displayed local time remains date-aware.</p>
+				</div>
+				<a href={indonesia.source.url} target="_blank" rel="noreferrer" class="shrink-0 border-b border-[var(--color-accent)] pb-1 text-sm text-[var(--color-accent)] hover:text-[var(--color-ink)]">{indonesia.source.label} ↗</a>
+			</div>
+		</section>
+	</main>
+</BaseLayout>
