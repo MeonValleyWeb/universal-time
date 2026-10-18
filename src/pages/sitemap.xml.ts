@@ -17,6 +17,7 @@ export const GET: APIRoute = ({ site, url }) => {
 		{ path: '/time-zones', priority: '0.8', frequency: 'daily' },
 		{ path: '/astronomy', priority: '0.8', frequency: 'daily' },
 		{ path: '/guides', priority: '0.8', frequency: 'weekly' },
+		{ path: '/changelog', priority: '0.4', frequency: 'monthly' },
 		{ path: '/privacy', priority: '0.3', frequency: 'yearly' },
 		...celestialEvents.map((event) => ({ path: `/astronomy/${event.slug}`, priority: '0.7', frequency: 'monthly' })),
 		...timeGuides.map((guide) => ({
