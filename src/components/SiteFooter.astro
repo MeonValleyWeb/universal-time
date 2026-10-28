@@ -1,0 +1,19 @@
+---
+import { siteRelease } from '../lib/release';
+---
+
+<footer class="border-t border-[var(--color-line)] px-4 py-7 sm:px-6">
+	<div class="mx-auto flex max-w-[1180px] flex-col gap-5 text-sm text-[var(--color-muted)] sm:flex-row sm:items-center sm:justify-between">
+		<p>
+			<span class="font-serif text-lg text-[var(--color-ink)]">WorldTime</span>
+			· Time zones, without the mental overhead.
+			<a href="/changelog" class="ml-1 font-sans text-[10px] normal-case tracking-wide text-[var(--color-muted)] hover:text-[var(--color-signal)]" aria-label={`WorldTime version ${siteRelease.version} changelog`}>v{siteRelease.version}</a>
+		</p>
+		<nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Legal and information">
+			<a href="/astronomy" class="hover:text-[var(--color-signal)]">Sun & Moon</a>
+			<a href="/guides" class="hover:text-[var(--color-signal)]">How time works</a>
+			<a href="/changelog" class="hover:text-[var(--color-signal)]">Changelog</a>
+			<a href="/privacy" class="hover:text-[var(--color-signal)]">Privacy & cookies</a>
+		</nav>
+	</div>
+</footer>

@@ -2,8 +2,8 @@ import {
 	NEWSLETTER_CONSENT_VERSION,
 	validateNewsletterInput,
 } from './lib/newsletter';
+import { canonicalRedirect } from './lib/canonical';
 
-const canonicalHost = 'universaltime.app';
 const maxJsonBytes = 8_192;
 const contentSignal = 'ai-train=no, search=yes, ai-input=yes';
 const homepageLinks = [
@@ -178,9 +178,9 @@ export default {
 	async fetch(request, env): Promise<Response> {
 		const url = new URL(request.url);
 
-		if (url.hostname === `www.${canonicalHost}`) {
-			url.hostname = canonicalHost;
-			return Response.redirect(url.toString(), 308);
+		const canonicalUrl = canonicalRedirect(url);
+		if (canonicalUrl) {
+			return Response.redirect(canonicalUrl, 308);
 		}
 
 		if (request.method === 'GET' && url.pathname === '/ads.txt') {

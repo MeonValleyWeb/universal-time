@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { siteRelease } from '../lib/release';
 
 interface Props {
 	title?: string;
@@ -58,6 +60,7 @@ const adsensePageReady =
 		<meta name="description" content={description} />
 		<meta name="robots" content="index,follow,max-image-preview:large" />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="application-version" content={siteRelease.version} />
 		<meta name="theme-color" content="#f3f6f7" />
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="WorldTime" />
@@ -87,16 +90,7 @@ const adsensePageReady =
 	<body class="min-h-screen bg-[var(--color-canvas)] text-[var(--color-ink)] antialiased">
 		<SiteHeader />
 		<slot />
-		<footer class="border-t border-[var(--color-line)] px-4 py-7 sm:px-6">
-			<div class="mx-auto flex max-w-[1180px] flex-col gap-5 text-sm text-[var(--color-muted)] sm:flex-row sm:items-center sm:justify-between">
-				<p><span class="font-serif text-lg text-[var(--color-ink)]">WorldTime</span> · Time zones, without the mental overhead.</p>
-				<nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Legal and information">
-					<a href="/astronomy" class="hover:text-[var(--color-signal)]">Sun & Moon</a>
-					<a href="/guides" class="hover:text-[var(--color-signal)]">How time works</a>
-					<a href="/privacy" class="hover:text-[var(--color-signal)]">Privacy & cookies</a>
-				</nav>
-			</div>
-		</footer>
+		<SiteFooter />
 		{cloudflareAnalyticsToken && (
 			<script
 				is:inline

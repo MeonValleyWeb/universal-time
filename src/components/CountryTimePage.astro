@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MultiZoneClocks from './MultiZoneClocks';
+import { cityBySlug } from '../lib/cities';
+import type { CountryTimeGuide } from '../lib/country-times';
+
+interface Props {
+	guide: CountryTimeGuide;
+}
+
+const { guide } = Astro.props;
+const initialNow = Date.now();
+const entryCity = cityBySlug(guide.entryCitySlug)!;
+const schema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebPage',
+	name: guide.metaTitle,
+	description: guide.metaDescription,
+	about: { '@type': 'Country', name: guide.name },
+};
+---
+
+<BaseLayout
+	title={`${guide.metaTitle} · WorldTime`}
+	description={guide.metaDescription}
+	canonical={`/time/${guide.slug}`}
+	schema={schema}
+>
+	<main>
+		<section class="px-5 py-16 sm:px-8 lg:py-24">
+			<div class="mx-auto max-w-[1180px]">
+				<p class="font-sans text-[10px] normal-case tracking-[0.18em] text-[var(--color-accent)]">{guide.name} / live local time</p>
+				<div class="mt-8 grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
+					<div>
+						<h1 class="max-w-3xl font-serif text-[clamp(3.5rem,8vw,7rem)] font-medium leading-[0.88] tracking-[-0.06em]">Time in {guide.name} now</h1>
+						<p class="mt-7 max-w-2xl text-xl leading-8 text-[var(--color-muted)]">{guide.summary}</p>
+					</div>
+					<div class="border-l border-[var(--color-accent)] pl-5 lg:mb-2">
+						<p class="font-sans text-[10px] normal-case tracking-[0.16em] text-[var(--color-muted)]">The quick answer</p>
+						<p class="mt-3 font-serif text-2xl leading-snug">{guide.quickAnswer}</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="border-y border-[var(--color-line)] bg-[var(--color-input)] px-5 py-5 sm:px-8 sm:py-8">
+			<div class="mx-auto max-w-[1180px]">
+				<h2 class="sr-only">Current time in {guide.name} time zones</h2>
+				<MultiZoneClocks client:load zones={guide.zones} initialNow={initialNow} />
+			</div>
+		</section>
+
+		<section class="px-5 py-16 sm:px-8 lg:py-20">
+			<div class="mx-auto grid max-w-[1180px] gap-12 lg:grid-cols-[.72fr_1.28fr] lg:gap-20">
+				<div>
+					<p class="font-sans text-[10px] normal-case tracking-[0.18em] text-[var(--color-accent)]">Plan by place</p>
+					<h2 class="mt-3 font-serif text-4xl tracking-[-0.045em]">{guide.question}</h2>
+				</div>
+				<div class="space-y-8 text-lg leading-8 text-[var(--color-muted)]">
+					<p>Use the city or region in an invitation. A country-wide time can mean more than one moment, while a named place lets every calendar calculate the intended local result.</p>
+					<p>{guide.planningCopy}</p>
+					<div class="flex flex-wrap gap-3 pt-2">
+						<a href={`/time/${entryCity.slug}`} class="inline-flex min-h-11 items-center rounded-[var(--radius-button)] border border-[var(--color-line)] px-4 text-sm font-medium hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">{entryCity.name} time →</a>
+						<a href="/meeting-planner" class="inline-flex min-h-11 items-center rounded-[var(--radius-button)] bg-[var(--color-accent)] px-4 text-sm font-medium text-[var(--color-signal-ink)] hover:brightness-110">Plan across time zones →</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="border-t border-[var(--color-line)] px-5 py-14 sm:px-8 lg:py-16">
+			<div class="mx-auto flex max-w-[1180px] flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+				<div>
+					<p class="font-sans text-[10px] normal-case tracking-[0.18em] text-[var(--color-muted)]">Source and method</p>
+					<p class="mt-3 max-w-2xl text-sm leading-6 text-[var(--color-muted)]">The official-zone summary is sourced below. Live clocks use named IANA time-zone identifiers, so the displayed local time stays aware of the city and date.</p>
+				</div>
+				<a href={guide.source.url} target="_blank" rel="noreferrer" class="shrink-0 border-b border-[var(--color-accent)] pb-1 text-sm text-[var(--color-accent)] hover:text-[var(--color-ink)]">{guide.source.label} ↗</a>
+			</div>
+		</section>
+	</main>
+</BaseLayout>

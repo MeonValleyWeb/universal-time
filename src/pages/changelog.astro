@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteRelease } from '../lib/release';
+
+const releases = [
+	{
+		version: '0.2.0',
+		date: siteRelease.label,
+		intro: 'A stronger, more useful WorldTime for live city clocks, international planning and search discovery.',
+		sections: [
+			{
+				title: 'Added',
+				items: [
+					'Live country-clock pages for Indonesia and Mexico, including the places where one national time is not enough.',
+					'City-specific context for the pages people are already finding: seasonal rules, country-wide differences and direct next steps.',
+					'A public release record and version marker across the site.',
+				],
+			},
+			{
+				title: 'Improved',
+				items: [
+					'Worldwide meeting planning guidance, portable planner links and calendar exports.',
+					'City-page titles and descriptions so search results describe the live local answer more clearly.',
+				],
+			},
+			{
+				title: 'Fixed',
+				items: [
+					'HTTP traffic now permanently redirects to the canonical HTTPS address.',
+					'Meeting-planner hour selection works reliably with click or double-click.',
+				],
+			},
+		],
+	},
+];
+---
+
+<BaseLayout
+	title="WorldTime changelog · release notes"
+	description="A concise record of WorldTime releases, improvements and fixes."
+	canonical="/changelog"
+>
+	<main class="px-5 py-16 sm:px-8 lg:py-24">
+		<section class="mx-auto max-w-[1180px]">
+			<p class="font-sans text-[10px] normal-case tracking-[0.18em] text-[var(--color-accent)]">Release notes</p>
+			<div class="mt-7 grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
+				<div>
+					<h1 class="max-w-3xl font-serif text-[clamp(3.5rem,8vw,7rem)] font-medium leading-[0.88] tracking-[-0.06em]">What changed, and why.</h1>
+					<p class="mt-7 max-w-2xl text-xl leading-8 text-[var(--color-muted)]">A short public record of the improvements that make WorldTime clearer, more dependable and easier to use across borders.</p>
+				</div>
+				<div class="border-l border-[var(--color-accent)] pl-5 lg:mb-2">
+					<p class="font-sans text-[10px] normal-case tracking-[0.16em] text-[var(--color-muted)]">Current release</p>
+					<p class="mt-3 font-serif text-3xl">v{siteRelease.version}</p>
+					<p class="mt-1 text-sm text-[var(--color-muted)]"><time datetime={siteRelease.published}>{siteRelease.label}</time></p>
+				</div>
+			</div>
+		</section>
+
+		<section class="mx-auto mt-16 max-w-[1180px] border-t border-[var(--color-line)] pt-12 sm:mt-20 sm:pt-16">
+			{releases.map((release) => (
+				<article>
+					<div class="grid gap-10 lg:grid-cols-[.72fr_1.28fr] lg:gap-20">
+						<div>
+							<p class="font-sans text-[10px] normal-case tracking-[0.18em] text-[var(--color-accent)]">v{release.version} · {release.date}</p>
+							<p class="mt-4 font-serif text-3xl leading-tight">{release.intro}</p>
+						</div>
+						<div class="grid gap-px border border-[var(--color-line)] bg-[var(--color-line)] sm:grid-cols-3">
+							{release.sections.map((section) => (
+								<section class="bg-[var(--color-surface)] p-5">
+									<h2 class="font-serif text-2xl">{section.title}</h2>
+									<ul class="mt-5 space-y-4 text-sm leading-6 text-[var(--color-muted)]">
+										{section.items.map((item) => <li class="border-l border-[var(--color-accent)] pl-3">{item}</li>)}
+									</ul>
+								</section>
+							))}
+						</div>
+					</div>
+				</article>
+			))}
+		</section>
+	</main>
+</BaseLayout>

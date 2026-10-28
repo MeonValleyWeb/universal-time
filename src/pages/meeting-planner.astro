@@ -6,25 +6,52 @@ const initialNow = Date.now();
 ---
 
 <PlannerLayout
-	title="World Time Meeting Planner · WorldTime"
-	description="Compare working hours across cities and find the fairest meeting time on one visual 48-hour timeline."
+	title="Worldwide Meeting Planner & Time Zone Converter · WorldTime"
+	description="Plan international meetings across time zones. Compare working hours, local dates and daylight-saving changes on one visual timeline."
 >
 	<main class="relative z-10 mx-auto max-w-[1180px] px-4 pb-24 sm:px-6">
 		<section class="grid items-end gap-8 pb-11 pt-14 sm:pb-14 sm:pt-16 lg:grid-cols-[0.94fr_1.06fr] lg:gap-[72px] lg:pt-20">
 			<div>
 				<p class="meridian-eyebrow">
-					A fairer window
+					Worldwide meeting planner
 				</p>
 				<h1 class="mt-4 max-w-[620px] font-serif text-[clamp(3.1rem,6vw,4.875rem)] font-medium leading-[0.96] tracking-[-0.06em] text-[var(--color-ink)]">
 					Find the overlap, not the compromise.
 				</h1>
 			</div>
 			<div class="max-w-[470px] border-l border-[var(--color-accent)] pl-5 lg:mb-3 lg:justify-self-end">
-				<p class="text-[19px] leading-[1.55] text-[var(--color-muted)]">Choose your places and see the working day across every one. The highlighted hours reveal a mutual moment—not someone’s midnight.</p>
+				<p class="text-[19px] leading-[1.55] text-[var(--color-muted)]">Plan an international meeting by place, not by guesswork. The highlighted hours reveal a mutual moment—not someone’s midnight.</p>
 				<p class="mt-3 font-sans text-[10px] leading-5 tracking-wide text-[var(--color-muted)]">Drag empty timeline space · Click any hour to set the meeting · Add any IANA time zone</p>
 			</div>
 		</section>
 
 		<TimeCanvas client:load initialNow={initialNow} />
+
+		<section class="mt-16 border-t border-[var(--color-line)] pt-12 sm:mt-20 sm:pt-16">
+			<div class="grid gap-10 lg:grid-cols-[.72fr_1.28fr] lg:gap-20">
+				<div>
+					<p class="font-sans text-[10px] normal-case tracking-[0.18em] text-[var(--color-accent)]">International meeting schedule</p>
+					<h2 class="mt-3 font-serif text-4xl tracking-[-0.045em]">Plan worldwide without making one person take the night shift.</h2>
+				</div>
+				<div class="grid gap-px border border-[var(--color-line)] bg-[var(--color-line)] sm:grid-cols-3">
+					<article class="bg-[var(--color-surface)] p-5">
+						<p class="font-sans text-[10px] font-bold normal-case tracking-[0.16em] text-[var(--color-accent)]">01</p>
+						<h3 class="mt-5 font-serif text-2xl">Add every place</h3>
+						<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">Choose the cities where people will actually join—not just their current UTC offsets.</p>
+					</article>
+					<article class="bg-[var(--color-surface)] p-5">
+						<p class="font-sans text-[10px] font-bold normal-case tracking-[0.16em] text-[var(--color-accent)]">02</p>
+						<h3 class="mt-5 font-serif text-2xl">Set the meeting length</h3>
+						<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">A fair hour for a 30-minute call may not work for a 90-minute workshop.</p>
+					</article>
+					<article class="bg-[var(--color-surface)] p-5">
+						<p class="font-sans text-[10px] font-bold normal-case tracking-[0.16em] text-[var(--color-accent)]">03</p>
+						<h3 class="mt-5 font-serif text-2xl">Check the local date</h3>
+						<p class="mt-3 text-sm leading-6 text-[var(--color-muted)]">The same meeting can be tomorrow for one person and today for another. The planner shows both.</p>
+					</article>
+				</div>
+			</div>
+			<p class="mt-8 max-w-3xl text-sm leading-6 text-[var(--color-muted)]">WorldTime uses named city time zones, so seasonal clock changes are calculated for the meeting date rather than inferred from today’s offset. <a href="/guides/iana-time-zones-vs-utc-offsets" class="text-[var(--color-accent)] underline underline-offset-4">Why named zones matter →</a></p>
+		</section>
 	</main>
 </PlannerLayout>

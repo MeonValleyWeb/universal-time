@@ -2,6 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CityClock from '../../components/CityClock';
 import { cities, converterPairs, type City } from '../../lib/cities';
+import { countryTimeGuideByEntryCity } from '../../lib/country-times';
+import { cityTimeContextBySlug } from '../../lib/city-time-context';
 import { getCitySeasonalContext } from '../../lib/search-context';
 import { formatOffset, getLocalParts, getOffsetMinutes } from '../../lib/time';
 
@@ -18,6 +20,8 @@ const comparisons = converterPairs
 	.map((pair) => cities.find((item) => item.slug === pair.to)!)
 	.filter(Boolean);
 const seasonalContext = getCitySeasonalContext(city, getLocalParts(initialNow, city.zone).year);
+const countryGuide = countryTimeGuideByEntryCity(city.slug);
+const cityContext = cityTimeContextBySlug(city.slug);
 const schema = {
 	'@context': 'https://schema.org',
 	'@type': 'WebPage',
@@ -32,8 +36,8 @@ const schema = {
 ---
 
 <BaseLayout
-	title={`Current time in ${city.name}, ${city.country} · WorldTime`}
-	description={`See the exact local time, date and UTC offset in ${city.name}. Compare ${city.name} with cities around the world.`}
+	title={`${cityContext?.title ?? `${city.name} time now: current local time in ${city.country}`} · WorldTime`}
+	description={cityContext?.description ?? `Current time in ${city.name}, ${city.country}: live clock, local date, ${city.zone}, and today’s UTC offset. Compare ${city.name} with cities around the world.`}
 	canonical={`/time/${city.slug}`}
 	schema={schema}
 >
@@ -102,6 +106,20 @@ const schema = {
 						<h3 class="font-serif text-2xl">Does {city.name} change its clocks?</h3>
 						<p class="mt-3 text-sm leading-6 text-stone-600">{seasonalContext}</p>
 					</article>
+					{cityContext && (
+						<article class="bg-[#f2efe8] p-6 sm:col-span-2">
+							<h3 class="font-serif text-2xl">{cityContext.heading}</h3>
+							<p class="mt-3 text-sm leading-6 text-stone-600">{cityContext.body}</p>
+							<a href={cityContext.related.href} class="mt-4 inline-flex border-b border-[var(--color-accent)] pb-1 text-sm text-[var(--color-accent)] hover:text-[var(--color-ink)]">{cityContext.related.label}</a>
+						</article>
+					)}
+					{countryGuide && (
+						<article class="bg-[#f2efe8] p-6 sm:col-span-2">
+							<h3 class="font-serif text-2xl">{countryGuide.name} has {countryGuide.zones.length} time zones</h3>
+							<p class="mt-3 text-sm leading-6 text-stone-600">{countryGuide.summary}</p>
+							<a href={`/time/${countryGuide.slug}`} class="mt-4 inline-flex border-b border-[var(--color-accent)] pb-1 text-sm text-[var(--color-accent)] hover:text-[var(--color-ink)]">See every {countryGuide.name} clock →</a>
+						</article>
+					)}
 				</div>
 			</div>
 		</section>

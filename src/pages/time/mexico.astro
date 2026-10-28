@@ -1,0 +1,8 @@
+---
+import CountryTimePage from '../../components/CountryTimePage.astro';
+import { countryTimeGuideBySlug } from '../../lib/country-times';
+
+const mexico = countryTimeGuideBySlug('mexico')!;
+---
+
+<CountryTimePage guide={mexico} />
