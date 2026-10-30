@@ -34,10 +34,10 @@
     "wrangler": "^4.147.0"
   },
   "overrides": {
-    "fast-uri": "4.2.2",
+    "fast-uri": "4.2.3",
     "js-yaml": "5.5.0",
     "nanoid": "6.0.2",
-    "postcss": "8.5.31",
+    "postcss": "8.5.32",
     "undici": "7.30.1"
   }
 }
