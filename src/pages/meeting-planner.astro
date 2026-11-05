@@ -2,7 +2,6 @@
 import PlannerLayout from '../layouts/PlannerLayout.astro';
 import TimeCanvas from '../components/TimeCanvas';
 
-const initialNow = Date.now();
 ---
 
 <PlannerLayout
@@ -25,7 +24,7 @@ const initialNow = Date.now();
 			</div>
 		</section>
 
-		<TimeCanvas client:load initialNow={initialNow} />
+		<TimeCanvas client:load />
 
 		<section class="mt-16 border-t border-[var(--color-line)] pt-12 sm:mt-20 sm:pt-16">
 			<div class="grid gap-10 lg:grid-cols-[.72fr_1.28fr] lg:gap-20">

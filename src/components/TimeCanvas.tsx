@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { useCurrentTime } from '../lib/use-current-time';
+import { plannerDate } from '../lib/planner-date';
 import {
 	formatClock,
 	formatDate,
@@ -15,7 +17,7 @@ import {
 } from '../lib/time';
 
 interface Props {
-	initialNow: number;
+	now: number;
 }
 
 const HOUR = 3_600_000;
@@ -31,13 +33,18 @@ const searchAliases: Record<string, string> = {
 
 const unique = (zones: string[]) => [...new Set(zones)];
 
-export default function TimeCanvas({ initialNow }: Props) {
-	const [now, setNow] = useState(initialNow);
+export default function TimeCanvas() {
+	const now = useCurrentTime();
+	if (now === null) return <div class="min-h-[600px] rounded-[var(--radius-panel)] border border-[var(--color-line)] bg-[var(--color-surface)] p-7" role="status">Loading today’s meeting timeline…</div>;
+	return <MeetingTimeline now={now} />;
+}
+
+function MeetingTimeline({ now }: Props) {
 	const [dayOffset, setDayOffset] = useState(0);
 	const [locations, setLocations] = useState(fallbackLocations);
 	const [query, setQuery] = useState('');
 	const [hour12, setHour12] = useState(false);
-	const [selectedTime, setSelectedTime] = useState(Math.ceil(initialNow / HOUR) * HOUR);
+	const [selectedTime, setSelectedTime] = useState(Math.ceil(now / HOUR) * HOUR);
 	const [durationMinutes, setDurationMinutes] = useState(60);
 	const [copied, setCopied] = useState(false);
 	const [dragging, setDragging] = useState(false);
@@ -45,15 +52,14 @@ export default function TimeCanvas({ initialNow }: Props) {
 	const drag = useRef({ pointerId: 0, startX: 0, startScroll: 0 });
 
 	const zoneOptions = useMemo(() => getTimeZoneOptions(), []);
-	const baseStart = Math.floor(initialNow / HOUR) * HOUR - 6 * HOUR;
-	const timelineStart = baseStart + dayOffset * 24 * HOUR;
+	const homeZone = locations[0] ?? 'UTC';
+	const timelineStart = plannerDate(now, dayOffset, homeZone).start;
 	const timestamps = useMemo(
 		() => Array.from({ length: HOURS_VISIBLE }, (_, index) => timelineStart + index * HOUR),
 		[timelineStart],
 	);
-	const homeZone = locations[0] ?? 'UTC';
 	const meetingEnd = selectedTime + durationMinutes * 60_000;
-	const dayLabel = dayOffset === 0 ? 'Today' : formatDate(timelineStart + 6 * HOUR, homeZone);
+	const dayLabel = dayOffset === 0 ? 'Today' : formatDate(timelineStart, homeZone);
 	const meetingScore = useMemo(
 		() => getMeetingScore(selectedTime, durationMinutes, locations),
 		[selectedTime, durationMinutes, locations],
@@ -81,7 +87,6 @@ export default function TimeCanvas({ initialNow }: Props) {
 	}, [locations, query, zoneOptions]);
 
 	useEffect(() => {
-		const interval = window.setInterval(() => setNow(Date.now()), 30_000);
 		const saved = window.localStorage.getItem(STORAGE_KEY);
 
 		if (saved) {
@@ -98,11 +103,6 @@ export default function TimeCanvas({ initialNow }: Props) {
 			setLocations(unique([detected, ...fallbackLocations]));
 		}
 
-		window.requestAnimationFrame(() => {
-			if (timelineRef.current) timelineRef.current.scrollLeft = CELL_WIDTH * 4.5;
-		});
-
-		return () => window.clearInterval(interval);
 	}, []);
 
 	useEffect(() => {
@@ -110,9 +110,15 @@ export default function TimeCanvas({ initialNow }: Props) {
 	}, [locations]);
 
 	useEffect(() => {
-		setSelectedTime(Math.ceil((timelineStart + 6 * HOUR) / HOUR) * HOUR);
-		if (timelineRef.current) timelineRef.current.scrollTo({ left: CELL_WIDTH * 4.5, behavior: 'smooth' });
+		const focusTime = dayOffset === 0 ? now : plannerDate(now, dayOffset, homeZone).morning;
+		if (timelineRef.current) timelineRef.current.scrollTo({ left: Math.max(0, (focusTime - timelineStart) / HOUR - 2) * CELL_WIDTH, behavior: 'smooth' });
 	}, [timelineStart]);
+
+	const changeDay = (nextOffset: number) => {
+		setDayOffset(nextOffset);
+		setSelectedTime(nextOffset === 0 ? Math.ceil(now / HOUR) * HOUR : plannerDate(now, nextOffset, homeZone).morning);
+		setCopied(false);
+	};
 
 	const addLocation = (zone: string) => {
 		setLocations((current) => [...current, zone]);
@@ -215,9 +221,9 @@ export default function TimeCanvas({ initialNow }: Props) {
 
 					<div class="flex flex-wrap items-center gap-2">
 						<div class="flex rounded-[var(--radius-button)] border border-[var(--color-line)] bg-[var(--color-input)] p-1">
-							<button type="button" aria-label="Previous day" onClick={() => setDayOffset((value) => value - 1)} class="grid size-9 place-items-center rounded-[var(--radius-control)] text-[var(--color-muted)] hover:bg-[oklch(0.73_0.16_245/0.1)] hover:text-[var(--color-ink)]">←</button>
-							<button type="button" onClick={() => setDayOffset(0)} aria-label={dayOffset === 0 ? 'Viewing today' : 'Return to today'} class="min-w-20 rounded-[var(--radius-control)] px-3 font-sans text-[10px] font-bold normal-case tracking-wide text-[var(--color-accent)] hover:bg-[oklch(0.73_0.16_245/0.1)]">{dayLabel}</button>
-							<button type="button" aria-label="Next day" onClick={() => setDayOffset((value) => value + 1)} class="grid size-9 place-items-center rounded-[var(--radius-control)] text-[var(--color-muted)] hover:bg-[oklch(0.73_0.16_245/0.1)] hover:text-[var(--color-ink)]">→</button>
+							<button type="button" aria-label="Previous day" onClick={() => changeDay(dayOffset - 1)} class="grid size-9 place-items-center rounded-[var(--radius-control)] text-[var(--color-muted)] hover:bg-[oklch(0.73_0.16_245/0.1)] hover:text-[var(--color-ink)]">←</button>
+							<button type="button" onClick={() => changeDay(0)} aria-label={dayOffset === 0 ? 'Viewing today' : 'Return to today'} class="min-w-20 rounded-[var(--radius-control)] px-3 font-sans text-[10px] font-bold normal-case tracking-wide text-[var(--color-accent)] hover:bg-[oklch(0.73_0.16_245/0.1)]">{dayLabel}</button>
+							<button type="button" aria-label="Next day" onClick={() => changeDay(dayOffset + 1)} class="grid size-9 place-items-center rounded-[var(--radius-control)] text-[var(--color-muted)] hover:bg-[oklch(0.73_0.16_245/0.1)] hover:text-[var(--color-ink)]">→</button>
 						</div>
 						<button
 							type="button"

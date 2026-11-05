@@ -4,8 +4,25 @@ import { siteRelease } from '../lib/release';
 
 const releases = [
 	{
-		version: '0.2.0',
+		version: siteRelease.version,
 		date: siteRelease.label,
+		intro: 'Current dates and clock rules, with clearer paths between city clocks and converters.',
+		sections: [
+			{ title: 'Fixed', items: [
+				'Today in the meeting planner follows the current local date, including daylight-saving changes.',
+				'Clocks, UTC offsets, abbreviations and homepage groups refresh from the visitor’s current time. Loading states replace old build-time values.',
+				'Meeting selections stay in place while live clocks tick or the browser regains focus.',
+			] },
+			{ title: 'Improved', items: [
+				'All curated city comparisons are linked from city pages.',
+				'Converters link to both city clocks and the reverse conversion.',
+				'Calling windows and time-difference guidance use the current date, including seasonal transition weeks.',
+			] },
+		],
+	},
+	{
+		version: '0.2.0',
+		date: '18 October 2026',
 		intro: 'A stronger, more useful WorldTime for live city clocks, international planning and search discovery.',
 		sections: [
 			{

@@ -3,21 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import NaturalTime from '../components/NaturalTime';
 import PersonalTimeScale from '../components/PersonalTimeScale';
 import WorldStrip from '../components/WorldStrip';
-import { cities } from '../lib/cities';
-import { formatOffset, getOffsetMinutes } from '../lib/time';
-
-const initialNow = Date.now();
-const citiesByOffset = cities.reduce((groups, city) => {
-	const offset = getOffsetMinutes(initialNow, city.zone);
-	groups.set(offset, [...(groups.get(offset) ?? []), city]);
-	return groups;
-}, new Map<number, typeof cities>());
-const clockGroups = [...citiesByOffset.entries()]
-	.sort(([leftOffset], [rightOffset]) => leftOffset - rightOffset)
-	.map(([offset, groupedCities]) => ({
-		label: offset === 0 ? 'UTC / GMT' : formatOffset(offset),
-		cities: [...groupedCities].sort((left, right) => left.name.localeCompare(right.name)),
-	}));
+import ClockDirectory from '../components/ClockDirectory';
 ---
 
 <BaseLayout
@@ -40,7 +26,7 @@ const clockGroups = [...citiesByOffset.entries()]
 						Open the meeting planner <span aria-hidden="true">→</span>
 					</a>
 				</div>
-				<NaturalTime client:load initialNow={initialNow} />
+				<NaturalTime client:load />
 			</div>
 
 			<div class="mx-auto mt-12 max-w-[1180px] lg:mt-16">
@@ -48,7 +34,7 @@ const clockGroups = [...citiesByOffset.entries()]
 					<h2 class="font-medium text-[var(--color-fg)]">Current time in six cities</h2>
 					<span class="hidden sm:inline">Select a city for local details</span>
 				</div>
-				<WorldStrip client:load initialNow={initialNow} />
+				<WorldStrip client:load />
 			</div>
 		</section>
 
@@ -116,24 +102,7 @@ const clockGroups = [...citiesByOffset.entries()]
 				<p class="text-sm font-medium text-[var(--color-accent)]">Browse by time zone</p>
 				<h2 class="mt-2 font-serif text-3xl font-medium tracking-[-0.04em]">Local times around the world</h2>
 				<p class="mt-3 max-w-2xl text-sm leading-6 text-[var(--color-muted)]">Cities are grouped by their current UTC offset. Seasonal clock changes can move a city to a different group.</p>
-				<div class="mt-8 grid gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-3">
-					{clockGroups.map((group) => (
-						<section class="border-t border-[var(--color-border)] pt-4" aria-label={`${group.label} city clocks`}>
-							<div class="flex items-baseline justify-between gap-3">
-								<h3 class="text-sm font-medium text-[var(--color-accent)]">{group.label}</h3>
-								<span class="text-xs text-[var(--color-subtle)]">{group.cities.length} {group.cities.length === 1 ? 'place' : 'places'}</span>
-							</div>
-							<div class="mt-2">
-								{group.cities.map((city) => (
-									<a href={`/time/${city.slug}`} class="flex items-center justify-between gap-3 border-b border-[var(--color-border)] py-3 text-sm text-[var(--color-fg)] hover:text-[var(--color-accent)]">
-										<span>{city.name}</span>
-										<span class="shrink-0 text-xs text-[var(--color-subtle)]">{city.country}</span>
-									</a>
-								))}
-							</div>
-						</section>
-					))}
-				</div>
+				<ClockDirectory client:load />
 			</div>
 		</section>
 	</main>

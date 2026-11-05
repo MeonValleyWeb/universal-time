@@ -38,6 +38,20 @@ export const getCitySeasonalContext = (city: City, year: number) => {
 	return `${city.name} changes seasonally: the offset is ${formatOffset(january)} in January and ${formatOffset(july)} in July. Always use the date of the call rather than assuming today’s gap.`;
 };
 
+const yearlyGapCache = new Map<string, number[]>();
+const yearlyGaps = (from: City, to: City, year: number) => {
+	const key = `${from.zone}:${to.zone}:${year}`;
+	const cached = yearlyGapCache.get(key);
+	if (cached) return cached;
+	const gaps = new Set<number>();
+	for (let day = Date.UTC(year, 0, 1, 12); day < Date.UTC(year + 1, 0, 1, 12); day += 86_400_000) {
+		gaps.add(getOffsetMinutes(day, to.zone) - getOffsetMinutes(day, from.zone));
+	}
+	const result = [...gaps].sort((a, b) => a - b);
+	yearlyGapCache.set(key, result);
+	return result;
+};
+
 export const getPairContext = (from: City, to: City, now: number) => {
 	const currentGap = getOffsetMinutes(now, to.zone) - getOffsetMinutes(now, from.zone);
 	const currentGapText = formatGap(currentGap);
@@ -83,11 +97,10 @@ export const getPairContext = (from: City, to: City, now: number) => {
 			: `At 09:00 in ${from.name}, ${to.name} is ${dayDifference === -1 ? 'still on the previous calendar day' : `${Math.abs(dayDifference)} calendar days behind`}.`;
 
 	const year = sourceDate.year;
-	const januaryGap = getOffsetMinutes(Date.UTC(year, 0, 15, 12), to.zone) - getOffsetMinutes(Date.UTC(year, 0, 15, 12), from.zone);
-	const julyGap = getOffsetMinutes(Date.UTC(year, 6, 15, 12), to.zone) - getOffsetMinutes(Date.UTC(year, 6, 15, 12), from.zone);
-	const dstSummary = januaryGap === julyGap
-		? `The usual gap is stable in the January and July reference dates at ${formatGap(januaryGap)}.`
-		: `Seasonal clock changes alter the gap: it is ${formatGap(januaryGap)} on the January reference date and ${formatGap(julyGap)} on the July reference date. Transition weeks can differ again, so check the exact date.`;
+	const gaps = yearlyGaps(from, to, year);
+	const dstSummary = gaps.length === 1
+		? `${to.name} stays ${formatGap(gaps[0])} ${from.name} across the current time-zone rules for ${year}.`
+		: `${to.name} can be ${gaps.map(formatGap).join(' or ')} ${from.name} during ${year}, including transition weeks. Check the exact date of the call.`;
 
 	return {
 		currentGap,

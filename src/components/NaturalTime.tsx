@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { cities, type City } from '../lib/cities';
 import { parseNaturalTime, type NaturalTimeResult } from '../lib/natural-time';
+import { useCurrentTime } from '../lib/use-current-time';
 import {
 	formatClock,
 	formatDate,
@@ -11,7 +12,6 @@ import {
 } from '../lib/time';
 
 interface Props {
-	initialNow: number;
 	initialQuery?: string;
 }
 
@@ -26,15 +26,14 @@ const cityForBrowserZone = (zone: string): City =>
 	};
 
 export default function NaturalTime({
-	initialNow,
 	initialQuery,
 }: Props) {
-	const [now, setNow] = useState(initialNow);
+	const now = useCurrentTime();
 	const [query, setQuery] = useState(initialQuery ?? '');
 	const [submitted, setSubmitted] = useState(initialQuery ?? '');
 	const [copied, setCopied] = useState(false);
 	const [localTarget, setLocalTarget] = useState<City>(cities.find((city) => city.slug === 'london')!);
-	const localTimeResult = useMemo<NaturalTimeResult>(() => ({
+	const localTimeResult = useMemo<NaturalTimeResult | null>(() => now === null ? null : ({
 		source: localTarget,
 		target: localTarget,
 		answer: localTarget,
@@ -45,13 +44,11 @@ export default function NaturalTime({
 		warnings: [],
 	}), [now, localTarget]);
 	const result = useMemo(
-		() => submitted ? parseNaturalTime(submitted, now, localTarget) : localTimeResult,
+		() => now === null ? null : submitted ? parseNaturalTime(submitted, now, localTarget) : localTimeResult,
 		[submitted, now, localTarget, localTimeResult],
 	);
 
 	useEffect(() => {
-		setNow(Date.now());
-		const interval = window.setInterval(() => setNow(Date.now()), 30_000);
 		const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		setLocalTarget(cityForBrowserZone(localZone));
 		const sharedQuery = new URLSearchParams(window.location.search).get('q');
@@ -59,7 +56,6 @@ export default function NaturalTime({
 			setQuery(sharedQuery);
 			setSubmitted(sharedQuery);
 		}
-		return () => window.clearInterval(interval);
 	}, []);
 
 	const submit = (event: Event) => {
@@ -104,7 +100,7 @@ export default function NaturalTime({
 							Ask anything about time
 						</label>
 						<span class="flex items-center gap-2 font-sans text-[9px] normal-case tracking-[0.13em] text-[var(--color-fg)] before:size-1.5 before:rounded-full before:bg-[var(--color-accent)] before:shadow-[0_0_0_4px_oklch(0.73_0.16_245/0.12)]">
-							Your time · {localTarget.name} · {formatClock(now, localTarget.zone, false)} {getLocalParts(now, localTarget.zone).abbreviation}
+							{now === null ? 'Loading your local time…' : `Your time · ${localTarget.name} · ${formatClock(now, localTarget.zone, false)} ${getLocalParts(now, localTarget.zone).abbreviation}`}
 						</span>
 					</div>
 					<div class="flex items-center gap-3 border-b border-[var(--color-border)] pb-3 focus-within:border-[var(--color-accent)]">
@@ -179,6 +175,8 @@ export default function NaturalTime({
 								</div>
 							</div>
 						</div>
+					) : now === null ? (
+						<p class="text-sm text-[var(--color-muted)]" role="status">Loading current time…</p>
 					) : (
 						<div class="border-l-2 border-[var(--color-accent)] pl-5">
 							<p class="font-serif text-2xl text-[var(--color-fg)]">We couldn’t place that time yet.</p>

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useCurrentTime } from '../lib/use-current-time';
 import { cities, type City } from '../lib/cities';
 import { formatClock, formatDate, formatOffset, getDayRelation, getLocalParts, getOffsetMinutes } from '../lib/time';
 
@@ -13,16 +14,19 @@ const seasonalRule = (zone: string, timestamp: number) => {
 	return winter === summer ? 'No seasonal clock change detected' : 'Seasonal clock rule changes this year';
 };
 
-export default function TimeZoneExplorer({ initialNow }: { initialNow: number }) {
-	const [now, setNow] = useState(initialNow);
+export default function TimeZoneExplorer() {
+	const now = useCurrentTime(1000);
+	if (now === null) return <p class="min-h-64 border border-[var(--color-line)] p-7 text-[var(--color-muted)]" role="status">Loading current city times…</p>;
+	return <LiveTimeZoneExplorer now={now} />;
+}
+
+function LiveTimeZoneExplorer({ now }: { now: number }) {
 	const [referenceZone, setReferenceZone] = useState('Europe/London');
 	const [search, setSearch] = useState('');
 
 	useEffect(() => {
 		const browserZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		if (cityByZone(browserZone)) setReferenceZone(browserZone);
-		const timer = window.setInterval(() => setNow(Date.now()), 1_000);
-		return () => window.clearInterval(timer);
 	}, []);
 
 	const reference = cityByZone(referenceZone) ?? cities[0];

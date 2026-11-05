@@ -9,7 +9,6 @@ interface Props {
 }
 
 const { guide } = Astro.props;
-const initialNow = Date.now();
 const entryCity = cityBySlug(guide.entryCitySlug)!;
 const schema = {
 	'@context': 'https://schema.org',
@@ -46,7 +45,7 @@ const schema = {
 		<section class="border-y border-[var(--color-line)] bg-[var(--color-input)] px-5 py-5 sm:px-8 sm:py-8">
 			<div class="mx-auto max-w-[1180px]">
 				<h2 class="sr-only">Current time in {guide.name} time zones</h2>
-				<MultiZoneClocks client:load zones={guide.zones} initialNow={initialNow} />
+				<MultiZoneClocks client:load zones={guide.zones} />
 			</div>
 		</section>
 

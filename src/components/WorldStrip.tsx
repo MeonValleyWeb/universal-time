@@ -1,24 +1,15 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useCurrentTime } from '../lib/use-current-time';
 import { cities, featuredCitySlugs } from '../lib/cities';
 import { formatClock, getLocalParts } from '../lib/time';
 
-interface Props {
-	initialNow: number;
-}
-
-export default function WorldStrip({ initialNow }: Props) {
-	const [now, setNow] = useState(initialNow);
+export default function WorldStrip() {
+	const now = useCurrentTime();
 	const featured = featuredCitySlugs.map((slug) => cities.find((city) => city.slug === slug)!);
-
-	useEffect(() => {
-		const interval = window.setInterval(() => setNow(Date.now()), 30_000);
-		return () => window.clearInterval(interval);
-	}, []);
 
 	return (
 		<div class="grid grid-cols-2 overflow-hidden rounded-[var(--radius-panel)] border border-[var(--color-border)] bg-[var(--color-surface)] sm:grid-cols-3 lg:grid-cols-6">
 			{featured.map((city) => {
-				const hour = getLocalParts(now, city.zone).hour;
+				const hour = now === null ? -1 : getLocalParts(now, city.zone).hour;
 				const daylight = hour >= 7 && hour < 20;
 				return (
 					<a
@@ -35,7 +26,7 @@ export default function WorldStrip({ initialNow }: Props) {
 						</div>
 						<p class="mt-7 truncate font-serif text-xl">{city.name}</p>
 						<p class="mt-1 font-sans text-3xl font-medium tracking-[-0.055em] tabular-nums">
-							{formatClock(now, city.zone, false)}
+							{now === null ? '--:--' : formatClock(now, city.zone, false)}
 						</p>
 					</a>
 				);
